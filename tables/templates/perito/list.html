@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block title %} Lista de Peritos {% endblock %} {% block content %}
+<table>
+    <tr>
+        <th>MASP</th>
+        <th>Nome do Perito</th>
+    </tr>
+    {% for result in data %}
+    <tr>
+        <td>{{ result.masp }}</td>
+        <td>{{ result.nome_perito }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

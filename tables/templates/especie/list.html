@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block title %} Lista de Especies {% endblock %} {% block content %}
+<table>
+    <tr>
+        <th>Codigo Especie</th>
+        <th>Descrição</th>
+        <th>Codigo Natureza</th>
+        <th>Sigla</th>
+    </tr>
+    {% for result in data %}
+    <tr>
+        <td>{{ result.cod_especie_exame }}</td>
+        <td>{{ result.descricao_especie }}</td>
+        <td>{{ result.cod_natureza_exame }}</td>
+        <td>{{ result.sigla}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

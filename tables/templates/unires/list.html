@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% block title %} Lista de Unidades Requisitantes {% endblock %} {% block content %}
+<table>
+    <tr>
+        <th>Codigo da Unidade</th>
+        <th>Unidade</th>
+        <th>Tipo da Unidade</th>
+        <th>Subordinação</th>
+        <th>Município</th>
+        <th>Geocodigo</th>
+    </tr>
+    {% for result in data %}
+    <tr>
+        <td>{{ result.cod_unidade_requisitante }}</td>
+        <td>{{ result.unidade }}</td>
+        <td>{{ result.tipo_unidade }}</td>
+        <td>{{ result.subordinacao }}</td>
+        <td>{{ result.municipio }}</td>
+        <td>{{ result.geocodigo }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% block title %} Lista de Naturezas {% endblock %} {% block content %}
+<table>
+    <tr>
+        <th>Codigo</th>
+        <th>Descrição</th>
+        <th>Ciencia</th>
+    </tr>
+    {% for result in naturezas %}
+    <tr>
+        <td>{{ result.cod_natureza_exame }}</td>
+        <td>{{ result.descricao_natureza }}</td>
+        <td>{{ result.ciencia}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
