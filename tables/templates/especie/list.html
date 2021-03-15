@@ -1,5 +1,16 @@
 {% extends 'base.html' %} {% block title %} Lista de Especies {% endblock %} {% block content %}
-<table>
+<div class="offset-1 col-10 list-div">
+    <h1>Lista de Especies</h1>
+    <div class="col-2 add-div">
+        <i class="bi bi-plus-square"></i> Nova Especie
+    </div>
+    <div class="col-9 search-div">
+        <input type="text" id="search" name="search" placeholder="Nome da Especie">
+        <i class="bi bi-search"></i>
+    </div>
+</div>
+
+<table class="table">
     <tr>
         <th>Codigo Especie</th>
         <th>Descrição</th>
@@ -12,6 +23,7 @@
         <td>{{ result.descricao_especie }}</td>
         <td>{{ result.cod_natureza_exame }}</td>
         <td>{{ result.sigla}}</td>
+        <td><i class="bi bi-pencil-square"></i></td>
     </tr>
     {% endfor %}
 </table>
