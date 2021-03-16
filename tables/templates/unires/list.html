@@ -1,36 +1,39 @@
 {% extends 'base.html' %} {% block title %} Lista de Unidades Requisitantes {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1>Lista de Unidades Requisitantes</h1>
-    <div class="col-2 add-div">
+    <div class="col-3 add-div">
         <i class="bi bi-plus-square"></i> Nova Unidade Requisitante
     </div>
-    <div class="col-9 search-div">
-        <input type="text" id="search" name="search" placeholder="Nome da Unidade">
+    <div class="col-8 search-div">
+        <input type="text" id="search" name="search" placeholder="Nome da Unidade" size="80px">
         <i class="bi bi-search"></i>
     </div>
 
 
-
-    <table class="table">
-        <tr>
-            <th>Codigo da Unidade</th>
-            <th>Unidade</th>
-            <th>Tipo da Unidade</th>
-            <th>Subordinação</th>
-            <th>Município</th>
-            <th>Geocodigo</th>
-        </tr>
-        {% for result in data %}
-        <tr>
-            <td>{{ result.cod_unidade_requisitante }}</td>
-            <td>{{ result.unidade }}</td>
-            <td>{{ result.tipo_unidade }}</td>
-            <td>{{ result.subordinacao }}</td>
-            <td>{{ result.municipio }}</td>
-            <td>{{ result.geocodigo }}</td>
-            <td><i class="bi bi-pencil-square"></i></td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div id="div_table">
+        <table class="table table-striped">
+            <tr>
+                <th>Codigo da Unidade</th>
+                <th>Unidade</th>
+                <th>Tipo da Unidade</th>
+                <th>Subordinação</th>
+                <th>Município</th>
+                <th>Geocodigo</th>
+                <th id="edit_col">Editar</th>
+            </tr>
+            {% for result in data %}
+            <tr>
+                <td>{{ result.cod_unidade_requisitante }}</td>
+                <td>{{ result.unidade }}</td>
+                <td>{{ result.tipo_unidade }}</td>
+                <td>{{ result.subordinacao }}</td>
+                <td>{{ result.municipio }}</td>
+                <td>{{ result.geocodigo }}</td>
+                <td id="edit_col"><i class="bi bi-pencil-square"></i></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </div>
+
 {% endblock %}

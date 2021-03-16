@@ -5,25 +5,28 @@
         <i class="bi bi-plus-square"></i> Nova Natureza
     </div>
     <div class="col-9 search-div">
-        <input type="text" id="search" name="search" placeholder="Nome da Natureza">
+        <input type="text" id="search" name="search" placeholder="Nome da Natureza" size="80px">
         <i class="bi bi-search"></i>
     </div>
+
+
+    <div id="div_table">
+        <table class="table table-striped">
+            <tr>
+                <th>Codigo</th>
+                <th>Descrição</th>
+                <th>Ciencia</th>
+                <th id="edit_col">Editar</th>
+            </tr>
+            {% for result in naturezas %}
+            <tr>
+                <td>{{ result.cod_natureza_exame }}</td>
+                <td>{{ result.descricao_natureza }}</td>
+                <td>{{ result.ciencia}}</td>
+                <td id="edit_col"><i class="bi bi-pencil-square"></i></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </div>
-
-
-<table class="table">
-    <tr>
-        <th>Codigo</th>
-        <th>Descrição</th>
-        <th>Ciencia</th>
-    </tr>
-    {% for result in naturezas %}
-    <tr>
-        <td>{{ result.cod_natureza_exame }}</td>
-        <td>{{ result.descricao_natureza }}</td>
-        <td>{{ result.ciencia}}</td>
-        <td><i class="bi bi-pencil-square"></i></td>
-    </tr>
-    {% endfor %}
-</table>
 {% endblock %}
