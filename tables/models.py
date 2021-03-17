@@ -4,7 +4,8 @@ from django.db import models
 class EspecieModel(models.Model):
     cod_especie_exame = models.IntegerField()
     descricao_especie = models.CharField(max_length=150)
-    cod_natureza_exame = models.IntegerField()
+    cod_natureza_exame = models.ForeignKey(
+        'NaturezaModel', on_delete=models.CASCADE)
     sigla = models.CharField(max_length=3)
 
     class Meta:
@@ -15,6 +16,9 @@ class NaturezaModel(models.Model):
     cod_natureza_exame = models.IntegerField()
     descricao_natureza = models.CharField(max_length=70)
     ciencia = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.descricao_natureza
 
     class Meta:
         db_table = "natureza_exame"

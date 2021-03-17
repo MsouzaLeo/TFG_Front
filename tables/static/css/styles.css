@@ -55,6 +55,10 @@
     font-size: 22px;
 }
 
+#add-link {
+    text-decoration: none;
+}
+
 
 /*Search*/
 
@@ -87,6 +91,6 @@ th {
 }
 
 #div_table {
-    overflow: scroll;
+    overflow: auto;
     height: 460px;
 }
