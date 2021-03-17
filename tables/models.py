@@ -1,19 +1,8 @@
 from django.db import models
 
 
-class EspecieModel(models.Model):
-    cod_especie_exame = models.IntegerField()
-    descricao_especie = models.CharField(max_length=150)
-    cod_natureza_exame = models.ForeignKey(
-        'NaturezaModel', on_delete=models.CASCADE)
-    sigla = models.CharField(max_length=3)
-
-    class Meta:
-        db_table = "especie_exame"
-
-
 class NaturezaModel(models.Model):
-    cod_natureza_exame = models.IntegerField()
+    cod_natureza_exame = models.IntegerField(primary_key=True)
     descricao_natureza = models.CharField(max_length=70)
     ciencia = models.CharField(max_length=30)
 
@@ -22,6 +11,17 @@ class NaturezaModel(models.Model):
 
     class Meta:
         db_table = "natureza_exame"
+
+
+class EspecieModel(models.Model):
+    cod_especie_exame = models.IntegerField(primary_key=True)
+    descricao_especie = models.CharField(max_length=150)
+    cod_natureza_exame = models.ForeignKey(
+        'NaturezaModel', on_delete=models.DO_NOTHING, db_column='cod_natureza_exame')
+    sigla = models.CharField(max_length=3)
+
+    class Meta:
+        db_table = "especie_exame"
 
 
 class PeritoModel(models.Model):
