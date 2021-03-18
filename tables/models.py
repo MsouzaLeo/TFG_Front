@@ -25,7 +25,7 @@ class EspecieModel(models.Model):
 
 
 class PeritoModel(models.Model):
-    masp = models.IntegerField()
+    masp = models.IntegerField(primary_key=True)
     nome_perito = models.CharField(max_length=70)
 
     class Meta:
@@ -33,7 +33,7 @@ class PeritoModel(models.Model):
 
 
 class UniexaModel(models.Model):
-    cod_unidade_exame = models.CharField(max_length=6)
+    cod_unidade_exame = models.CharField(max_length=6, primary_key=True)
     comarca_da_unidade = models.CharField(max_length=70)
 
     class Meta:
@@ -41,7 +41,7 @@ class UniexaModel(models.Model):
 
 
 class UniresModel(models.Model):
-    cod_unidade_requisitante = models.CharField(max_length=6)
+    cod_unidade_requisitante = models.CharField(max_length=6, primary_key=True)
     unidade = models.CharField(max_length=70)
     tipo_unidade = models.CharField(max_length=50)
     subordinacao = models.CharField(max_length=100)

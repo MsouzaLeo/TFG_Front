@@ -4,7 +4,7 @@ from .forms import *
 
 
 def especieList(request):
-    showall = EspecieModel.objects.all()
+    showall = EspecieModel.objects.all().order_by('cod_especie_exame')
     return render(request, 'especie/list.html', {"data": showall})
 
 
@@ -21,7 +21,7 @@ def especieCreate(request):
 
 
 def naturezaList(request):
-    showall = NaturezaModel.objects.all()
+    showall = NaturezaModel.objects.all().order_by('cod_natureza_exame')
     return render(request, 'natureza/list.html', {"naturezas": showall})
 
 
