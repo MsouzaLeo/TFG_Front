@@ -25,9 +25,31 @@ def naturezaList(request):
     return render(request, 'natureza/list.html', {"naturezas": showall})
 
 
+def naturezaCreate(request):
+    if request.method == 'GET':
+        form = NaturezaForm()
+        return render(request, 'natureza/create.html', {'form': form})
+    else:
+        form = NaturezaForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('/natureza')
+
+
 def peritoList(request):
     showall = PeritoModel.objects.all()
     return render(request, 'perito/list.html', {"data": showall})
+
+
+def peritoCreate(request):
+    if request.method == 'GET':
+        form = PeritoForm()
+        return render(request, 'perito/create.html', {'form': form})
+    else:
+        form = PeritoForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('/perito')
 
 
 def uniexaList(request):
@@ -35,6 +57,28 @@ def uniexaList(request):
     return render(request, 'uniexa/list.html', {"data": showall})
 
 
+def uniexaCreate(request):
+    if request.method == 'GET':
+        form = UniexaForm()
+        return render(request, 'uniexa/create.html', {'form': form})
+    else:
+        form = UniexaForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('/uniexa')
+
+
 def uniresList(request):
     showall = UniresModel.objects.all()
     return render(request, 'unires/list.html', {"data": showall})
+
+
+def uniresCreate(request):
+    if request.method == 'GET':
+        form = UniresForm()
+        return render(request, 'unires/create.html', {'form': form})
+    else:
+        form = UniresForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('/unires')

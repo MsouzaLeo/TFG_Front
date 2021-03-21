@@ -1,9 +1,11 @@
 {% extends 'base.html' %} {% block title %} Lista de Unidades de Exame {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1>Lista de Unidades de Exame</h1>
-    <div class="col-3 add-div">
-        <i class="bi bi-plus-square"></i> Nova Unidade de Exame
-    </div>
+    <a id="add-link" href="novaUniexa/">
+        <div class="col-3 add-div">
+            <i class="bi bi-plus-square"></i> Nova Unidade de Exame
+        </div>
+    </a>
     <div class="col-8 search-div">
         <input type="text" id="search" name="search" placeholder="Nome da Unidade" size="80px">
         <i class="bi bi-search"></i>

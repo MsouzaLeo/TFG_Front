@@ -1,9 +1,11 @@
 {% extends 'base.html' %} {% block title %} Lista de Naturezas {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1>Lista de Naturezas</h1>
-    <div class="col-2 add-div">
-        <i class="bi bi-plus-square"></i> Nova Natureza
-    </div>
+    <a id="add-link" href="novaNatureza/">
+        <div class="col-2 add-div">
+            <i class="bi bi-plus-square"></i> Nova Natureza
+        </div>
+    </a>
     <div class="col-9 search-div">
         <input type="text" id="search" name="search" placeholder="Nome da Natureza" size="80px">
         <i class="bi bi-search"></i>
@@ -13,9 +15,9 @@
     <div id="div_table">
         <table class="table table-striped">
             <tr>
-                <th>Codigo</th>
+                <th>Código</th>
                 <th>Descrição</th>
-                <th>Ciencia</th>
+                <th>Ciência</th>
                 <th id="edit_col">Editar</th>
             </tr>
             {% for result in naturezas %}

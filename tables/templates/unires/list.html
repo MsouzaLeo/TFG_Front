@@ -1,9 +1,11 @@
 {% extends 'base.html' %} {% block title %} Lista de Unidades Requisitantes {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1>Lista de Unidades Requisitantes</h1>
-    <div class="col-3 add-div">
-        <i class="bi bi-plus-square"></i> Nova Unidade Requisitante
-    </div>
+    <a id="add-link" href="novaUnires/">
+        <div class="col-3 add-div">
+            <i class="bi bi-plus-square"></i> Nova Unidade Requisitante
+        </div>
+    </a>
     <div class="col-8 search-div">
         <input type="text" id="search" name="search" placeholder="Nome da Unidade" size="80px">
         <i class="bi bi-search"></i>

@@ -1,9 +1,11 @@
 {% extends 'base.html' %} {% block title %} Lista de Peritos {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1>Lista de Peritos</h1>
-    <div class="col-2 add-div">
-        <i class="bi bi-plus-square"></i> Novo Perito
-    </div>
+    <a id="add-link" href="novoPerito/">
+        <div class="col-2 add-div">
+            <i class="bi bi-plus-square"></i> Novo Perito
+        </div>
+    </a>
     <div class="col-9 search-div">
         <input type="text" id="search" name="search" placeholder="Nome do Perito" size="80px">
         <i class="bi bi-search"></i>
