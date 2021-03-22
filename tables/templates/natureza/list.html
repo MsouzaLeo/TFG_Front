@@ -20,12 +20,16 @@
                 <th>Ciência</th>
                 <th id="edit_col">Editar</th>
             </tr>
-            {% for result in naturezas %}
+            {% for result in data %}
             <tr>
                 <td>{{ result.cod_natureza_exame }}</td>
                 <td>{{ result.descricao_natureza }}</td>
                 <td>{{ result.ciencia}}</td>
-                <td id="edit_col"><i class="bi bi-pencil-square"></i></td>
+                <td id="edit_col">
+                    <a href="{% url 'natureza-update' result.cod_natureza_exame %}" class="btn edit-link">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </table>

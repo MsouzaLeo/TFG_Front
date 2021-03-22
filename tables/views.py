@@ -20,18 +20,21 @@ def especieCreate(request, cod_especie_exame=0):
         form = EspecieForm(request.POST)
         if form.is_valid():
             form.save()
-
         return redirect('/especie')
 
 
 def naturezaList(request):
     showall = NaturezaModel.objects.all().order_by('cod_natureza_exame')
-    return render(request, 'natureza/list.html', {"naturezas": showall})
+    return render(request, 'natureza/list.html', {"data": showall})
 
 
-def naturezaCreate(request):
+def naturezaCreate(request, cod_natureza_exame=0):
     if request.method == 'GET':
-        form = NaturezaForm()
+        if cod_natureza_exame == 0:
+            form = NaturezaForm()
+        else:
+            natureza = NaturezaModel.objects.get(pk=cod_natureza_exame)
+            form = NaturezaForm(instance=natureza)
         return render(request, 'natureza/create.html', {'form': form})
     else:
         form = NaturezaForm(request.POST)
