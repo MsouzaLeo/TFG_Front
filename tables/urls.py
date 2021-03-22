@@ -20,4 +20,6 @@ urlpatterns = [
     path('perito/<int:masp>/', views.peritoCreate, name='perito-update'),
     path('uniexa/<str:cod_unidade_exame>/',
          views.uniexaCreate, name='uniexa-update'),
+    path('unires/<str:cod_unidade_requisitante>/',
+         views.uniresCreate, name='unires-update'),
 ]

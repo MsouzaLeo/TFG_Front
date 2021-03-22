@@ -31,7 +31,11 @@
                 <td>{{ result.subordinacao }}</td>
                 <td>{{ result.municipio }}</td>
                 <td>{{ result.geocodigo }}</td>
-                <td id="edit_col"><i class="bi bi-pencil-square"></i></td>
+                <td id="edit_col">
+                    <a href="{% url 'unires-update' result.cod_unidade_requisitante %}" class="btn edit-link">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </table>

@@ -88,9 +88,13 @@ def uniresList(request):
     return render(request, 'unires/list.html', {"data": showall})
 
 
-def uniresCreate(request):
+def uniresCreate(request, cod_unidade_requisitante=''):
     if request.method == 'GET':
-        form = UniresForm()
+        if cod_unidade_requisitante == '':
+            form = UniresForm()
+        else:
+            unires = UniresModel.objects.get(pk=cod_unidade_requisitante)
+            form = UniresForm(instance=unires)
         return render(request, 'unires/create.html', {'form': form})
     else:
         form = UniresForm(request.POST)
