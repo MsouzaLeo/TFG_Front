@@ -23,7 +23,11 @@
             <tr>
                 <td>{{ result.cod_unidade_exame }}</td>
                 <td>{{ result.comarca_da_unidade }}</td>
-                <td id="edit_col"><i class="bi bi-pencil-square"></i></td>
+                <td id="edit_col">
+                    <a href="{% url 'uniexa-update' result.cod_unidade_exame %}" class="btn edit-link">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </table>

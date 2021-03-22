@@ -18,4 +18,6 @@ urlpatterns = [
     path('natureza/<int:cod_natureza_exame>/',
          views.naturezaCreate, name='natureza-update'),
     path('perito/<int:masp>/', views.peritoCreate, name='perito-update'),
+    path('uniexa/<str:cod_unidade_exame>/',
+         views.uniexaCreate, name='uniexa-update'),
 ]

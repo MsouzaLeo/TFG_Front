@@ -68,9 +68,13 @@ def uniexaList(request):
     return render(request, 'uniexa/list.html', {"data": showall})
 
 
-def uniexaCreate(request):
+def uniexaCreate(request, cod_unidade_exame=''):
     if request.method == 'GET':
-        form = UniexaForm()
+        if cod_unidade_exame == '':
+            form = UniexaForm()
+        else:
+            uniexa = UniexaModel.objects.get(pk=cod_unidade_exame)
+            form = UniexaForm(instance=uniexa)
         return render(request, 'uniexa/create.html', {'form': form})
     else:
         form = UniexaForm(request.POST)
