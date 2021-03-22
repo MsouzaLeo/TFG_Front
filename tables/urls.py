@@ -17,4 +17,5 @@ urlpatterns = [
          views.especieCreate, name='especie-update'),
     path('natureza/<int:cod_natureza_exame>/',
          views.naturezaCreate, name='natureza-update'),
+    path('perito/<int:masp>/', views.peritoCreate, name='perito-update'),
 ]

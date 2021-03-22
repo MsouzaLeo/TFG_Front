@@ -48,9 +48,13 @@ def peritoList(request):
     return render(request, 'perito/list.html', {"data": showall})
 
 
-def peritoCreate(request):
+def peritoCreate(request, masp=-1):
     if request.method == 'GET':
-        form = PeritoForm()
+        if masp == -1:
+            form = PeritoForm()
+        else:
+            perito = PeritoModel.objects.get(pk=masp)
+            form = PeritoForm(instance=perito)
         return render(request, 'perito/create.html', {'form': form})
     else:
         form = PeritoForm(request.POST)

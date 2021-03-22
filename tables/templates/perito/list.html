@@ -23,7 +23,11 @@
             <tr>
                 <td>{{ result.masp }}</td>
                 <td>{{ result.nome_perito }}</td>
-                <td id="edit_col"><i class="bi bi-pencil-square"></i></td>
+                <td id="edit_col">
+                    <a href="{% url 'perito-update' result.masp %}" class="btn edit-link">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </table>
