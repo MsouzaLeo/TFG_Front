@@ -28,7 +28,11 @@
                 <td>{{ result.descricao_especie }}</td>
                 <td>{{ result.cod_natureza_exame }}</td>
                 <td>{{ result.sigla}}</td>
-                <td id="edit_col"><i class="bi bi-pencil-square"></i></td>
+                <td id="edit_col">
+                    <a href="{% url 'especie-update' result.cod_especie_exame %}" class="btn edit-link">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </table>

@@ -8,9 +8,13 @@ def especieList(request):
     return render(request, 'especie/list.html', {"data": showall})
 
 
-def especieCreate(request):
+def especieCreate(request, cod_especie_exame=0):
     if request.method == 'GET':
-        form = EspecieForm()
+        if cod_especie_exame == 0:
+            form = EspecieForm()
+        else:
+            especie = EspecieModel.objects.get(pk=cod_especie_exame)
+            form = EspecieForm(instance=especie)
         return render(request, 'especie/create.html', {'form': form})
     else:
         form = EspecieForm(request.POST)

@@ -13,4 +13,8 @@ urlpatterns = [
     path('perito/novoPerito/', views.peritoCreate, name='novo-perito'),
     path('uniexa/novaUniexa/', views.uniexaCreate, name='nova-uniexa'),
     path('unires/novaUnires/', views.uniresCreate, name='nova-unires'),
+    path('especie/<int:cod_especie_exame>/',
+         views.especieCreate, name='especie-update'),
+    path('natureza/<int:cod_natureza_exame>/',
+         views.naturezaCreate, name='natureza-update'),
 ]
