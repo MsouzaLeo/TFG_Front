@@ -16,13 +16,13 @@ urlpatterns = [
     path('especie/<int:cod_especie_exame>/',
          views.especieEdit, name='especie-update'),
     path('natureza/<int:cod_natureza_exame>/',
-         views.naturezaCreate, name='natureza-update'),
+         views.naturezaEdit, name='natureza-update'),
     path('perito/<int:masp>/',
-         views.peritoCreate, name='perito-update'),
+         views.peritoEdit, name='perito-update'),
     path('uniexa/<str:cod_unidade_exame>/',
-         views.uniexaCreate, name='uniexa-update'),
+         views.uniexaEdit, name='uniexa-update'),
     path('unires/<str:cod_unidade_requisitante>/',
-         views.uniresCreate, name='unires-update'),
+         views.uniresEdit, name='unires-update'),
 ]
 
 """

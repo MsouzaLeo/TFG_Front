@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block title %} Edit de Unidade de Requisitante {% endblock %} {% load crispy_forms_tags %} {% block content %}
+
+<div class="offset-1 col-10">
+    <h1>Editar a Unidade de Requisitante:</h1>
+    <form method="POST" autocomplete="off">
+        {% csrf_token %}
+        <div class="col-md-5">
+            {{form.unidade|as_crispy_field}} {{form.tipo_unidade|as_crispy_field}} {{form.subordinacao|as_crispy_field}} {{form.municipio|as_crispy_field}} {{form.geocodigo|as_crispy_field}}
+        </div>
+        <button type="submit" class="btn btn-success"><i class="bi bi-upload"></i> Enviar </button>
+    </form>
+</div>
+{% endblock %}
