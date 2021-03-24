@@ -4,7 +4,12 @@ from .forms import *
 
 
 def especieList(request):
-    showall = EspecieModel.objects.all().order_by('cod_especie_exame')
+    search = request.GET.get('search')
+    if search:
+        showall = EspecieModel.objects.filter(
+            descricao_especie__icontains=search)
+    else:
+        showall = EspecieModel.objects.all().order_by('cod_especie_exame')
     return render(request, 'especie/list.html', {"data": showall})
 
 
@@ -39,7 +44,12 @@ def especieEdit(request, cod_especie_exame=0):
 
 
 def naturezaList(request):
-    showall = NaturezaModel.objects.all().order_by('cod_natureza_exame')
+    search = request.GET.get('search')
+    if search:
+        showall = NaturezaModel.objects.filter(
+            descricao_natureza__icontains=search)
+    else:
+        showall = NaturezaModel.objects.all().order_by('cod_natureza_exame')
     return render(request, 'natureza/list.html', {"data": showall})
 
 
@@ -74,7 +84,11 @@ def naturezaEdit(request, cod_natureza_exame=0):
 
 
 def peritoList(request):
-    showall = PeritoModel.objects.all()
+    search = request.GET.get('search')
+    if search:
+        showall = PeritoModel.objects.filter(nome_perito__icontains=search)
+    else:
+        showall = PeritoModel.objects.all()
     return render(request, 'perito/list.html', {"data": showall})
 
 
@@ -109,7 +123,12 @@ def peritoEdit(request, masp=-1):
 
 
 def uniexaList(request):
-    showall = UniexaModel.objects.all()
+    search = request.GET.get('search')
+    if search:
+        showall = UniexaModel.objects.filter(
+            comarca_da_unidade__icontains=search)
+    else:
+        showall = UniexaModel.objects.all()
     return render(request, 'uniexa/list.html', {"data": showall})
 
 
@@ -144,7 +163,11 @@ def uniexaEdit(request, cod_unidade_exame=''):
 
 
 def uniresList(request):
-    showall = UniresModel.objects.all()
+    search = request.GET.get('search')
+    if search:
+        showall = UniresModel.objects.filter(unidade__icontains=search)
+    else:
+        showall = UniresModel.objects.all()
     return render(request, 'unires/list.html', {"data": showall})
 
 
