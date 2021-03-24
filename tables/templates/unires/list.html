@@ -8,14 +8,14 @@
     </a>
     <div class="col-8 search-div">
         <form method="get" id='search-form'>
-            <input type="text" id="search" name="search" placeholder="Unidade" size="80px">
-            <i class="bi bi-search"></i>
+            <input type="text" id="search" name="search" placeholder="Unidade" size="80px" value="{{ request.GET.search}}">
+            <i class=" bi bi-search "></i>
         </form>
     </div>
 
 
-    <div id="div_table">
-        <table class="table table-striped">
+    <div id="div_table ">
+        <table class="table table-striped ">
             <tr>
                 <th>Codigo da Unidade</th>
                 <th>Unidade</th>
@@ -23,7 +23,7 @@
                 <th>Subordinação</th>
                 <th>Município</th>
                 <th>Geocodigo</th>
-                <th id="edit_col">Editar</th>
+                <th id="edit_col ">Editar</th>
             </tr>
             {% for result in data %}
             <tr>
@@ -33,9 +33,9 @@
                 <td>{{ result.subordinacao }}</td>
                 <td>{{ result.municipio }}</td>
                 <td>{{ result.geocodigo }}</td>
-                <td id="edit_col">
-                    <a href="{% url 'unires-update' result.cod_unidade_requisitante %}" class="btn edit-link">
-                        <i class="bi bi-pencil-square"></i>
+                <td id="edit_col ">
+                    <a href="{% url 'unires-update' result.cod_unidade_requisitante %} " class="btn edit-link ">
+                        <i class="bi bi-pencil-square "></i>
                     </a>
                 </td>
             </tr>

@@ -8,26 +8,26 @@
     </a>
     <div class="col-8 search-div">
         <form method="get" id='search-form'>
-            <input type="text" id="search" name="search" placeholder="Comarca" size="80px">
-            <i class="bi bi-search"></i>
+            <input type="text" id="search" name="search" placeholder="Comarca" size="80px" value="{{ request.GET.search}}">
+            <i class="bi bi-search "></i>
         </form>
     </div>
 
 
-    <div id="div_table">
-        <table class="table table-striped">
+    <div id="div_table ">
+        <table class="table table-striped ">
             <tr>
                 <th>Codigo da Unidade</th>
                 <th>Comarca da Unidade</th>
-                <th id="edit_col">Editar</th>
+                <th id="edit_col ">Editar</th>
             </tr>
             {% for result in data %}
             <tr>
                 <td>{{ result.cod_unidade_exame }}</td>
                 <td>{{ result.comarca_da_unidade }}</td>
-                <td id="edit_col">
-                    <a href="{% url 'uniexa-update' result.cod_unidade_exame %}" class="btn edit-link">
-                        <i class="bi bi-pencil-square"></i>
+                <td id="edit_col ">
+                    <a href="{% url 'uniexa-update' result.cod_unidade_exame %} " class="btn edit-link ">
+                        <i class="bi bi-pencil-square "></i>
                     </a>
                 </td>
             </tr>

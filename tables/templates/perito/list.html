@@ -8,26 +8,26 @@
     </a>
     <div class="col-9 search-div">
         <form method="get" id='search-form'>
-            <input type="text" id="search" name="search" placeholder="Nome do Perito" size="80px">
-            <i class="bi bi-search"></i>
+            <input type="text" id="search" name="search" placeholder="Nome do Perito" size="80px" value="{{ request.GET.search}}">
+            <i class=" bi bi-search "></i>
         </form>
     </div>
 
 
-    <div id="div_table">
-        <table class="table table-striped">
+    <div id="div_table ">
+        <table class="table table-striped ">
             <tr>
                 <th>MASP</th>
                 <th>Nome do Perito</th>
-                <th id="edit_col">Editar</th>
+                <th id="edit_col ">Editar</th>
             </tr>
             {% for result in data %}
             <tr>
                 <td>{{ result.masp }}</td>
                 <td>{{ result.nome_perito }}</td>
-                <td id="edit_col">
-                    <a href="{% url 'perito-update' result.masp %}" class="btn edit-link">
-                        <i class="bi bi-pencil-square"></i>
+                <td id="edit_col ">
+                    <a href="{% url 'perito-update' result.masp %} " class="btn edit-link ">
+                        <i class="bi bi-pencil-square "></i>
                     </a>
                 </td>
             </tr>
