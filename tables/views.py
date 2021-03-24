@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.files.storage import FileSystemStorage
 from tables.models import *
 from .forms import *
 
@@ -199,3 +200,11 @@ def uniresEdit(request, cod_unidade_requisitante=''):
         if form.is_valid():
             form.save()
         return redirect('/unires')
+
+
+def upload(request):
+    if request.method == 'POST':
+        uploaded_file = request.FILES['document']
+        fs = FileSystemStorage()
+        fs.save(uploaded_file.name, uploaded_file)
+    return render(request, 'upload/upload.html')

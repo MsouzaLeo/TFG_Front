@@ -23,10 +23,5 @@ urlpatterns = [
          views.uniexaEdit, name='uniexa-update'),
     path('unires/<str:cod_unidade_requisitante>/',
          views.uniresEdit, name='unires-update'),
+    path('upload/', views.upload, name='upload'),
 ]
-
-"""
-TESTAR DEPOIS O UPDATE COM UMA NOVA VIEW SÓ PARA ELE, PARA NAO PODER EDITAR A PRIMARY KEY, SENÃO VAI DAR ERRO E VOU TER Q OUVIR DA VANESSA
-É SÓ CRIAR UMA NOCA VIEW PARECIDO COM A DE CREATE, AI VC VOLTA A CREATE PRA COMO ELA TAVA ANTES, E NA DE EDIT DEIXA COMO ELA TA MAIS OU MENOS
-E AI CRIAR UM HTML NOVO PRO EDIT, AI NAO COLOCA O CAMPO DA PRIMARY KEY NA PAGINA DE UPDATE
-"""

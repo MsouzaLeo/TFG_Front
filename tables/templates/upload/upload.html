@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% block content %}
+<div class="offset-1 col-6 list-div">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h1>Carga de Laudos do mês</h1>
+        <p></p>
+
+        <div class="input-group mb-4 col-4">
+            <input type="file" class="form-control" id="inputGroupFile02" name="document">
+
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+</div>
+</form>
+
+{% endblock %}
