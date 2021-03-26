@@ -24,4 +24,5 @@ urlpatterns = [
     path('unires/<str:cod_unidade_requisitante>/',
          views.uniresEdit, name='unires-update'),
     path('upload/', views.upload, name='upload'),
+    path('teste/', views.run_python_script, name='upload'),
 ]

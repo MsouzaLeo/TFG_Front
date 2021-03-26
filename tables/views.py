@@ -1,7 +1,12 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from subprocess import run, PIPE
+import sys
+from tkinter.constants import FALSE
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.core.files.storage import FileSystemStorage
 from tables.models import *
 from .forms import *
+import os
+from scripts import *
 
 
 def especieList(request):
@@ -165,8 +170,9 @@ def uniexaEdit(request, cod_unidade_exame=''):
 
 def uniresList(request):
     search = request.GET.get('search')
+    # search.uppercase
     if search:
-        showall = UniresModel.objects.filter(unidade__icontains=search)
+        showall = UniresModel.objects.filter(municipio=search)
     else:
         showall = UniresModel.objects.all()
     return render(request, 'unires/list.html', {"data": showall})
@@ -208,3 +214,9 @@ def upload(request):
         fs = FileSystemStorage()
         fs.save(uploaded_file.name, uploaded_file)
     return render(request, 'upload/upload.html')
+
+
+def run_python_script(request):
+    out = run([sys.executable, 'scripts/ETL.py'], shell=False, stdout=PIPE)
+    print(out)
+    return render(request, 'upload/upload.html', {'data': out.stdout})
