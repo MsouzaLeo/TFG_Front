@@ -219,4 +219,4 @@ def upload(request):
 def run_python_script(request):
     out = run([sys.executable, 'scripts/ETL.py'], shell=False, stdout=PIPE)
     print(out)
-    return render(request, 'upload/upload.html', {'data': out.returncode})
+    return render(request, 'upload/upload.html', {'data': out})
