@@ -89,7 +89,7 @@ try:
 except ValueError as vx:
     print(vx)
 except Exception as ex:
-    print(ex)
+    print(ex.__cause__)
 else:
     print(f"A tabela {table_name} foi carregada com sucesso.")
 finally:
