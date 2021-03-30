@@ -72,7 +72,7 @@ df['cod_modelo_laudo'] = df['cod_modelo_laudo'].fillna(0)
 df['cod_modelo_laudo'] = df['cod_modelo_laudo'].astype('int64')
 
 
-print(df.dtypes)
+# print(df.dtypes)
 
 
 # Criando a conexao ao Banco
