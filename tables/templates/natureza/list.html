@@ -6,10 +6,10 @@
             <i class="bi bi-plus-square"></i> Nova Natureza
         </div>
     </a>
-    <div class="col-9 search-div">
+    <div class="col-9 search-div form">
         <form method="get" id='search-form'>
-            <input type="text" id="search" name="search" placeholder="Descrição da Natureza" size="80px" value=" {{ request.GET.search}} ">
-            <i class="bi bi-search "></i>
+            <input type="text" id="search" name="search" placeholder="Descrição da Natureza" size="80px" value="{{request.GET.search}}">
+            <i id="search-btn" class="bi bi-search "></i>
         </form>
     </div>
 

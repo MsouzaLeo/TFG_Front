@@ -135,7 +135,7 @@ def uniexaList(request):
     search = request.GET.get('search')
     if search:
         showall = UniexaModel.objects.filter(
-            comarca_da_unidade__icontains=search)
+            comarca_da_unidade__icontains=search.upper())
     else:
         showall = UniexaModel.objects.all()
     return render(request, 'uniexa/list.html', {"data": showall})
@@ -175,7 +175,8 @@ def uniresList(request):
     search = request.GET.get('search')
     # search.uppercase
     if search:
-        showall = UniresModel.objects.filter(municipio=search)
+        showall = UniresModel.objects.filter(
+            municipio__icontains=search.upper())
     else:
         showall = UniresModel.objects.all()
     return render(request, 'unires/list.html', {"data": showall})
@@ -223,13 +224,13 @@ def run_python_script(request):
         fs = FileSystemStorage()
         fs.save(uploaded_file.name, uploaded_file)
 
-    out = run([sys.executable, 'scripts/ETL.py'],
+    out = run([sys.executable, 'scripts/ETL.py', 'media/' + uploaded_file.name],
               shell=False, stdout=PIPE, stderr=PIPE)
    #out = Popen(['python', 'scripts/ETL.py'], stdout=PIPE, )
    # print(out.comunicate())
-    print(out)
+    print(out.stdout.decode('utf-8'))
     # return {'data': out.stdout}
-    return render(request, 'upload/upload.html', {"data": out.stdout})
+    return render(request, 'upload/upload.html', {"data": out.stdout.decode('utf-8')})
 
 
 # def run_python_script(request):

@@ -1,15 +1,16 @@
 import pandas as pd
 import sqlalchemy
 from tkinter import filedialog
+import sys
 
 pd.options.mode.chained_assignment = None
 
 # Selecionando o arquivo com a planilhas dos Laudos
-arquivo = filedialog.askopenfilenames(title='Selecione a planilha')
+#arquivo = filedialog.askopenfilenames(title='Selecione a planilha')
 
 # print(arquivo[0])
 # Lendo o arquivo selecionado e transformando-o em um DataFrame
-IC_mes = pd.read_csv(arquivo[0], sep=';', encoding='cp1252')
+IC_mes = pd.read_csv(sys.argv[1], sep=';', encoding='cp1252')
 
 
 # Separando os dados dos Laudos para o Banco de Dados
