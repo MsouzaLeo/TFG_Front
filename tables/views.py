@@ -229,6 +229,7 @@ def run_python_script(request):
             out = run([sys.executable, 'scripts/ETL.py', 'media/' + uploaded_file.name],
                       shell=False, stdout=PIPE, stderr=PIPE)
             print(out.stdout.decode('utf-8'))
+            os.remove(path='media/' + uploaded_file.name)
             return render(request, 'upload/upload.html', {"data": out.stdout.decode('utf-8')})
         else:
             return render(request, 'upload/upload.html')
