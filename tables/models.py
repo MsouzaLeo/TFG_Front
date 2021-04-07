@@ -50,3 +50,25 @@ class UniresModel(models.Model):
 
     class Meta:
         db_table = "unidade_requisitante"
+
+
+class LaudoModel(models.Model):
+    nmr_requisicao = models.CharField(max_length=15, primary_key=True)
+    cod_natureza_exame = models.IntegerField()
+    cod_especie_exame = models.IntegerField()
+    cod_unidade_requisitante = models.CharField(max_length=6)
+    cod_unidade_exame = models.CharField(max_length=6)
+    masp_perito = models.IntegerField()
+    tipo_requisicao = models.CharField(max_length=20)
+    nmr_procedimento = models.IntegerField()
+    cod_modelo_laudo = models.IntegerField()
+    data_requisicao_pericia = models.DateTimeField()
+    data_distribuicao_requisicao = models.DateTimeField()
+    data_redistribuicao = models.DateTimeField()
+    data_devolucao_requisicao = models.DateTimeField()
+    data_aceite_requisicao = models.DateTimeField()
+    data_expedicao_laudo = models.DateTimeField()
+    tempo_confeccao_laudo = models.IntegerField()
+
+    class Meta:
+        db_table = 'laudo'

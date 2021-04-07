@@ -200,7 +200,6 @@ def uniexaEdit(request, cod_unidade_exame=''):
 
 def uniresList(request):
     search = request.GET.get('search')
-    # search.uppercase
     if search:
         showall = UniresModel.objects.filter(
             municipio__icontains=search.upper())
@@ -260,3 +259,15 @@ def run_python_script(request):
             return render(request, 'upload/upload.html', {"data": out.stdout.decode('utf-8')})
         else:
             return render(request, 'upload/upload.html')
+
+
+def laudoList(request):
+    natu = request.GET.get('natu')
+    espe = request.GET.get('espe')
+    masp = request.GET.get('masp')
+    if natu or espe or masp:
+        showall = LaudoModel.objects.filter(
+            cod_natureza_exame=natu, cod_especie_exame=espe, masp_perito=masp)
+    else:
+        showall = LaudoModel.objects.all()[:1000]
+    return render(request, 'laudo/list.html', {"data": showall})
