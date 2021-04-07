@@ -10,7 +10,8 @@
     <div class="col-9 search-div form">
         <a href="{% url 'export-csv' %}" class='btn btn-success'>CSV</a>
         <form method="get" id='search-form'>
-            <input type="text" id="search" name="search" placeholder="Descrição da Espécie" size="80px" value="{{request.GET.search}}">
+            <input type="text" id="search" name="desc" placeholder="Descrição da Espécie" size="95px" value="{{request.GET.desc}}">
+            <input type="text" id="search" name="sigl" placeholder="Sigla da Espécie" value="{{request.GET.sigl}}">
             <i id="search-btn" class="bi bi-search"></i>
         </form>
     </div>

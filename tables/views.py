@@ -12,13 +12,17 @@ import datetime
 
 
 def especieList(request):
-    search = request.GET.get('search')
-    if search:
+    desc = request.GET.get('desc')
+    sigla = request.GET.get('nat')
+    if desc or sigla:
         showall = EspecieModel.objects.filter(
-            descricao_especie__icontains=search)
+            descricao_especie__icontains=desc, sigla__icontains=sigla)
     else:
         showall = EspecieModel.objects.all().order_by('cod_especie_exame')
     return render(request, 'especie/list.html', {"data": showall})
+
+
+# def multipleSearch(request):
 
 
 def export_csv(request):
@@ -75,10 +79,11 @@ def especieEdit(request, cod_especie_exame=0):
 
 
 def naturezaList(request):
-    search = request.GET.get('search')
-    if search:
+    desc = request.GET.get('desc')
+    cien = request.GET.get('cien')
+    if desc or cien:
         showall = NaturezaModel.objects.filter(
-            descricao_natureza__icontains=search)
+            descricao_natureza__icontains=desc, ciencia__icontains=cien)
     else:
         showall = NaturezaModel.objects.all().order_by('cod_natureza_exame')
     return render(request, 'natureza/list.html', {"data": showall})
