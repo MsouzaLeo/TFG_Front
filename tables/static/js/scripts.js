@@ -10,3 +10,13 @@ $(searchBtn).on('click', function() {
 $(uploadBtn).on('click', function() {
     uploadForm.submit();
 })
+
+/*Export dos dados da Table em CSV*/
+var name_file = document.getElementById('name').innerHTML;
+var options = {
+    'separator': ";",
+    'filename': name_file + ".csv"
+}
+$('#downloadcsv').on('click', function() {
+    $('#table').table2csv(options);
+});

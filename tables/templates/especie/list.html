@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block title %} Lista de Especies {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
-    <h1>Lista de Especies</h1>
+    <h1 id='name'>Especies de Exame</h1>
 
     <a id="add-link" href="novaEspecie/">
         <div class="col-2 add-div">
@@ -8,7 +8,6 @@
         </div>
     </a>
     <div class="col-9 search-div form">
-        <a href="{% url 'export-csv' %}" class='btn btn-success'>CSV</a>
         <form method="get" id='search-form'>
             <input type="text" id="search" name="desc" placeholder="Descrição da Espécie" size="95px" value="{{request.GET.desc}}">
             <input type="text" id="search" name="sigl" placeholder="Sigla da Espécie" value="{{request.GET.sigl}}">
@@ -17,7 +16,7 @@
     </div>
 
     <div id="div_table">
-        <table class="table table-striped">
+        <table id='table' class="table table-striped">
             <tr>
                 <th>Codigo Especie</th>
                 <th>Descrição</th>
@@ -39,7 +38,8 @@
             </tr>
             {% endfor %}
         </table>
-    </div>
-</div>
 
+    </div>
+    <button class='btn btn-success' id='downloadcsv'>CSV</button>
+</div>
 {% endblock %}

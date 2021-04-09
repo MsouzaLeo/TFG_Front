@@ -1,6 +1,7 @@
 {% extends 'base.html' %} {% block title %} Lista de Unidades de Exame {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
-    <h1>Lista de Unidades de Exame</h1>
+    <h1 id='name'>Lista de Unidades de Exame</h1>
+
     <a id="add-link" href="novaUniexa/">
         <div class="col-3 add-div">
             <i class="bi bi-plus-square"></i> Nova Unidade de Exame
@@ -9,13 +10,13 @@
     <div class="col-8 search-div">
         <form method="get" id='search-form'>
             <input type="text" id="search" name="search" placeholder="Comarca" size="80px" value="{{request.GET.search}}">
-            <i class="bi bi-search "></i>
+            <i id="search-btn" class="bi bi-search "></i>
         </form>
     </div>
 
 
     <div id="div_table">
-        <table class="table table-striped ">
+        <table id='table' class="table table-striped ">
             <tr>
                 <th>Codigo da Unidade</th>
                 <th>Comarca da Unidade</th>
@@ -34,5 +35,6 @@
             {% endfor %}
         </table>
     </div>
+    <button class='btn btn-success' id='downloadcsv'>CSV</button>
 </div>
 {% endblock %}

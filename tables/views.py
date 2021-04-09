@@ -13,39 +13,13 @@ import datetime
 
 def especieList(request):
     desc = request.GET.get('desc')
-    sigla = request.GET.get('nat')
+    sigla = request.GET.get('sigl')
     if desc or sigla:
         showall = EspecieModel.objects.filter(
             descricao_especie__icontains=desc, sigla__icontains=sigla)
     else:
         showall = EspecieModel.objects.all().order_by('cod_especie_exame')
     return render(request, 'especie/list.html', {"data": showall})
-
-
-# def multipleSearch(request):
-
-
-def export_csv(request):
-    search = request.GET.get('search')
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="especies"' + \
-        str(datetime.datetime.now())+'.csv'
-
-    writer = csv.writer(response, delimiter=';')
-    writer.writerow(
-        ['Codigo da Especie', 'Descricao da Especie', 'Codigo da Natureza', 'Sigla'])
-
-    if search:
-        especies = EspecieModel.objects.filter(
-            descricao_especie__icontains=search)
-    else:
-        especies = EspecieModel.objects.all().order_by('cod_especie_exame')
-
-    for especie in especies:
-        writer.writerow([str(especie.cod_especie_exame), str(especie.descricao_especie),
-                         especie.cod_natureza_exame, especie.sigla])
-
-    return response
 
 
 def especieCreate(request, cod_especie_exame=0):

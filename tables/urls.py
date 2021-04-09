@@ -26,6 +26,4 @@ urlpatterns = [
          views.uniresEdit, name='unires-update'),
     path('upload/', views.upload, name='upload'),
     path('ETL/', views.run_python_script, name='upload'),
-    path('export_csv/',
-         views.export_csv, name='export-csv'),
 ]
