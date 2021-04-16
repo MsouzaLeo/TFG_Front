@@ -9,8 +9,10 @@
     </a>
     <div class="col-9 search-div form">
         <form method="get" id='search-form'>
-            <input type="text" id="search" name="desc" placeholder="Descrição da Espécie" size="95px" value="{{request.GET.desc}}">
+            <input type="text" id="search" name="desc" placeholder="Descrição da Espécie" size='70px' value="{{request.GET.desc}}">
+            <input type="text" id="search" name="natu" placeholder="Natureza da Espécie" value="{{request.GET.natu}}">
             <input type="text" id="search" name="sigl" placeholder="Sigla da Espécie" value="{{request.GET.sigl}}">
+
             <i id="search-btn" class="bi bi-search"></i>
         </form>
     </div>

@@ -14,9 +14,10 @@ import datetime
 def especieList(request):
     desc = request.GET.get('desc')
     sigla = request.GET.get('sigl')
-    if desc or sigla:
+    natureza = request.GET.get('natu')
+    if desc or sigla or natureza:
         showall = EspecieModel.objects.filter(
-            descricao_especie__icontains=desc, sigla__icontains=sigla)
+            descricao_especie__icontains=desc, sigla__icontains=sigla, cod_natureza_exame__descricao_natureza__icontains=natureza)
     else:
         showall = EspecieModel.objects.all().order_by('cod_especie_exame')
     return render(request, 'especie/list.html', {"data": showall})
