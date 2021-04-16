@@ -13,12 +13,20 @@ class NaturezaModel(models.Model):
         db_table = "natureza_exame"
 
 
+SIGLAS = (
+    ('', 'Selecione'),
+    ('DI', 'DI'),
+    ('DEA', 'DEA'),
+    ('DEU', 'DEU')
+)
+
+
 class EspecieModel(models.Model):
     cod_especie_exame = models.IntegerField(primary_key=True)
     descricao_especie = models.CharField(max_length=150)
     cod_natureza_exame = models.ForeignKey(
         'NaturezaModel', on_delete=models.DO_NOTHING, db_column='cod_natureza_exame')
-    sigla = models.CharField(max_length=3)
+    sigla = models.BooleanField(choices=SIGLAS)
 
     class Meta:
         db_table = "especie_exame"
