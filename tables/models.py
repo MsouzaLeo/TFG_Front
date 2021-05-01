@@ -28,6 +28,9 @@ class EspecieModel(models.Model):
         'NaturezaModel', on_delete=models.DO_NOTHING, db_column='cod_natureza_exame')
     sigla = models.BooleanField(choices=SIGLAS)
 
+    def __str__(self):
+        return self.descricao_especie
+
     class Meta:
         db_table = "especie_exame"
 
@@ -62,8 +65,10 @@ class UniresModel(models.Model):
 
 class LaudoModel(models.Model):
     nmr_requisicao = models.CharField(max_length=15, primary_key=True)
-    cod_natureza_exame = models.IntegerField()
-    cod_especie_exame = models.IntegerField()
+    cod_natureza_exame = models.ForeignKey(
+        'NaturezaModel', on_delete=models.DO_NOTHING, db_column='cod_natureza_exame')
+    cod_especie_exame = models.ForeignKey(
+        'EspecieModel', on_delete=models.DO_NOTHING, db_column='cod_especie_exame')
     cod_unidade_requisitante = models.CharField(max_length=6)
     cod_unidade_exame = models.CharField(max_length=6)
     masp_perito = models.IntegerField()
