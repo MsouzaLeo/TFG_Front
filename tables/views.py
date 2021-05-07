@@ -242,7 +242,8 @@ def laudoList(request):
     masp = request.GET.get('masp')
     if natu or espe or masp:
         showall = LaudoModel.objects.filter(
-            cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito=masp)
+            cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp)[:5000]
+        print(masp, type(masp))
     else:
-        showall = LaudoModel.objects.all()[:10000]
+        showall = LaudoModel.objects.all()[:5000]
     return render(request, 'laudo/list.html', {"data": showall})
