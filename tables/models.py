@@ -26,7 +26,7 @@ class EspecieModel(models.Model):
     descricao_especie = models.CharField(max_length=150)
     cod_natureza_exame = models.ForeignKey(
         'NaturezaModel', on_delete=models.DO_NOTHING, db_column='cod_natureza_exame')
-    sigla = models.BooleanField(choices=SIGLAS)
+    sigla = models.CharField(max_length=3, choices=SIGLAS, default='')
 
     def __str__(self):
         return self.descricao_especie

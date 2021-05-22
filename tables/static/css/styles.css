@@ -34,6 +34,28 @@
     font-size: 20px;
 }
 
+.bi.bi-linkedin {
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    margin: 5px;
+    font-size: 25px;
+}
+
+.bi.bi-github {
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    margin: 5px;
+    font-size: 25px;
+}
+
+.bi.bi-linkedin:hover {
+    color: rgb(110, 110, 110) !important;
+}
+
+.bi.bi-github:hover {
+    color: rgb(110, 110, 110) !important;
+}
+
 
 /*Botão adicionar*/
 

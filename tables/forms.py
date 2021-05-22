@@ -17,7 +17,7 @@ class EspecieForm(forms.ModelForm):
     def __init__(self, *arg, **kwargs):
         super(EspecieForm, self).__init__(*arg, **kwargs)
         self.fields['cod_natureza_exame'].empty_label = 'Selecione'
-        self.fields['sigla'].required = False
+        self.fields['sigla'].required = True
 
 
 class NaturezaForm(forms.ModelForm):

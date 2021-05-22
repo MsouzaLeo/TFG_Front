@@ -34,7 +34,7 @@ def especieCreate(request, cod_especie_exame=0):
     else:
         form = EspecieForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
         return redirect('/especie')
 
 
