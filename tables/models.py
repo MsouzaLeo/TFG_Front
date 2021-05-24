@@ -47,6 +47,9 @@ class UniexaModel(models.Model):
     cod_unidade_exame = models.CharField(max_length=6, primary_key=True)
     comarca_da_unidade = models.CharField(max_length=70)
 
+    def __str__(self):
+        return self.comarca_da_unidade
+
     class Meta:
         db_table = "unidade_exame"
 
@@ -59,6 +62,9 @@ class UniresModel(models.Model):
     municipio = models.CharField(max_length=80)
     geocodigo = models.IntegerField()
 
+    def __str__(self):
+        return self.municipio
+
     class Meta:
         db_table = "unidade_requisitante"
 
@@ -69,8 +75,10 @@ class LaudoModel(models.Model):
         'NaturezaModel', on_delete=models.DO_NOTHING, db_column='cod_natureza_exame')
     cod_especie_exame = models.ForeignKey(
         'EspecieModel', on_delete=models.DO_NOTHING, db_column='cod_especie_exame')
-    cod_unidade_requisitante = models.CharField(max_length=6)
-    cod_unidade_exame = models.CharField(max_length=6)
+    cod_unidade_requisitante = models.ForeignKey(
+        'UniresModel', on_delete=models.DO_NOTHING, db_column='cod_unidade_requisitante')
+    cod_unidade_exame = models.ForeignKey(
+        'UniexaModel', on_delete=models.DO_NOTHING, db_column='cod_unidade_exame')
     masp_perito = models.IntegerField()
     tipo_requisicao = models.CharField(max_length=20)
     nmr_procedimento = models.IntegerField()
