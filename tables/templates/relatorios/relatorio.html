@@ -1,11 +1,11 @@
-{% extends 'base.html' %} {% block title %} Laudos {% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %} Relatorio {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
-    <h1 id='name'>Laudos</h1>
+    <h1 id='name'>Relatório de Laudos</h1>
     <div class="col-9 search-div form">
         <form method="get" id='search-form'>
-            <h5>Pesquisas</h5>
-            <input type="text" id="natu" name="natu" placeholder="Natureza do exame" value="{{request.GET.natu}}">
-            <input type="text" id="espe" name="espe" placeholder="Espécie do exame" value="{{request.GET.espe}}">
+            <h5>Filtros</h5>
+            <input type="text" id="natu" name="natu" placeholder="Código da Natureza" value="{{request.GET.natu}}">
+            <input type="text" id="espe" name="espe" placeholder="Código da Espécie" value="{{request.GET.espe}}">
             <input type="text" id="masp" name="masp" placeholder="MASP do Perito" value="{{request.GET.masp}}">
             <i id="search-btn" class="bi bi-search "></i>
         </form>

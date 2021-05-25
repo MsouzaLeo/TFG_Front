@@ -215,7 +215,6 @@ def uniresEdit(request, cod_unidade_requisitante=''):
 
 def upload(request):
 
-    # run_python_script()
     return render((request), 'upload/upload.html')
 
 
@@ -247,3 +246,8 @@ def laudoList(request):
     else:
         showall = LaudoModel.objects.all()[:5000]
     return render(request, 'laudo/list.html', {"data": showall})
+
+
+def relatorio(request):
+
+    return render((request), 'relatorios/relatorio.html')
