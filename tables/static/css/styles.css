@@ -34,26 +34,20 @@
     font-size: 20px;
 }
 
-.bi.bi-linkedin {
-    color: rgb(0, 0, 0);
-    cursor: pointer;
-    margin: 5px;
-    font-size: 25px;
-}
-
+.bi.bi-linkedin,
 .bi.bi-github {
-    color: rgb(0, 0, 0);
+    color: rgb(100, 100, 100) !important;
     cursor: pointer;
     margin: 5px;
     font-size: 25px;
 }
 
 .bi.bi-linkedin:hover {
-    color: rgb(110, 110, 110) !important;
+    color: #0e76a8 !important;
 }
 
 .bi.bi-github:hover {
-    color: rgb(110, 110, 110) !important;
+    color: rgb(0, 0, 0) !important;
 }
 
 

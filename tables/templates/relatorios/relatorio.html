@@ -1,14 +1,24 @@
 {% extends 'base.html' %} {% block title %} Relatorio {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
-    <h1 id='name'>Relatório de Laudos</h1>
+    <h1 id='name' style="text-align: center">Relatório de Laudos</h1>
     <br>
-    <div id="container" style="width: 75%;">
+
+    <div id="container" style="width: 50%;">
+        <h3 style="text-align: center">Unidade de Exame x Registros</h3>
         <canvas id="uniexa-chart" data-url="{% url 'uni-chart' %}"></canvas>
     </div>
+    <br><br><br>
+    <div id="container" style="width: 100%; height: 100%;">
+        <h3 style="text-align: center">Naturezas de Exame x Registros</h3>
+        <canvas id="natureza-chart" data-url="{% url 'natu-chart' %}"></canvas>
+
+    </div>
+
 </div>
 
 <script>
     $(function() {
+        var $naturezaChart = $("#natureza-chart");
 
         var $uniexaChart = $("#uniexa-chart");
         $.ajax({
@@ -28,6 +38,7 @@
                         }]
                     },
                     options: {
+                        indexAxis: 'y',
                         responsive: true,
                         legend: {
                             position: 'top',
@@ -41,6 +52,38 @@
 
             }
         });
+
+        $.ajax({
+            url: $naturezaChart.data("url"),
+            success: function(data) {
+
+                var ctx = $naturezaChart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Qtde de Registros',
+                            backgroundColor: '#3d3b8e',
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Gráfico de Unidade de Exame'
+                        }
+                    }
+                });
+
+            }
+        });
+
 
     });
 </script>

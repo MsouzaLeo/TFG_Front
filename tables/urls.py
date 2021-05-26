@@ -28,4 +28,5 @@ urlpatterns = [
     path('ETL/', views.run_python_script, name='upload'),
     path('relatorio/', views.relatorio),
     path('uni-chart/', views.uni_chart, name='uni-chart'),
+    path('natu-chart/', views.natu_chart, name='natu-chart'),
 ]

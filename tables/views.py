@@ -241,7 +241,7 @@ def laudoList(request):
     masp = request.GET.get('masp')
     if natu or espe or masp:
         showall = LaudoModel.objects.filter(
-            cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp)[:5000]
+            cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp)[:3000]
         print(masp, type(masp))
     else:
         showall = LaudoModel.objects.all()[:5000]
@@ -261,7 +261,22 @@ def uni_chart(request):
  group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc LIMIT 10'):
         labels.append(unidade.nome)
         data.append(unidade.contagem)
-        #print(unidade.nome + unidade.contagem)
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
+
+
+def natu_chart(request):
+    labels = []
+    data = []
+
+    for natureza in NaturezaModel.objects.raw('select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem \
+        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame\
+ group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'):
+        labels.append(natureza.descricao_natureza)
+        data.append(natureza.contagem)
 
     return JsonResponse(data={
         'labels': labels,
