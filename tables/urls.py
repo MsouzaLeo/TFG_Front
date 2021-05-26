@@ -26,5 +26,6 @@ urlpatterns = [
          views.uniresEdit, name='unires-update'),
     path('upload/', views.upload, name='upload'),
     path('ETL/', views.run_python_script, name='upload'),
-    path('relatorio/', views.relatorio, name='relatorio'),
+    path('relatorio/', views.relatorio),
+    path('uni-chart/', views.uni_chart, name='uni-chart'),
 ]

@@ -1,59 +1,48 @@
 {% extends 'base.html' %} {% block title %} Relatorio {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1 id='name'>Relatório de Laudos</h1>
-    <div class="col-9 search-div form">
-        <form method="get" id='search-form'>
-            <h5>Filtros</h5>
-            <input type="text" id="natu" name="natu" placeholder="Código da Natureza" value="{{request.GET.natu}}">
-            <input type="text" id="espe" name="espe" placeholder="Código da Espécie" value="{{request.GET.espe}}">
-            <input type="text" id="masp" name="masp" placeholder="MASP do Perito" value="{{request.GET.masp}}">
-            <i id="search-btn" class="bi bi-search "></i>
-        </form>
+    <br>
+    <div id="container" style="width: 75%;">
+        <canvas id="uniexa-chart" data-url="{% url 'uni-chart' %}"></canvas>
     </div>
-
-
-    <div id="div_table" class="table-responsive">
-        <table id='table' class="table table-striped ">
-            <tr>
-                <th>Nº de Requisição</th>
-                <th>Natureza</th>
-                <th>Espécie</th>
-                <th>Unidade Requisitante</th>
-                <th>Unidade de Exame</th>
-                <th>MASP</th>
-                <th>Tipo da Requisição</th>
-                <th>Nº de Procedimento</th>
-                <th>Modelo do Laudo</th>
-                <th>Data de Requisição de Perícia</th>
-                <th>Data de Distribuição da Requisição</th>
-                <th>Data de Redistribuição</th>
-                <th>Data de Devolução da Requisição</th>
-                <th>Data de Aceite da Requisição</th>
-                <th>Data de expedição do Laudo</th>
-                <th>Tempo de Confecção do Laudo</th>
-            </tr>
-            {% for result in data %}
-            <tr>
-                <td>{{ result.nmr_requisicao }}</td>
-                <td>{{ result.cod_natureza_exame }}</td>
-                <td>{{ result.cod_especie_exame}}</td>
-                <td>{{ result.cod_unidade_requisitante}}</td>
-                <td>{{ result.cod_unidade_exame}}</td>
-                <td>{{ result.masp_perito}}</td>
-                <td>{{ result.tipo_requisicao}}</td>
-                <td>{{ result.nmr_procedimento}}</td>
-                <td>{{ result.cod_modelo_laudo}}</td>
-                <td>{{ result.data_requisicao_pericia|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.data_distribuicao_requisicao|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.data_redistribuicao|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.data_devolucao_requisicao|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.data_aceite_requisicao|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.data_expedicao_laudo|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.tempo_confeccao_laudo}}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-    <button class='btn btn-success' id='downloadcsv'>CSV</button>
 </div>
+
+<script>
+    $(function() {
+
+        var $uniexaChart = $("#uniexa-chart");
+        $.ajax({
+            url: $uniexaChart.data("url"),
+            success: function(data) {
+
+                var ctx = $uniexaChart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Qtde de Registros',
+                            backgroundColor: '#0b6e4f',
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Gráfico de Unidade de Exame'
+                        }
+                    }
+                });
+
+            }
+        });
+
+    });
+</script>
+
 {% endblock %}

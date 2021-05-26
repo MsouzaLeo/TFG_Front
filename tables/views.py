@@ -6,9 +6,9 @@ from django.core.files.storage import FileSystemStorage
 from tables.models import *
 from .forms import *
 import os
+from django.http import JsonResponse
 from scripts import *
-import csv
-import datetime
+from django.db.models import Count
 
 
 def especieList(request):
@@ -249,5 +249,21 @@ def laudoList(request):
 
 
 def relatorio(request):
-
     return render((request), 'relatorios/relatorio.html')
+
+
+def uni_chart(request):
+    labels = []
+    data = []
+
+    for unidade in UniexaModel.objects.raw('select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem \
+        from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame\
+ group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc LIMIT 10'):
+        labels.append(unidade.nome)
+        data.append(unidade.contagem)
+        #print(unidade.nome + unidade.contagem)
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
