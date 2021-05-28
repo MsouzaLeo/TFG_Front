@@ -1,0 +1,44 @@
+{% extends 'base.html' %} {% block title %} Relatorio {% endblock %} {% block content %}
+<div class="offset-1 col-10 list-div">
+    <h1 id='name' style="text-align: center">Relatório de Naturezas de Exame</h1>
+    <br>
+    <br>
+    <div id="container" style="width: 100%;">
+        <canvas id="natureza-chart" data-url="{% url 'natureza-chart' %}"></canvas>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        var $naturezaChart = $("#natureza-chart");
+        $.ajax({
+            url: $naturezaChart.data("url"),
+            success: function(data) {
+                var ctx = $naturezaChart[0].getContext("2d");
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Qtde de Registros',
+                            backgroundColor: '#3d3b8e',
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Gráfico de Unidade de Exame'
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+{% endblock %}

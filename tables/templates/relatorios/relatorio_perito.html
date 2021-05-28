@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block title %} Relatorio {% endblock %} {% block content %}
+<div class="offset-1 col-10 list-div">
+    <h1 id='name' style="text-align: center">Relatório de Peritos</h1>
+    <br>
+    <div id="container" style="width: 50%;">
+        <canvas id="perito-chart" data-url="{% url 'perito-chart' %}"></canvas>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        var $peritoChart = $("#perito-chart");
+        $.ajax({
+            url: $peritoChart.data("url"),
+            success: function(data) {
+                var ctx = $peritoChart[0].getContext("2d");
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Qtde de Registros',
+                            backgroundColor: '#0b6e4f',
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Gráfico de Unidade de Exame'
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+{% endblock %}

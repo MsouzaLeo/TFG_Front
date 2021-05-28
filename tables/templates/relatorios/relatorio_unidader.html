@@ -1,0 +1,44 @@
+{% extends 'base.html' %} {% block title %} Relatorio {% endblock %} {% block content %}
+<div class="offset-1 col-10 list-div">
+    <h1 id='name' style="text-align: center">Relatório de Unidades Requisitantes</h1>
+    <br>
+    <div id="container" style="width: 100%;">
+        <canvas id="unidader-chart" data-url="{% url 'unidader-chart' %}"></canvas>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        var $unidaderChart = $("#unidader-chart");
+        $.ajax({
+            url: $unidaderChart.data("url"),
+            success: function(data) {
+                var ctx = $unidaderChart[0].getContext("2d");
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Qtde de Registros',
+                            backgroundColor: '#0b6e4f',
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Gráfico de Unidade de Exame'
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+{% endblock %}

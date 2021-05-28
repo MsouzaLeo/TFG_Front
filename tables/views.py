@@ -8,7 +8,7 @@ from .forms import *
 import os
 from django.http import JsonResponse
 from scripts import *
-from django.db.models import Count
+#from django.db.models import Count
 
 
 def especieList(request):
@@ -248,11 +248,75 @@ def laudoList(request):
     return render(request, 'laudo/list.html', {"data": showall})
 
 
-def relatorio(request):
-    return render((request), 'relatorios/relatorio.html')
+def relatorio_especie(request):
+    return render((request), 'relatorios/relatorio_especie.html')
 
 
-def uni_chart(request):
+def relatorio_natureza(request):
+    return render((request), 'relatorios/relatorio_natureza.html')
+
+
+def relatorio_perito(request):
+    return render((request), 'relatorios/relatorio_perito.html')
+
+
+def relatorio_unidadex(request):
+    return render((request), 'relatorios/relatorio_unidadex.html')
+
+
+def relatorio_unidader(request):
+    return render((request), 'relatorios/relatorio_unidader.html')
+
+
+def especie_chart(request):
+    labels = []
+    data = []
+
+    for natureza in NaturezaModel.objects.raw('select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem \
+        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame\
+ group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'):
+        labels.append(natureza.descricao_natureza)
+        data.append(natureza.contagem)
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
+
+
+def natureza_chart(request):
+    labels = []
+    data = []
+
+    for natureza in NaturezaModel.objects.raw('select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem \
+        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame\
+ group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'):
+        labels.append(natureza.descricao_natureza)
+        data.append(natureza.contagem)
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
+
+
+def perito_chart(request):
+    labels = []
+    data = []
+
+    for natureza in NaturezaModel.objects.raw('select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem \
+        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame\
+ group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'):
+        labels.append(natureza.descricao_natureza)
+        data.append(natureza.contagem)
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
+
+
+def unidadex_chart(request):
     labels = []
     data = []
 
@@ -268,7 +332,7 @@ def uni_chart(request):
     })
 
 
-def natu_chart(request):
+def unidader_chart(request):
     labels = []
     data = []
 

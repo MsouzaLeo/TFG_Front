@@ -26,7 +26,17 @@ urlpatterns = [
          views.uniresEdit, name='unires-update'),
     path('upload/', views.upload, name='upload'),
     path('ETL/', views.run_python_script, name='upload'),
-    path('relatorio/', views.relatorio),
-    path('uni-chart/', views.uni_chart, name='uni-chart'),
-    path('natu-chart/', views.natu_chart, name='natu-chart'),
+
+    path('relatorio-especie/', views.relatorio_especie),
+    path('relatorio-natureza/', views.relatorio_natureza),
+    path('relatorio-perito/', views.relatorio_perito),
+    path('relatorio-unidadex/', views.relatorio_unidadex),
+    path('relatorio-unidader/', views.relatorio_unidader),
+
+    path('especie-chart/', views.especie_chart, name='especie-chart'),
+    path('natureza-chart/', views.natureza_chart, name='natureza-chart'),
+    path('perito-chart/', views.perito_chart, name='perito-chart'),
+    path('unidadex-chart/', views.unidadex_chart, name='unidadex-chart'),
+    path('unidader-chart/', views.unidader_chart, name='unidader-chart'),
+
 ]
