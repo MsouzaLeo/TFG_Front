@@ -239,12 +239,13 @@ def laudoList(request):
     natu = request.GET.get('natu')
     espe = request.GET.get('espe')
     masp = request.GET.get('masp')
-    if natu or espe or masp:
+    dataini = request.GET.get('dataini')
+    datafim = request.GET.get('datafim')
+    if natu or espe or masp or (dataini and datafim):
         showall = LaudoModel.objects.filter(
-            cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp)[:3000]
-        print(masp, type(masp))
+            cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, data_requisicao_pericia__range=[dataini, datafim])[:3000]
     else:
-        showall = LaudoModel.objects.all()[:5000]
+        showall = LaudoModel.objects.all()[:3000]
     return render(request, 'laudo/list.html', {"data": showall})
 
 
@@ -345,4 +346,18 @@ def unidader_chart(request):
     return JsonResponse(data={
         'labels': labels,
         'data': data,
+    })
+
+
+def teste(request, pk):
+
+    natureza_obj = NaturezaModel.objects.get(pk=pk)
+
+    especie_obj = EspecieModel.objects.filter(
+        cod_natureza_exame=natureza_obj.cod_natureza_exame).values('descricao_especie')
+
+    return JsonResponse(data={
+        'natureza': natureza_obj.descricao_natureza,
+        'especies': list(especie_obj),
+
     })

@@ -7,6 +7,8 @@
             <input type="text" id="natu" name="natu" placeholder="Natureza do exame" value="{{request.GET.natu}}">
             <input type="text" id="espe" name="espe" placeholder="Espécie do exame" value="{{request.GET.espe}}">
             <input type="text" id="masp" name="masp" placeholder="MASP do Perito" value="{{request.GET.masp}}">
+            <input type="date" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
+            <input type="date" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
             <i id="search-btn" class="bi bi-search "></i>
         </form>
     </div>
@@ -54,6 +56,6 @@
             {% endfor %}
         </table>
     </div>
-    <button class='btn btn-success' id='downloadcsv'>CSV</button>
+    <button class='btn btn-success' id='downloadcsv'>CSV <i class="bi bi-file-earmark-arrow-down-fill"></i></button>
 </div>
 {% endblock %}

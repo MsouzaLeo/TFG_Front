@@ -2,6 +2,10 @@
     padding: 0px !important;
 }
 
+.col-9 {
+    width: auto !important;
+}
+
 
 /*Navbar*/
 
@@ -73,10 +77,22 @@
 
 #add-link {
     text-decoration: none;
+    vertical-align: middle !important;
 }
 
 
 /*Search*/
+
+#search-btn {
+    background: rgb(100, 100, 100);
+    color: #FFF;
+    padding: 4px 10px;
+    border-radius: 8px;
+}
+
+#search-btn:hover {
+    background: #333;
+}
 
 .search-div {
     padding: 0px;
@@ -109,4 +125,11 @@ th {
 #div_table {
     overflow: auto;
     height: 460px;
+}
+
+
+/* CSV Download */
+
+#downloadcsv {
+    margin-top: 15px;
 }

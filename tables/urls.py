@@ -39,4 +39,5 @@ urlpatterns = [
     path('unidadex-chart/', views.unidadex_chart, name='unidadex-chart'),
     path('unidader-chart/', views.unidader_chart, name='unidader-chart'),
 
+    path('teste/<int:pk>', views.teste, name='teste'),
 ]
