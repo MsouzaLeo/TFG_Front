@@ -273,11 +273,11 @@ def especie_chart(request):
     labels = []
     data = []
 
-    for natureza in NaturezaModel.objects.raw('select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem \
-        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame\
- group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'):
-        labels.append(natureza.descricao_natureza)
-        data.append(natureza.contagem)
+    for especie in EspecieModel.objects.raw('select l.cod_especie_exame ,e.descricao_especie, count(l.nmr_requisicao) as contagem \
+        from laudo l inner join especie_exame e on l.cod_especie_exame = e.cod_especie_exame\
+ group by e.cod_especie_exame, l.cod_especie_exame order by contagem desc'):
+        labels.append(especie.descricao_especie)
+        data.append(especie.contagem)
 
     return JsonResponse(data={
         'labels': labels,
@@ -305,11 +305,11 @@ def perito_chart(request):
     labels = []
     data = []
 
-    for natureza in NaturezaModel.objects.raw('select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem \
-        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame\
- group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'):
-        labels.append(natureza.descricao_natureza)
-        data.append(natureza.contagem)
+    for perito in PeritoModel.objects.raw('select l.masp_perito,pe.masp, count(*) as contagem \
+        from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp\
+            group by pe.masp, l.masp_perito order by contagem desc'):
+        labels.append(perito.nome_perito)
+        data.append(perito.contagem)
 
     return JsonResponse(data={
         'labels': labels,
@@ -323,7 +323,7 @@ def unidadex_chart(request):
 
     for unidade in UniexaModel.objects.raw('select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem \
         from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame\
- group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc LIMIT 10'):
+ group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc'):
         labels.append(unidade.nome)
         data.append(unidade.contagem)
 
@@ -337,11 +337,11 @@ def unidader_chart(request):
     labels = []
     data = []
 
-    for natureza in NaturezaModel.objects.raw('select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem \
-        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame\
- group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'):
-        labels.append(natureza.descricao_natureza)
-        data.append(natureza.contagem)
+    for unidade in UniresModel.objects.raw('select l.cod_unidade_requisitante, u.municipio as nome, count(*) as contagem \
+        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante\
+ group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc'):
+        labels.append(unidade.nome)
+        data.append(unidade.contagem)
 
     return JsonResponse(data={
         'labels': labels,
