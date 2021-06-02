@@ -8,6 +8,7 @@ from .forms import *
 import os
 from django.http import JsonResponse
 from scripts import *
+import json
 #from django.db.models import Count
 
 
@@ -250,24 +251,134 @@ def laudoList(request):
 
 
 def relatorio_especie(request):
-    return render((request), 'relatorios/relatorio_especie.html')
+    labels = []
+    data = []
+
+    for especie in EspecieModel.objects.raw('select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem \
+        from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame\
+ group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc'):
+        labels.append(especie.descricao_especie)
+        data.append(especie.contagem)
+    context={
+        'labels': json.dumps(labels),
+        'data': data,
+    }
+
+    return render(request, 'relatorios/relatorio_especie.html', context)
 
 
 def relatorio_natureza(request):
-    return render((request), 'relatorios/relatorio_natureza.html')
+    labels = []
+    data = []
+
+    dataini = request.GET.get('dataini')
+    datafim = request.GET.get('datafim')
+    if (dataini and datafim):
+        for natureza in NaturezaModel.objects.raw('''select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
+            from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
+            where l.data_requisicao_pericia BETWEEN %s AND %s
+            group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc''',[dataini,datafim]):
+            labels.append(natureza.descricao_natureza)
+            data.append(natureza.contagem)
+    else:
+        for natureza in NaturezaModel.objects.raw('''select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
+    group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'''):
+            labels.append(natureza.descricao_natureza)
+            data.append(natureza.contagem)
+
+    context={
+        'labels': json.dumps(labels),
+        'data': data,
+    }
+
+    return render(request, 'relatorios/relatorio_natureza.html', context)
 
 
 def relatorio_perito(request):
-    return render((request), 'relatorios/relatorio_perito.html')
+    labels = []
+    data = []
+
+    dataini = request.GET.get('dataini')
+    datafim = request.GET.get('datafim')
+    if (dataini and datafim):
+        for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
+        from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
+        where l.data_requisicao_pericia BETWEEN %s AND %s
+            group by pe.masp, l.masp_perito order by contagem desc''',[dataini,datafim]):
+            labels.append(perito.masp)
+            data.append(perito.contagem)
+    else:
+        for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
+        from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
+            group by pe.masp, l.masp_perito order by contagem desc'''):
+            labels.append(perito.masp)
+            data.append(perito.contagem)
+
+    context={
+        'labels': json.dumps(labels),
+        'data': data,
+    }
+
+    return render(request, 'relatorios/relatorio_perito.html', context)
 
 
 def relatorio_unidadex(request):
-    return render((request), 'relatorios/relatorio_unidadex.html')
+    labels = []
+    data = []
+
+    dataini = request.GET.get('dataini')
+    datafim = request.GET.get('datafim')
+    if (dataini and datafim):
+        for unidade in UniexaModel.objects.raw('''select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame
+        where l.data_requisicao_pericia BETWEEN %s AND %s
+        group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc''',[dataini,datafim]):
+            labels.append(unidade.nome)
+            data.append(unidade.contagem)
+    else:
+        for unidade in UniexaModel.objects.raw('''select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame
+        group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc'''):
+            labels.append(unidade.nome)
+            data.append(unidade.contagem)
+
+    context={
+        'labels': json.dumps(labels),
+        'data': data,
+    }
+
+    return render(request, 'relatorios/relatorio_unidadex.html', context)
 
 
 def relatorio_unidader(request):
-    return render((request), 'relatorios/relatorio_unidader.html')
+    labels = []
+    data = []
 
+    limit = request.GET.get('Qtde')
+    print(limit)
+    dataini = request.GET.get('dataini')
+    datafim = request.GET.get('datafim')
+    if (dataini and datafim) and limit == 'Ten':
+        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
+        where l.data_requisicao_pericia BETWEEN %s AND %s
+        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc LIMIT 10''',[dataini,datafim]):
+            labels.append(unidade.nome)
+            data.append(unidade.contagem)
+    else:
+        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
+        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc'''):
+            labels.append(unidade.nome)
+            data.append(unidade.contagem)
+
+    context={
+        'labels': json.dumps(labels),
+        'data': data,
+    }
+
+    return render(request, 'relatorios/relatorio_unidader.html', context)
 
 def especie_chart(request):
     labels = []
@@ -275,9 +386,9 @@ def especie_chart(request):
 
     for especie in EspecieModel.objects.raw('select l.cod_especie_exame ,e.descricao_especie, count(l.nmr_requisicao) as contagem \
         from laudo l inner join especie_exame e on l.cod_especie_exame = e.cod_especie_exame\
- group by e.cod_especie_exame, l.cod_especie_exame order by contagem desc'):
-        labels.append(especie.descricao_especie)
+        group by e.cod_especie_exame, l.cod_especie_exame order by contagem desc'):
         data.append(especie.contagem)
+        labels.append(especie.descricao_especie)
 
     return JsonResponse(data={
         'labels': labels,
@@ -288,10 +399,11 @@ def especie_chart(request):
 def natureza_chart(request):
     labels = []
     data = []
-
-    for natureza in NaturezaModel.objects.raw('select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem \
-        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame\
- group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'):
+    dataini = request.GET.get('dataini')
+    datafim = request.GET.get('datafim')
+    for natureza in NaturezaModel.objects.raw('''select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
+    group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'''):
         labels.append(natureza.descricao_natureza)
         data.append(natureza.contagem)
 
@@ -305,9 +417,9 @@ def perito_chart(request):
     labels = []
     data = []
 
-    for perito in PeritoModel.objects.raw('select l.masp_perito,pe.masp, count(*) as contagem \
-        from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp\
-            group by pe.masp, l.masp_perito order by contagem desc'):
+    for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
+        from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
+            group by pe.masp, l.masp_perito order by contagem desc'''):
         labels.append(perito.nome_perito)
         data.append(perito.contagem)
 
@@ -353,11 +465,11 @@ def teste(request, pk):
 
     natureza_obj = NaturezaModel.objects.get(pk=pk)
 
-    especie_obj = EspecieModel.objects.filter(
-        cod_natureza_exame=natureza_obj.cod_natureza_exame).values('descricao_especie')
+    especie_obj = list(EspecieModel.objects.filter(
+        cod_natureza_exame=natureza_obj.cod_natureza_exame).values('descricao_especie'))
 
     return JsonResponse(data={
         'natureza': natureza_obj.descricao_natureza,
-        'especies': list(especie_obj),
+        'especies': especie_obj,
 
     })

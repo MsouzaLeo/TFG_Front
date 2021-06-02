@@ -2,41 +2,44 @@
 <div class="offset-1 col-10 list-div">
     <h1 id='name' style="text-align: center">Relatório de Unidades Requisitantes</h1>
     <br>
+    <form method="get" id='search-form'>
+        <input type="date" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
+        <input type="date" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
+        <input type="radio" value='All' name='Qtde'> Todos
+        <input type="radio" value='Ten' name='Qtde'> Top 10
+        <i id="search-btn" class="bi bi-search "></i>
+    </form>
+    <br>
     <div id="container" style="width: 100%;">
-        <canvas id="unidader-chart" data-url="{% url 'unidader-chart' %}"></canvas>
+        <canvas id="unidader-chart"></canvas>
     </div>
 </div>
 
 <script>
-    $(function() {
-        var $unidaderChart = $("#unidader-chart");
-        $.ajax({
-            url: $unidaderChart.data("url"),
-            success: function(data) {
-                var ctx = $unidaderChart[0].getContext("2d");
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'Qtde de Registros',
-                            backgroundColor: '#0b6e4f',
-                            data: data.data
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Gráfico de Unidade de Exame'
-                        }
-                    }
-                });
+    console.log(jQuery.parseJSON('{{labels|safe}}'))
+    labels = jQuery.parseJSON('{{labels|safe}}')
+    data = jQuery.parseJSON('{{data|safe}}')
+    var ctx = document.getElementById("unidader-chart");
+    var naturezaChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Qtde de Registros',
+                backgroundColor: '#3d3b8e',
+                data: data
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Gráfico de Peritos'
             }
-        });
+        }
     });
 </script>
 
