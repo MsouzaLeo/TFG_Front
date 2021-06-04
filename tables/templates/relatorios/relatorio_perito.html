@@ -5,6 +5,8 @@
     <form method="get" id='search-form'>
         <input type="date" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
         <input type="date" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
+        <input type="radio" value='All' name='Qtde' checked="checked"> Todos
+        <input type="radio" value='Ten' name='Qtde'> Top 10
         <i id="search-btn" class="bi bi-search "></i>
     </form>
     <br>

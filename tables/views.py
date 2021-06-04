@@ -254,10 +254,18 @@ def relatorio_especie(request):
     labels = []
     data = []
 
-    for especie in EspecieModel.objects.raw('select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem \
-        from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame\
- group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc'):
-        labels.append(especie.descricao_especie)
+    limit = request.GET.get('Qtde')
+    dataini = request.GET.get('dataini')
+    datafim = request.GET.get('datafim')
+
+    if (dataini and datafim):
+        dataini = dataini + 'T00:00'
+        datafim = datafim + 'T23:59'
+    
+    for especie in EspecieModel.objects.raw('''select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem \
+        from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame
+        group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc'''):
+        labels.append(especie.cod_especie_exame)
         data.append(especie.contagem)
     context={
         'labels': json.dumps(labels),
@@ -271,8 +279,14 @@ def relatorio_natureza(request):
     labels = []
     data = []
 
+    limit = request.GET.get('Qtde')
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
+
+    if (dataini and datafim):
+        dataini = dataini + 'T00:00'
+        datafim = datafim + 'T23:59'
+    
     if (dataini and datafim):
         for natureza in NaturezaModel.objects.raw('''select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
             from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
@@ -299,8 +313,14 @@ def relatorio_perito(request):
     labels = []
     data = []
 
+    limit = request.GET.get('Qtde')
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
+
+    if (dataini and datafim):
+        dataini = dataini + 'T00:00'
+        datafim = datafim + 'T23:59'
+
     if (dataini and datafim):
         for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
         from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
@@ -327,8 +347,14 @@ def relatorio_unidadex(request):
     labels = []
     data = []
 
+    limit = request.GET.get('Qtde')
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
+
+    if (dataini and datafim):
+        dataini = dataini + 'T00:00'
+        datafim = datafim + 'T23:59'
+
     if (dataini and datafim):
         for unidade in UniexaModel.objects.raw('''select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem 
         from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame
@@ -356,9 +382,13 @@ def relatorio_unidader(request):
     data = []
 
     limit = request.GET.get('Qtde')
-    print(limit)
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
+
+    if (dataini and datafim):
+        dataini = dataini + 'T00:00'
+        datafim = datafim + 'T23:59'
+
     if (dataini and datafim) and limit == 'Ten':
         for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
         from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
@@ -366,6 +396,22 @@ def relatorio_unidader(request):
         group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc LIMIT 10''',[dataini,datafim]):
             labels.append(unidade.nome)
             data.append(unidade.contagem)
+    
+    elif not(dataini and datafim) and limit == 'Ten':
+        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
+        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc LIMIT 10'''):
+            labels.append(unidade.nome)
+            data.append(unidade.contagem)
+
+    elif(dataini and datafim) and limit == 'All':
+        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
+        where l.data_requisicao_pericia BETWEEN %s AND %s
+        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc''',[dataini,datafim]):
+            labels.append(unidade.nome)
+            data.append(unidade.contagem)
+
     else:
         for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
         from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
@@ -379,86 +425,6 @@ def relatorio_unidader(request):
     }
 
     return render(request, 'relatorios/relatorio_unidader.html', context)
-
-def especie_chart(request):
-    labels = []
-    data = []
-
-    for especie in EspecieModel.objects.raw('select l.cod_especie_exame ,e.descricao_especie, count(l.nmr_requisicao) as contagem \
-        from laudo l inner join especie_exame e on l.cod_especie_exame = e.cod_especie_exame\
-        group by e.cod_especie_exame, l.cod_especie_exame order by contagem desc'):
-        data.append(especie.contagem)
-        labels.append(especie.descricao_especie)
-
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
-
-
-def natureza_chart(request):
-    labels = []
-    data = []
-    dataini = request.GET.get('dataini')
-    datafim = request.GET.get('datafim')
-    for natureza in NaturezaModel.objects.raw('''select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
-        from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
-    group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc'''):
-        labels.append(natureza.descricao_natureza)
-        data.append(natureza.contagem)
-
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
-
-
-def perito_chart(request):
-    labels = []
-    data = []
-
-    for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
-        from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
-            group by pe.masp, l.masp_perito order by contagem desc'''):
-        labels.append(perito.nome_perito)
-        data.append(perito.contagem)
-
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
-
-
-def unidadex_chart(request):
-    labels = []
-    data = []
-
-    for unidade in UniexaModel.objects.raw('select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem \
-        from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame\
- group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc'):
-        labels.append(unidade.nome)
-        data.append(unidade.contagem)
-
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
-
-
-def unidader_chart(request):
-    labels = []
-    data = []
-
-    for unidade in UniresModel.objects.raw('select l.cod_unidade_requisitante, u.municipio as nome, count(*) as contagem \
-        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante\
- group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc'):
-        labels.append(unidade.nome)
-        data.append(unidade.contagem)
-
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
 
 
 def teste(request, pk):

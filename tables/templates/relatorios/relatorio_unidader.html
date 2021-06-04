@@ -2,13 +2,15 @@
 <div class="offset-1 col-10 list-div">
     <h1 id='name' style="text-align: center">Relatório de Unidades Requisitantes</h1>
     <br>
-    <form method="get" id='search-form'>
-        <input type="date" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
-        <input type="date" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
-        <input type="radio" value='All' name='Qtde'> Todos
-        <input type="radio" value='Ten' name='Qtde'> Top 10
-        <i id="search-btn" class="bi bi-search "></i>
-    </form>
+    <div class="row">
+        <form method="get" id='search-form'>
+            <input type="date" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
+            <input type="date" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
+            <input type="radio" value='All' name='Qtde' checked="checked" style='margin-left:100px'> Todos
+            <input type="radio" value='Ten' name='Qtde'> Top 10
+            <i id="search-btn" class="bi bi-search "></i>
+        </form>
+    </div>
     <br>
     <div id="container" style="width: 100%;">
         <canvas id="unidader-chart"></canvas>

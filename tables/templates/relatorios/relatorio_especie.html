@@ -1,52 +1,14 @@
 {% extends 'base.html' %} {% block title %} Relatorio {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1 id='name' style="text-align: center">Relatório de Espécies de Exame</h1>
-    <section>
-        <form action="" class="" method="POST">
-            {% csrf_token %}
-            <small class="form-text text-muted">Choose a dataset</small>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input dataset" type="radio" name="dataset" id="dataset_a" value="a" checked>
-                <label class="form-check-label" for="dataset_a">
-                    Dataset A
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input dataset" type="radio" name="dataset" id="dataset_b" value="b">
-                <label class="form-check-label" for="dataset_b">
-                    Dataset B
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input dataset" type="radio" name="dataset" id="both_datasets" value="all">
-                <label class="form-check-label" for="both_datasets">
-                    both datasets
-                </label>
-            </div>
-
-            <small class="form-text text-muted">Choose a label</small>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input dataset" type="radio" name="label" id="positive_class" value="pos">
-                <label class="form-check-label" for="positive_class">
-                    positive class
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input dataset" type="radio" name="label" id="negative_class" value="neg">
-                <label class="form-check-label" for="negative_class">
-                    negative class
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input dataset" type="radio" name="label" id="both_class" value="all" checked>
-                <label class="form-check-label" for="both_class">
-                    both classes
-                </label>
-            </div>
-            <input type="date" id="dataini" name="dataini" placeholder="Data de início">
-            <button type="submit"> buscar</button>
-        </form>
-    </section>
+    <br>
+    <form method="get" id='search-form'>
+        <input type="date" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
+        <input type="date" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
+        <input type="radio" value='All' name='Qtde' checked="checked"> Todos
+        <input type="radio" value='Ten' name='Qtde'> Top 10
+        <i id="search-btn" class="bi bi-search "></i>
+    </form>
     <br>
     <div id="container" style="width: 100%;">
         <canvas id="especie-chart" data-url="{% url 'especie-chart'%}"></canvas>
