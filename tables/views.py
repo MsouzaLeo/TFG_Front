@@ -261,12 +261,38 @@ def relatorio_especie(request):
     if (dataini and datafim):
         dataini = dataini + 'T00:00'
         datafim = datafim + 'T23:59'
-    
-    for especie in EspecieModel.objects.raw('''select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem \
+
+    if (dataini and datafim) and limit == 'Ten':
+        for especie in EspecieModel.objects.raw('''select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem 
+            from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame
+            where l.data_requisicao_pericia BETWEEN %s AND %s
+            group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc LIMIT 10''',[dataini,datafim]):
+            labels.append(especie.cod_especie_exame)
+            data.append(especie.contagem)
+
+    elif not(dataini and datafim) and limit == 'Ten':
+        for especie in EspecieModel.objects.raw('''select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem 
+            from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame
+            group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc LIMIT 10'''):
+            labels.append(especie.cod_especie_exame)
+            data.append(especie.contagem)
+
+    elif (dataini and datafim) and limit == 'All':
+        for especie in EspecieModel.objects.raw('''select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem
+            from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame
+            where l.data_requisicao_pericia BETWEEN %s AND %s
+            group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc''',[dataini,datafim]):
+            labels.append(especie.cod_especie_exame)
+            data.append(especie.contagem)
+
+    else:
+        for especie in EspecieModel.objects.raw('''select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem
         from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame
         group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc'''):
-        labels.append(especie.cod_especie_exame)
-        data.append(especie.contagem)
+            labels.append(especie.cod_especie_exame)
+            data.append(especie.contagem)
+
+
     context={
         'labels': json.dumps(labels),
         'data': data,
@@ -287,13 +313,29 @@ def relatorio_natureza(request):
         dataini = dataini + 'T00:00'
         datafim = datafim + 'T23:59'
     
-    if (dataini and datafim):
+    if (dataini and datafim) and limit == 'Ten':
+        for natureza in NaturezaModel.objects.raw('''select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
+            from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
+            where l.data_requisicao_pericia BETWEEN %s AND %s
+            group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc LIMIT 10''',[dataini,datafim]):
+            labels.append(natureza.descricao_natureza)
+            data.append(natureza.contagem)
+
+    elif not(dataini and datafim) and limit == 'Ten':
+        for natureza in NaturezaModel.objects.raw('''select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
+            from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
+            group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc LIMIT 10'''):
+            labels.append(natureza.descricao_natureza)
+            data.append(natureza.contagem)
+
+    elif (dataini and datafim) and limit == 'All':
         for natureza in NaturezaModel.objects.raw('''select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
             from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
             where l.data_requisicao_pericia BETWEEN %s AND %s
             group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc''',[dataini,datafim]):
             labels.append(natureza.descricao_natureza)
             data.append(natureza.contagem)
+
     else:
         for natureza in NaturezaModel.objects.raw('''select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
         from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
@@ -321,13 +363,29 @@ def relatorio_perito(request):
         dataini = dataini + 'T00:00'
         datafim = datafim + 'T23:59'
 
-    if (dataini and datafim):
+    if (dataini and datafim) and limit == 'Ten':
+        for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
+        from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
+        where l.data_requisicao_pericia BETWEEN %s AND %s
+            group by pe.masp, l.masp_perito order by contagem desc LIMIT 10''',[dataini,datafim]):
+            labels.append(perito.masp)
+            data.append(perito.contagem)
+
+    elif not(dataini and datafim) and limit == 'Ten':
+        for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
+        from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
+            group by pe.masp, l.masp_perito order by contagem desc LIMIT 10'''):
+            labels.append(perito.masp)
+            data.append(perito.contagem)
+
+    elif (dataini and datafim) and limit == 'All':
         for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
         from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
         where l.data_requisicao_pericia BETWEEN %s AND %s
             group by pe.masp, l.masp_perito order by contagem desc''',[dataini,datafim]):
             labels.append(perito.masp)
             data.append(perito.contagem)
+
     else:
         for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
         from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
@@ -355,13 +413,29 @@ def relatorio_unidadex(request):
         dataini = dataini + 'T00:00'
         datafim = datafim + 'T23:59'
 
-    if (dataini and datafim):
+    if (dataini and datafim) and limit == 'Ten':
+        for unidade in UniexaModel.objects.raw('''select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame
+        where l.data_requisicao_pericia BETWEEN %s AND %s
+        group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc LIMIT 10''',[dataini,datafim]):
+            labels.append(unidade.nome)
+            data.append(unidade.contagem)
+
+    elif not(dataini and datafim) and limit == 'Ten':
+        for unidade in UniexaModel.objects.raw('''select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame
+        group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc LIMIT 10'''):
+            labels.append(unidade.nome)
+            data.append(unidade.contagem)
+    
+    elif (dataini and datafim) and limit == 'All':
         for unidade in UniexaModel.objects.raw('''select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem 
         from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame
         where l.data_requisicao_pericia BETWEEN %s AND %s
         group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc''',[dataini,datafim]):
             labels.append(unidade.nome)
             data.append(unidade.contagem)
+
     else:
         for unidade in UniexaModel.objects.raw('''select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem 
         from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame
@@ -393,7 +467,7 @@ def relatorio_unidader(request):
         for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
         from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
         where l.data_requisicao_pericia BETWEEN %s AND %s
-        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc LIMIT 10''',[dataini,datafim]):
+        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc LIMIT 10''',[dataini, datafim]):
             labels.append(unidade.nome)
             data.append(unidade.contagem)
     
@@ -404,11 +478,11 @@ def relatorio_unidader(request):
             labels.append(unidade.nome)
             data.append(unidade.contagem)
 
-    elif(dataini and datafim) and limit == 'All':
+    elif (dataini and datafim) and limit == 'All':
         for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
         from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
         where l.data_requisicao_pericia BETWEEN %s AND %s
-        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc''',[dataini,datafim]):
+        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc''',[dataini, datafim]):
             labels.append(unidade.nome)
             data.append(unidade.contagem)
 
