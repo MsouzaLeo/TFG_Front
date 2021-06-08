@@ -5,8 +5,10 @@
     <form method="get" id='search-form'>
         <input type="date" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
         <input type="date" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
-        <input type="radio" value='All' name='Qtde' checked="checked"> Todos
-        <input type="radio" value='Ten' name='Qtde'> Top 10
+        <input type="radio" value='All' id="all" checked="checked" name='Qtde' onclick="Checkradiobutton()"> Todos
+        <input type="radio" value='Ten' id="ten" name='Qtde' onclick="Checkradiobutton()"> Top 10
+        <input type="radio" name="Qtde" id="other" value="Other" onclick="Checkradiobutton()" /> Uma natureza:
+        <input type="text" id="uma" placeholder="Descrição da Natureza" name="uma" disabled='true' />
         <i id="search-btn" class="bi bi-search "></i>
     </form>
     <br>
@@ -41,6 +43,15 @@
             }
         }
     });
+
+    function Checkradiobutton() {
+        if (document.getElementById('all').checked || document.getElementById('ten').checked) {
+
+            document.getElementById('uma').disabled = true;
+        } else {
+            document.getElementById('uma').disabled = false;
+        }
+    }
 </script>
 
 {% endblock %}

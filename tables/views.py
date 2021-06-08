@@ -304,10 +304,14 @@ def relatorio_especie(request):
 def relatorio_natureza(request):
     labels = []
     data = []
-
+    limit = 'All'
     limit = request.GET.get('Qtde')
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
+
+    if limit == "Other":
+        natu = str(request.GET.get('uma'))
+        natu = '%' + natu + '%'
 
     if (dataini and datafim):
         dataini = dataini + 'T00:00'
@@ -318,6 +322,22 @@ def relatorio_natureza(request):
             from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
             where l.data_requisicao_pericia BETWEEN %s AND %s
             group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc LIMIT 10''',[dataini,datafim]):
+            labels.append(natureza.descricao_natureza)
+            data.append(natureza.contagem)
+
+    elif (dataini and datafim) and limit == 'Other':
+        for natureza in NaturezaModel.objects.raw("""select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
+            from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
+            where (l.data_requisicao_pericia BETWEEN %s AND %s) AND n.descricao_natureza ILIKE  %s 
+            group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc""",[dataini,datafim,natu]):
+            labels.append(natureza.descricao_natureza)
+            data.append(natureza.contagem)
+
+    elif not(dataini and datafim) and limit == 'Other':
+        for natureza in NaturezaModel.objects.raw("""select l.cod_natureza_exame ,n.descricao_natureza, count(l.nmr_requisicao) as contagem 
+            from laudo l inner join natureza_exame n on l.cod_natureza_exame = n.cod_natureza_exame
+            where n.descricao_natureza ILIKE  %s 
+            group by n.cod_natureza_exame, l.cod_natureza_exame order by contagem desc""",[natu]):
             labels.append(natureza.descricao_natureza)
             data.append(natureza.contagem)
 
