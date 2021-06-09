@@ -404,7 +404,7 @@ def relatorio_perito(request):
 
     if limit == "Other":
         if request.GET.get('uma') != '':
-            espe = int(request.GET.get('uma'))
+            masp = int(request.GET.get('uma'))
         else:
             limit ="All"
 
