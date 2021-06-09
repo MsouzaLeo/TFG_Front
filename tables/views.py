@@ -258,6 +258,12 @@ def relatorio_especie(request):
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
 
+    if limit == "Other":
+        if request.GET.get('uma') != '':
+            espe = int(request.GET.get('uma'))
+        else:
+            limit ="All"
+
     if (dataini and datafim):
         dataini = dataini + 'T00:00'
         datafim = datafim + 'T23:59'
@@ -267,6 +273,22 @@ def relatorio_especie(request):
             from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame
             where l.data_requisicao_pericia BETWEEN %s AND %s
             group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc LIMIT 10''',[dataini,datafim]):
+            labels.append(especie.cod_especie_exame)
+            data.append(especie.contagem)
+
+    elif (dataini and datafim) and limit == 'Other':
+        for especie in EspecieModel.objects.raw('''select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem 
+            from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame
+            where l.data_requisicao_pericia BETWEEN %s AND %s AND n.cod_especie_exame = %s
+            group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc''',[dataini,datafim, espe]):
+            labels.append(especie.cod_especie_exame)
+            data.append(especie.contagem)
+
+    elif not(dataini and datafim) and limit == 'Other':
+        for especie in EspecieModel.objects.raw('''select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem 
+            from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame
+            where n.cod_especie_exame = %s
+            group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc''',[espe]):
             labels.append(especie.cod_especie_exame)
             data.append(especie.contagem)
 
@@ -304,6 +326,7 @@ def relatorio_especie(request):
 def relatorio_natureza(request):
     labels = []
     data = []
+
     limit = 'All'
     limit = request.GET.get('Qtde')
     dataini = request.GET.get('dataini')
@@ -379,6 +402,12 @@ def relatorio_perito(request):
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
 
+    if limit == "Other":
+        if request.GET.get('uma') != '':
+            espe = int(request.GET.get('uma'))
+        else:
+            limit ="All"
+
     if (dataini and datafim):
         dataini = dataini + 'T00:00'
         datafim = datafim + 'T23:59'
@@ -387,14 +416,30 @@ def relatorio_perito(request):
         for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
         from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
         where l.data_requisicao_pericia BETWEEN %s AND %s
-            group by pe.masp, l.masp_perito order by contagem desc LIMIT 10''',[dataini,datafim]):
+        group by pe.masp, l.masp_perito order by contagem desc LIMIT 10''',[dataini,datafim]):
+            labels.append(perito.masp)
+            data.append(perito.contagem)
+
+    elif (dataini and datafim) and limit == 'Other':
+        for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
+        from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
+        where l.data_requisicao_pericia BETWEEN %s AND %s AND pe.masp = %s
+        group by pe.masp, l.masp_perito order by contagem desc LIMIT 10''',[dataini,datafim, masp]):
+            labels.append(perito.masp)
+            data.append(perito.contagem)
+
+    elif not(dataini and datafim) and limit == 'Other':
+        for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
+        from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
+        where pe.masp = %s
+        group by pe.masp, l.masp_perito order by contagem desc LIMIT 10''',[masp]):
             labels.append(perito.masp)
             data.append(perito.contagem)
 
     elif not(dataini and datafim) and limit == 'Ten':
         for perito in PeritoModel.objects.raw('''select l.masp_perito,pe.masp, count(*) as contagem 
         from laudo l inner join perito_responsavel pe on l.masp_perito = pe.masp
-            group by pe.masp, l.masp_perito order by contagem desc LIMIT 10'''):
+        group by pe.masp, l.masp_perito order by contagem desc LIMIT 10'''):
             labels.append(perito.masp)
             data.append(perito.contagem)
 
@@ -429,6 +474,10 @@ def relatorio_unidadex(request):
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
 
+    if limit == "Other":
+        unid = str(request.GET.get('uma'))
+        unid = '%' + unid + '%'
+
     if (dataini and datafim):
         dataini = dataini + 'T00:00'
         datafim = datafim + 'T23:59'
@@ -438,6 +487,22 @@ def relatorio_unidadex(request):
         from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame
         where l.data_requisicao_pericia BETWEEN %s AND %s
         group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc LIMIT 10''',[dataini,datafim]):
+            labels.append(unidade.nome)
+            data.append(unidade.contagem)
+
+    elif (dataini and datafim) and limit == 'Other':
+        for unidade in UniexaModel.objects.raw('''select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame
+        where l.data_requisicao_pericia BETWEEN %s AND %s AND u.comarca_da_unidade ILIKE %s
+        group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc''',[dataini,datafim, unid]):
+            labels.append(unidade.nome)
+            data.append(unidade.contagem)
+
+    elif not(dataini and datafim) and limit == 'Other':
+        for unidade in UniexaModel.objects.raw('''select l.cod_unidade_exame ,u.comarca_da_unidade as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_exame u on l.cod_unidade_exame = u.cod_unidade_exame
+        where u.comarca_da_unidade ILIKE %s
+        group by u.cod_unidade_exame, l.cod_unidade_exame order by contagem desc''',[unid]):
             labels.append(unidade.nome)
             data.append(unidade.contagem)
 
@@ -479,6 +544,10 @@ def relatorio_unidader(request):
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
 
+    if limit == "Other":
+        unid = str(request.GET.get('uma'))
+        unid = '%' + unid + '%'
+
     if (dataini and datafim):
         dataini = dataini + 'T00:00'
         datafim = datafim + 'T23:59'
@@ -488,14 +557,34 @@ def relatorio_unidader(request):
         from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
         where l.data_requisicao_pericia BETWEEN %s AND %s
         group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc LIMIT 10''',[dataini, datafim]):
-            labels.append(unidade.nome)
+            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
+            labels.append(cod_nome)
             data.append(unidade.contagem)
     
+    elif (dataini and datafim) and limit == 'Other':
+        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
+        where l.data_requisicao_pericia BETWEEN %s AND %s AND u.municipio ILIKE %s
+        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc''',[dataini, datafim, unid]):
+            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
+            labels.append(cod_nome)
+            data.append(unidade.contagem)
+
+    elif not(dataini and datafim) and limit == 'Other':
+        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
+        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
+        where u.municipio ILIKE %s
+        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc''',[unid]):
+            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
+            labels.append(cod_nome)
+            data.append(unidade.contagem)
+
     elif not(dataini and datafim) and limit == 'Ten':
         for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
         from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
         group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc LIMIT 10'''):
-            labels.append(unidade.nome)
+            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
+            labels.append(cod_nome)
             data.append(unidade.contagem)
 
     elif (dataini and datafim) and limit == 'All':
@@ -503,14 +592,16 @@ def relatorio_unidader(request):
         from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
         where l.data_requisicao_pericia BETWEEN %s AND %s
         group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc''',[dataini, datafim]):
-            labels.append(unidade.nome)
+            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
+            labels.append(cod_nome)
             data.append(unidade.contagem)
 
     else:
         for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
         from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
         group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc'''):
-            labels.append(unidade.nome)
+            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
+            labels.append(cod_nome)
             data.append(unidade.contagem)
 
     context={

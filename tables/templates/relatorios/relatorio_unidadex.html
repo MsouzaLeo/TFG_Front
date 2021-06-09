@@ -3,11 +3,26 @@
     <h1 id='name' style="text-align: center">Relatório de Unidades de Exames</h1>
     <br>
     <form method="get" id='search-form'>
-        <input type="date" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
-        <input type="date" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
-        <input type="radio" value='All' name='Qtde' checked="checked"> Todos
-        <input type="radio" value='Ten' name='Qtde'> Top 10
-        <i id="search-btn" class="bi bi-search "></i>
+        <div class="row offset-1">
+            <div class="col-2">
+                <label for="dataini">Data de início </label>
+                <input type="date" class="form-control" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
+            </div>
+            <div class="col-2">
+                <label for="datafim">Data de fim </label>
+                <input type="date" class="form-control" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
+            </div>
+            <div class="col-8" style="margin-top: 25px;">
+                <label class="form-check-label" for="all">Todos </label>
+                <input type="radio" class="form-check-input" value='All' id="all" checked="checked" name='Qtde' onclick="Checkradiobutton()">
+                <label class="form-check-label" for="ten" style="margin-left: 25px;">Top 10 </label>
+                <input type="radio" class="form-check-input" value='Ten' id="ten" name='Qtde' onclick="Checkradiobutton()">
+                <label class="form-check-label" for="other" style="margin-left: 25px;">Uma Unidade </label>
+                <input type="radio" class="form-check-input" name="Qtde" id="other" value="Other" onclick="Checkradiobutton()" />
+                <input type="text" id="uma" placeholder="Município" name="uma" disabled='true' style="margin-left: 15px;" />
+                <i id="search-btn" class="bi bi-search " style="margin-left: 25px;"></i>
+            </div>
+        </div>
     </form>
     <br>
     <div id="container" style="width: 100%;">
@@ -41,6 +56,15 @@
             }
         }
     });
+
+    function Checkradiobutton() {
+        if (document.getElementById('all').checked || document.getElementById('ten').checked) {
+
+            document.getElementById('uma').disabled = true;
+        } else {
+            document.getElementById('uma').disabled = false;
+        }
+    }
 </script>
 
 {% endblock %}
