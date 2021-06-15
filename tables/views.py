@@ -9,8 +9,6 @@ import os
 from django.http import JsonResponse
 from scripts import *
 import json
-#from django.db.models import Count
-
 
 def especieList(request):
     desc = request.GET.get('desc')
@@ -46,11 +44,15 @@ def especieEdit(request, cod_especie_exame=0):
         else:
             especie = EspecieModel.objects.get(pk=cod_especie_exame)
             form = EspecieForm(instance=especie)
+            form.fields['cod_especie_exame'].widget.attrs['readonly'] = True
         return render(request, 'especie/edit.html', {'form': form})
     else:
-        form = EspecieForm(request.POST)
+        especie = EspecieModel.objects.get(pk=cod_especie_exame)
+        form = EspecieForm(request.POST, instance=especie)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
+        else:
+            print(request.POST)
         return redirect('/especie')
 
 
@@ -616,11 +618,11 @@ def teste(request, pk):
 
     natureza_obj = NaturezaModel.objects.get(pk=pk)
 
-    especie_obj = list(EspecieModel.objects.filter(
-        cod_natureza_exame=natureza_obj.cod_natureza_exame).values('descricao_especie'))
+    especie_obj = EspecieModel.objects.filter(
+        cod_natureza_exame=natureza_obj.cod_natureza_exame)
 
     return JsonResponse(data={
         'natureza': natureza_obj.descricao_natureza,
-        'especies': especie_obj,
+        'especies': list(especie_obj),
 
     })

@@ -28,8 +28,8 @@ class EspecieModel(models.Model):
         'NaturezaModel', on_delete=models.DO_NOTHING, db_column='cod_natureza_exame')
     sigla = models.CharField(max_length=3, choices=SIGLAS, default='')
 
-    # def __str__(self):
-    #    return self.descricao_especie
+    def __str__(self):
+        return self.descricao_especie
 
     class Meta:
         db_table = "especie_exame"

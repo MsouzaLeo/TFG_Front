@@ -5,9 +5,14 @@
     <form method="POST" autocomplete="off">
         {% csrf_token %}
         <div class="col-md-5">
-            {{form.descricao_especie|as_crispy_field}} {{form.cod_natureza_exame|as_crispy_field}} {{form.sigla|as_crispy_field}}
+            {{form.cod_especie_exame|as_crispy_field}} {{form.descricao_especie|as_crispy_field}} {{form.cod_natureza_exame|as_crispy_field}} {{form.sigla|as_crispy_field}}
         </div>
         <button type="submit" class="btn btn-success"><i class="bi bi-upload"></i> Enviar </button>
     </form>
 </div>
+<style>
+    #id_cod_especie_exame {
+        disabled='true';
+    }
+</style>
 {% endblock %}
