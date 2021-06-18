@@ -27,6 +27,7 @@
     <br>
     <div id="container" style="width: 100%;">
         <canvas id="unidader-chart"></canvas>
+        <button class="btn btn-primary" id="btn-download"> Download</button>
     </div>
 </div>
 
@@ -35,7 +36,7 @@
     labels = jQuery.parseJSON('{{labels|safe}}')
     data = jQuery.parseJSON('{{data|safe}}')
     var ctx = document.getElementById("unidader-chart");
-    var naturezaChart = new Chart(ctx, {
+    var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,

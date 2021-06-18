@@ -27,16 +27,16 @@
     <br>
     <div id="container" style="width: 100%;">
         <canvas id="especie-chart"></canvas>
+        <button class="btn btn-primary" id="btn-download"> Download</button>
     </div>
 </div>
 
 <script>
-    console.log(jQuery.parseJSON('{{labels|safe}}'))
     labels = jQuery.parseJSON('{{labels|safe}}')
     console.log(labels)
     data = jQuery.parseJSON('{{data|safe}}')
     var ctx = document.getElementById("especie-chart");
-    var naturezaChart = new Chart(ctx, {
+    var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,

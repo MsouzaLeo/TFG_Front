@@ -20,3 +20,11 @@ var options = {
 $('#downloadcsv').on('click', function() {
     $('#table').table2csv(options);
 });
+
+document.getElementById('btn-download').onclick = function() {
+    var name_file = document.getElementById('name').innerHTML;
+    var a = document.createElement('a');
+    a.href = myChart.toBase64Image();
+    a.download = name_file + '.png';
+    a.click();
+}
