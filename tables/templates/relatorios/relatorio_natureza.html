@@ -54,6 +54,16 @@
             title: {
                 display: true,
                 text: 'Gráfico de Unidade de Exame'
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: (ctx) => 'Tooltip position mode: ' + ctx.chart.options.plugins.tooltip.position,
+                }
             }
         }
     });
