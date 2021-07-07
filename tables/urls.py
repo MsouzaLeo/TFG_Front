@@ -37,5 +37,7 @@ urlpatterns = [
     path('relatorio-unidadex/', views.relatorio_unidadex),
     path('relatorio-unidader/', views.relatorio_unidader),
 
+     path('ad-hoc/', views.adhoc, name='adhoc'),
+
     path('teste/<int:pk>', views.teste, name='teste'),
 ]

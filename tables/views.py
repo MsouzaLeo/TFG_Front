@@ -614,6 +614,20 @@ def relatorio_unidader(request):
     return render(request, 'relatorios/relatorio_unidader.html', context)
 
 
+def adhoc(request):
+
+    natu = request.GET.get('natu')
+    espe = request.GET.get('espe')
+    masp = request.GET.get('masp')
+    dataini = request.GET.get('dataini')
+    datafim = request.GET.get('datafim')
+    if natu or espe or masp or (dataini and datafim):
+        showall = LaudoModel.objects.filter(
+            cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, data_requisicao_pericia__range=[dataini, datafim])[:100]
+    else:
+        showall = LaudoModel.objects.all()[:100]
+    return render(request, 'relatorios/relatorio_adhoc.html', {"data": showall})
+
 def teste(request, pk):
 
     natureza_obj = NaturezaModel.objects.get(pk=pk)
@@ -626,3 +640,4 @@ def teste(request, pk):
         'especies': list(especie_obj),
 
     })
+
