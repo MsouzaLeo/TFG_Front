@@ -251,7 +251,7 @@ def laudoList(request):
         else:
             showall = LaudoModel.objects.all()[:100]
     else:
-        if natu or espe or maspor (dataini and datafim):
+        if natu or espe or masp or (dataini and datafim):
             showall = LaudoModel.objects.filter(
                 cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, data_requisicao_pericia__range=[dataini, datafim])[:2000]
     
