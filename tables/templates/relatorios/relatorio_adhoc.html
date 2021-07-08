@@ -1,17 +1,50 @@
 {% extends 'base.html' %} {% block title %} Laudos {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
-    <h1 id='name'>Relatório Dinâmico</h1>
-    <div class="col-9 search-div form">
-        <form method="get" id='search-form'>
-            <h5>Filtros</h5>
-            <input type="text" id="natu" name="natu" placeholder="Natureza do exame" value="{{request.GET.natu}}">
-            <input type="text" id="espe" name="espe" placeholder="Espécie do exame" value="{{request.GET.espe}}">
-            <input type="text" id="masp" name="masp" placeholder="MASP do Perito" value="{{request.GET.masp}}">
-            <input type="date" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
-            <input type="date" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
-            <i id="search-btn" class="bi bi-search "></i>
-        </form>
-    </div>
+    <h1 class="offset-3" id='name'>Relatório Dinâmico</h1>
+
+    <form class="offset-2" method="get" id='search-form'>
+
+        <h5>Filtros</h5>
+
+        <div class="form-group row ">
+            <div class="form-group col-4">
+                <label for="dataini">
+                            Data de Início
+                        </label>
+                <input type="date" id="dataini" name="dataini" class="form-control" placeholder="Data de início" value="{{request.GET.dataini}}">
+            </div>
+            <div class="form-group col-4">
+                <label for="datafim">
+                            Data de Fim
+                        </label>
+                <input type="date" id="datafim" name="datafim" class="form-control" placeholder="Data de fim" value="{{request.GET.datafim}}">
+            </div>
+        </div>
+
+        <div class="form-group col-8">
+            <label for="natu">
+                        Natureza de Exame
+                    </label>
+            <input type="text" id="natu" name="natu" class="form-control" placeholder="Natureza do exame" value="{{request.GET.natu}}" />
+        </div>
+
+        <div class="form-group col-8">
+            <label for="espe">
+                        Espécie de Exame
+                    </label>
+            <input type="text" id="espe" name="espe" class="form-control" placeholder="Espécie do exame" value="{{request.GET.espe}}" />
+        </div>
+
+        <div class="form-group col-8">
+            <label for="masp">
+                        MASP do perito
+                    </label>
+            <input type="text" id="masp" name="masp" class="form-control" placeholder="MASP do Perito" value="{{request.GET.masp}}">
+        </div>
+
+
+        <button type="submit" class="btn btn-secondary" style="margin-top: 10px; margin-bottom: 30px;"><i class="bi bi-search "></i></button>
+    </form>
 
 
     <div id="div_table" class="table-responsive">
@@ -19,7 +52,7 @@
             <tr>
                 <th>Nº de Requisição</th>
                 <th>Natureza</th>
-                <th>Natureza Ciência</th>
+                <th>Ciência da Natureza</th>
                 <th>Espécie</th>
                 <th>Unidade Requisitante</th>
                 <th>Unidade de Exame</th>

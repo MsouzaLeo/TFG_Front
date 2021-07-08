@@ -244,11 +244,17 @@ def laudoList(request):
     masp = request.GET.get('masp')
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
-    if natu or espe or masp or (dataini and datafim):
-        showall = LaudoModel.objects.filter(
-            cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, data_requisicao_pericia__range=[dataini, datafim])[:3000]
+    if not(dataini and datafim):
+        if natu or espe or masp:
+            showall = LaudoModel.objects.filter(
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp)[:2000]
+        else:
+            showall = LaudoModel.objects.all()[:100]
     else:
-        showall = LaudoModel.objects.all()[:3000]
+        if natu or espe or maspor (dataini and datafim):
+            showall = LaudoModel.objects.filter(
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, data_requisicao_pericia__range=[dataini, datafim])[:2000]
+    
     return render(request, 'laudo/list.html', {"data": showall})
 
 
@@ -614,6 +620,7 @@ def relatorio_unidader(request):
     return render(request, 'relatorios/relatorio_unidader.html', context)
 
 
+from datetime import datetime
 def adhoc(request):
 
     natu = request.GET.get('natu')
@@ -621,12 +628,19 @@ def adhoc(request):
     masp = request.GET.get('masp')
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
-    if natu or espe or masp or (dataini and datafim):
-        showall = LaudoModel.objects.filter(
-            cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, data_requisicao_pericia__range=[dataini, datafim])[:100]
+    if not(dataini and datafim):
+        if natu or espe or masp:
+            showall = LaudoModel.objects.filter(
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp)[:100]
+        else:
+            showall = LaudoModel.objects.all()[:100]
     else:
-        showall = LaudoModel.objects.all()[:100]
+        if natu or espe or masp or (dataini and datafim):
+            showall = LaudoModel.objects.filter(
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, data_requisicao_pericia__range=[dataini, datafim])[:100]
+    
     return render(request, 'relatorios/relatorio_adhoc.html', {"data": showall})
+
 
 def teste(request, pk):
 

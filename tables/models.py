@@ -84,11 +84,11 @@ class LaudoModel(models.Model):
     nmr_procedimento = models.IntegerField()
     cod_modelo_laudo = models.IntegerField()
     data_requisicao_pericia = models.DateTimeField()
-    data_distribuicao_requisicao = models.DateTimeField()
-    data_redistribuicao = models.DateTimeField()
-    data_devolucao_requisicao = models.DateTimeField()
-    data_aceite_requisicao = models.DateTimeField()
-    data_expedicao_laudo = models.DateTimeField()
+    data_distribuicao_requisicao = models.DateTimeField(blank=True, null=True)
+    data_redistribuicao = models.DateTimeField(blank=True, null=True)
+    data_devolucao_requisicao = models.DateTimeField(blank=True, null=True)
+    data_aceite_requisicao = models.DateTimeField(blank=True, null=True)
+    data_expedicao_laudo = models.DateTimeField(blank=True, null=True)
     tempo_confeccao_laudo = models.IntegerField()
 
     class Meta:
