@@ -1,96 +1,202 @@
 {% extends 'base.html' %} {% block title %} Laudos {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
-    <h1 class="offset-3" id='name'>Relatório Dinâmico</h1>
+    <h1 id='name' style="text-align:center">Relatório Dinâmico</h1>
+    <div class="row" style="margin-top: 10px; margin-bottom: 30px;">
+        <div class="col-8">
+            <form method="get" id='search-form'>
 
-    <form class="offset-2" method="get" id='search-form'>
+                <h5>Filtros</h5>
 
-        <h5>Filtros</h5>
-
-        <div class="form-group row ">
-            <div class="form-group col-4">
-                <label for="dataini">
+                <div class="form-group row ">
+                    <div class="form-group col-4">
+                        <label for="dataini">
                             Data de Início
                         </label>
-                <input type="date" id="dataini" name="dataini" class="form-control" placeholder="Data de início" value="{{request.GET.dataini}}">
-            </div>
-            <div class="form-group col-4">
-                <label for="datafim">
+                        <input type="date" id="dataini" name="dataini" class="form-control" placeholder="Data de início" value="{{request.GET.dataini}}">
+                    </div>
+                    <div class="form-group col-4">
+                        <label for="datafim">
                             Data de Fim
                         </label>
-                <input type="date" id="datafim" name="datafim" class="form-control" placeholder="Data de fim" value="{{request.GET.datafim}}">
-            </div>
-        </div>
+                        <input type="date" id="datafim" name="datafim" class="form-control" placeholder="Data de fim" value="{{request.GET.datafim}}">
+                    </div>
+                </div>
 
-        <div class="form-group col-8">
-            <label for="natu">
+                <div class="form-group col-8">
+                    <label for="natu">
                         Natureza de Exame
                     </label>
-            <input type="text" id="natu" name="natu" class="form-control" placeholder="Natureza do exame" value="{{request.GET.natu}}" />
-        </div>
+                    <input type="text" id="natu" name="natu" class="form-control" placeholder="Natureza do exame" value="{{request.GET.natu}}" />
+                </div>
 
-        <div class="form-group col-8">
-            <label for="espe">
+                <div class="form-group col-8">
+                    <label for="espe">
                         Espécie de Exame
                     </label>
-            <input type="text" id="espe" name="espe" class="form-control" placeholder="Espécie do exame" value="{{request.GET.espe}}" />
-        </div>
+                    <input type="text" id="espe" name="espe" class="form-control" placeholder="Espécie do exame" value="{{request.GET.espe}}" />
+                </div>
 
-        <div class="form-group col-8">
-            <label for="masp">
+                <div class="form-group col-8">
+                    <label for="masp">
                         MASP do perito
                     </label>
-            <input type="text" id="masp" name="masp" class="form-control" placeholder="MASP do Perito" value="{{request.GET.masp}}">
+                    <input type="text" id="masp" name="masp" class="form-control" placeholder="MASP do Perito" value="{{request.GET.masp}}">
+                </div>
+
+
+                <button type="submit" class="btn btn-secondary" style="margin-top: 10px; margin-bottom: 30px;"><i
+                        class="bi bi-search "></i></button>
+            </form>
         </div>
 
 
-        <button type="submit" class="btn btn-secondary" style="margin-top: 10px; margin-bottom: 30px;"><i class="bi bi-search "></i></button>
-    </form>
+        <div class="col-4">
+            <form name="tcol" onsubmit="return false">
+                <h5>Campos </h5>
+                <p>Seleciones os Campos desejados no relatório:</p>
+                <div>
+                    <input type=checkbox name="col1" onclick="toggleVis(this.name)" checked> Nº de Requisição
+                </div>
+                <div>
+                    <input type=checkbox name="col2" onclick="toggleVis(this.name)" checked> Natureza
+                </div>
+                <div>
+                    <input type=checkbox name="col3" onclick="toggleVis(this.name)" checked> Ciência da Natureza
+                </div>
+                <div>
+                    <input type=checkbox name="col4" onclick="toggleVis(this.name)" checked> Espécie
+                </div>
+                <div>
+                    <input type=checkbox name="col5" onclick="toggleVis(this.name)" checked> Unidade Requisitante
+                </div>
+                <div>
+                    <input type=checkbox name="col6" onclick="toggleVis(this.name)" checked> Unidade de Exame
+                </div>
+                <div>
+                    <input type=checkbox name="col7" onclick="toggleVis(this.name)" checked> MASP
+                </div>
+                <div>
+                    <input type=checkbox name="col8" onclick="toggleVis(this.name)" checked> Tipo da Requisição
+                </div>
+                <div>
+                    <input type=checkbox name="col9" onclick="toggleVis(this.name)" checked> Nº de Procedimento
+                </div>
+                <div>
+                    <input type=checkbox name="col10" onclick="toggleVis(this.name)" checked> Modelo do Laudo
+                </div>
+                <div>
+                    <input type=checkbox name="col11" onclick="toggleVis(this.name)" checked> Data de Requisição de Perícia
+                </div>
+                <div>
+                    <input type=checkbox name="col12" onclick="toggleVis(this.name)" checked> Data de Distribuição da Requisição
+                </div>
+                <div>
+                    <input type=checkbox name="col13" onclick="toggleVis(this.name)" checked> Data de Redistribuição
+                </div>
+                <div>
+                    <input type=checkbox name="col14" onclick="toggleVis(this.name)" checked> Data de Devolução da Requisição
+                </div>
+                <div>
+                    <input type=checkbox name="col15" onclick="toggleVis(this.name)" checked> Data de Aceite da Requisição
+                </div>
+                <div>
+                    <input type=checkbox name="col16" onclick="toggleVis(this.name)" checked> Data de expedição do Laudo
+                </div>
+                <div>
+                    <input type=checkbox name="col17" onclick="toggleVis(this.name)" checked> Tempo de Confecção do Laudo
+                </div>
+            </form>
+        </div>
+    </div>
+
+
 
 
     <div id="div_table" class="table-responsive">
         <table id='table' class="table table-striped ">
             <tr>
-                <th>Nº de Requisição</th>
-                <th>Natureza</th>
-                <th>Ciência da Natureza</th>
-                <th>Espécie</th>
-                <th>Unidade Requisitante</th>
-                <th>Unidade de Exame</th>
-                <th>MASP</th>
-                <th>Tipo da Requisição</th>
-                <th>Nº de Procedimento</th>
-                <th>Modelo do Laudo</th>
-                <th>Data de Requisição de Perícia</th>
-                <th>Data de Distribuição da Requisição</th>
-                <th>Data de Redistribuição</th>
-                <th>Data de Devolução da Requisição</th>
-                <th>Data de Aceite da Requisição</th>
-                <th>Data de expedição do Laudo</th>
-                <th>Tempo de Confecção do Laudo</th>
+                <th name="tcol1" id="tcol1">Nº de Requisição</th>
+                <th name="tcol2" id="tcol2">Natureza</th>
+                <th name="tcol3" id="tcol3">Ciência da Natureza</th>
+                <th name="tcol4" id="tcol4">Espécie</th>
+                <th name="tcol4" id="tcol4">Classificação da Espécie</th>
+                <th name="tcol5" id="tcol5">Unidade Requisitante</th>
+                <th name="tcol6" id="tcol6">Unidade de Exame</th>
+                <th name="tcol7" id="tcol7">MASP</th>
+                <th name="tcol8" id="tcol8">Tipo da Requisição</th>
+                <th name="tcol9" id="tcol9">Nº de Procedimento</th>
+                <th name="tcol10" id="tcol10">Modelo do Laudo</th>
+                <th name="tcol11" id="tcol11">Data de Requisição de Perícia</th>
+                <th name="tcol12" id="tcol12">Data de Distribuição da Requisição</th>
+                <th name="tcol13" id="tcol13">Data de Redistribuição</th>
+                <th name="tcol14" id="tcol14">Data de Devolução da Requisição</th>
+                <th name="tcol15" id="tcol15">Data de Aceite da Requisição</th>
+                <th name="tcol16" id="tcol16">Data de expedição do Laudo</th>
+                <th name="tcol17" id="tcol17">Tempo de Confecção do Laudo</th>
             </tr>
             {% for result in data %}
             <tr>
-                <td>{{ result.nmr_requisicao }}</td>
-                <td>{{ result.cod_natureza_exame}}</td>
-                <td>{{ result.cod_natureza_exame.ciencia}}</td>
-                <td>{{ result.cod_especie_exame}}</td>
-                <td>{{ result.cod_unidade_requisitante}}</td>
-                <td>{{ result.cod_unidade_exame}}</td>
-                <td>{{ result.masp_perito}}</td>
-                <td>{{ result.tipo_requisicao}}</td>
-                <td>{{ result.nmr_procedimento}}</td>
-                <td>{{ result.cod_modelo_laudo}}</td>
-                <td>{{ result.data_requisicao_pericia|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.data_distribuicao_requisicao|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.data_redistribuicao|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.data_devolucao_requisicao|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.data_aceite_requisicao|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.data_expedicao_laudo|date:"d/m/Y H:i"}}</td>
-                <td>{{ result.tempo_confeccao_laudo}}</td>
+                <td name="tcol1" id="tcol1">{{ result.nmr_requisicao }}</td>
+                <td name="tcol2" id="tcol2">{{ result.cod_natureza_exame}}</td>
+                <td name="tcol3" id="tcol3">{{ result.cod_natureza_exame.ciencia}}</td>
+                <td name="tcol4" id="tcol4">{{ result.cod_especie_exame}}</td>
+                <td name="tcol4" id="tcol4" style="text-align:center">{{ result.cod_especie_exame.sigla}}</td>
+                <td name="tcol5" id="tcol5">{{ result.cod_unidade_requisitante}}</td>
+                <td name="tcol6" id="tcol6">{{ result.cod_unidade_exame}}</td>
+                <td name="tcol7" id="tcol7">{{ result.masp_perito}}</td>
+                <td name="tcol8" id="tcol8">{{ result.tipo_requisicao}}</td>
+                <td name="tcol9" id="tcol9">{{ result.nmr_procedimento}}</td>
+                <td name="tcol10" id="tcol10">{{ result.cod_modelo_laudo}}</td>
+                <td name="tcol11" id="tcol11">{{ result.data_requisicao_pericia|date:"d/m/Y H:i"}}</td>
+                <td name="tcol12" id="tcol12">{{ result.data_distribuicao_requisicao|date:"d/m/Y H:i"}}</td>
+                <td name="tcol13" id="tcol13">{{ result.data_redistribuicao|date:"d/m/Y H:i"}}</td>
+                <td name="tcol14" id="tcol14">{{ result.data_devolucao_requisicao|date:"d/m/Y H:i"}}</td>
+                <td name="tcol15" id="tcol15">{{ result.data_aceite_requisicao|date:"d/m/Y H:i"}}</td>
+                <td name="tcol16" id="tcol16">{{ result.data_expedicao_laudo|date:"d/m/Y H:i"}}</td>
+                <td name="tcol17" id="tcol17">{{ result.tempo_confeccao_laudo}}</td>
             </tr>
             {% endfor %}
         </table>
     </div>
     <button class='btn btn-success' id='downloadcsv'>CSV <i class="bi bi-file-earmark-arrow-down-fill"></i></button>
 </div>
+
+<script language="javascript">
+    // Set the default "show" mode to that specified by W3C DOM
+    // compliant browsers
+
+    var showMode = 'table-cell';
+
+    // However, IE5 at least does not render table cells correctly
+    // using the style 'table-cell', but does when the style 'block'
+    // is used, so handle this
+
+    if (document.all) showMode = 'block';
+
+    // This is the function that actually does the manipulation
+
+    function toggleVis(btn) {
+
+        // First isolate the checkbox by name using the
+        // name of the form and the name of the checkbox
+
+        btn = document.forms['tcol'].elements[btn];
+
+        // Next find all the table cells by using the DOM function
+        // getElementsByName passing in the constructed name of
+        // the cells, derived from the checkbox name
+
+        cells = document.getElementsByName('t' + btn.name);
+
+        // Once the cells and checkbox object has been retrieved
+        // the show hide choice is simply whether the checkbox is
+        // checked or clear
+
+        mode = btn.checked ? showMode : 'none';
+
+        // Apply the style to the CSS display property for the cells
+
+        for (j = 0; j < cells.length; j++) cells[j].style.display = mode;
+    }
+</script>
 {% endblock %}
