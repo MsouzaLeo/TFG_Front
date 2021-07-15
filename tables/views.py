@@ -620,24 +620,26 @@ def relatorio_unidader(request):
     return render(request, 'relatorios/relatorio_unidader.html', context)
 
 
-from datetime import datetime
 def adhoc(request):
 
     natu = request.GET.get('natu')
     espe = request.GET.get('espe')
     masp = request.GET.get('masp')
+    unires = request.GET.get('unires')
+    uniex = request.GET.get('uniex')
+    tpres = request.GET.get('tpres')
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
     if not(dataini and datafim):
-        if natu or espe or masp:
+        if natu or espe or masp or unires or uniex or tpres:
             showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp)[:100]
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres)[:1000]
         else:
-            showall = LaudoModel.objects.all()[:100]
+            showall = LaudoModel.objects.all()[:1000]
     else:
-        if natu or espe or masp or (dataini and datafim):
+        if natu or espe or masp or unires or uniex or tpres or (dataini and datafim):
             showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, data_requisicao_pericia__range=[dataini, datafim])[:100]
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim])[:1000]
     
     return render(request, 'relatorios/relatorio_adhoc.html', {"data": showall})
 
