@@ -238,26 +238,6 @@ def run_python_script(request):
             return render(request, 'upload/upload.html')
 
 
-def laudoList(request):
-    natu = request.GET.get('natu')
-    espe = request.GET.get('espe')
-    masp = request.GET.get('masp')
-    dataini = request.GET.get('dataini')
-    datafim = request.GET.get('datafim')
-    if not(dataini and datafim):
-        if natu or espe or masp:
-            showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp)[:2000]
-        else:
-            showall = LaudoModel.objects.all()[:100]
-    else:
-        if natu or espe or masp or (dataini and datafim):
-            showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, data_requisicao_pericia__range=[dataini, datafim])[:2000]
-    
-    return render(request, 'laudo/list.html', {"data": showall})
-
-
 def relatorio_especie(request):
     labels = []
     data = []
@@ -644,6 +624,31 @@ def adhoc(request):
     return render(request, 'relatorios/relatorio_adhoc.html', {"data": showall})
 
 
+
+def dash(request):
+    labels = []
+    count = []
+    for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
+    from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
+    group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc'''):
+        cod_nome = str(unidade.geocodigo)
+        labels.append(cod_nome)
+        count.append(unidade.contagem)
+
+    data = []
+    for j, val1 in enumerate(labels):
+	    for i,val2 in enumerate(count):
+		    if j == i:
+			    data.append([val1, val2])
+    # context={
+    #     'labels': json.dumps(labels),
+    #     'data': data,
+    # }
+
+    return render(request, 'dashboard/dash.html', {"data": data})
+
+
+
 def teste(request, pk):
 
     natureza_obj = NaturezaModel.objects.get(pk=pk)
@@ -654,6 +659,6 @@ def teste(request, pk):
     return JsonResponse(data={
         'natureza': natureza_obj.descricao_natureza,
         'especies': list(especie_obj),
-
     })
+
 
