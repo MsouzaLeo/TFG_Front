@@ -32,7 +32,8 @@ urlpatterns = [
 
      path('ad-hoc/', views.adhoc, name='adhoc'),
 
-     path('teste/<int:pk>', views.teste, name='teste'),
+     path('dadosMapa/', views.dadosMapa, name='teste'),
+     path('dadosGraf/<int:geocod>/', views.dadosLinha, name='teste'),
 
      path('dash/', views.dash, name='dash'),
 ]

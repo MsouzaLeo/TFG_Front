@@ -1,6 +1,7 @@
 from subprocess import run, PIPE, Popen
 import sys
 from tkinter.constants import FALSE
+from django.db.models.aggregates import Count
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.core.files.storage import FileSystemStorage
 from tables.models import *
@@ -9,6 +10,8 @@ import os
 from django.http import JsonResponse
 from scripts import *
 import json
+from django.db.models.functions import TruncMonth
+
 
 def especieList(request):
     desc = request.GET.get('desc')
@@ -626,39 +629,16 @@ def adhoc(request):
 
 
 def dash(request):
-    labels = []
-    count = []
-    for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
-    from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
-    group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc'''):
-        cod_nome = str(unidade.geocodigo)
-        labels.append(cod_nome)
-        count.append(unidade.contagem)
-
-    data = []
-    for j, val1 in enumerate(labels):
-	    for i,val2 in enumerate(count):
-		    if j == i:
-			    data.append([val1, val2])
-    # context={
-    #     'labels': json.dumps(labels),
-    #     'data': data,
-    # }
-
-    return render(request, 'dashboard/dash.html', {"data": data})
+    return render(request, 'dashboard/dash.html')
 
 
+def dadosMapa(request):
+    natu = request.GET.get('desc')
+    data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(cod_natureza_exame__descricao_natureza__icontains=natu)
+    #data = list(teste.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-laudo_nmr'))
+    return JsonResponse(list(data),safe=False)
 
-def teste(request, pk):
-
-    natureza_obj = NaturezaModel.objects.get(pk=pk)
-
-    especie_obj = EspecieModel.objects.filter(
-        cod_natureza_exame=natureza_obj.cod_natureza_exame)
-
-    return JsonResponse(data={
-        'natureza': natureza_obj.descricao_natureza,
-        'especies': list(especie_obj),
-    })
-
-
+def dadosLinha(request,geocod):
+    natu = request.GET.get('desc')
+    teste = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(cod_natureza_exame__descricao_natureza__icontains=natu)
+    return JsonResponse(list(teste),safe=False)
