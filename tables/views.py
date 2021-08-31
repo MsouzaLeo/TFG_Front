@@ -627,18 +627,38 @@ def adhoc(request):
     return render(request, 'relatorios/relatorio_adhoc.html', {"data": showall})
 
 
+def dashTeste(request,cod_natureza_exame=0):
+    natureza = NaturezaModel.objects.all().order_by('descricao_natureza')
+    return render(request, 'dashboard/dash copy.html',{"data": natureza})
 
 def dash(request):
-    return render(request, 'dashboard/dash.html')
-
+    natureza = NaturezaModel.objects.all().order_by('descricao_natureza')
+    return render(request, 'dashboard/dash.html',{"data": natureza})
 
 def dadosMapa(request):
-    natu = request.GET.get('desc')
-    data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(cod_natureza_exame__descricao_natureza__icontains=natu)
-    #data = list(teste.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-laudo_nmr'))
+    natu = request.GET.get('natureza')
+    inicio = request.GET.get('inicio')
+    fim = request.GET.get('fim')
+    if not natu and not inicio:
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value')
+    elif natu and not(inicio and fim):
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(cod_natureza_exame=natu)
+    elif not natu and (inicio and fim):
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(data_requisicao_pericia__range=[inicio, fim])
+    elif natu and (inicio and fim):
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(cod_natureza_exame=natu, data_requisicao_pericia__range=[inicio, fim])
     return JsonResponse(list(data),safe=False)
 
 def dadosLinha(request,geocod):
-    natu = request.GET.get('desc')
-    teste = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(cod_natureza_exame__descricao_natureza__icontains=natu)
-    return JsonResponse(list(teste),safe=False)
+    natu = request.GET.get('natureza')
+    inicio = request.GET.get('inicio')
+    fim = request.GET.get('fim')
+    if not natu and not inicio:
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod)
+    elif natu and not(inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(cod_natureza_exame=natu)
+    elif not natu and (inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(data_requisicao_pericia__range=[inicio, fim])
+    elif natu and (inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(data_requisicao_pericia__range=[inicio, fim], cod_natureza_exame=natu)
+    return JsonResponse(list(data),safe=False)
