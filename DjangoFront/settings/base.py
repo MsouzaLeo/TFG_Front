@@ -28,7 +28,7 @@ SECRET_KEY = 'rrgo=$g5i7)@hfv!7ib950s7)97*j&u1qwk&f9%4^zl&4@uk^%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://tfg-leonardo.herokuapp.com/']
+ALLOWED_HOSTS = ['tfg-leonardo.herokuapp.com/']
 
 
 # Application definition
