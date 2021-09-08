@@ -1,6 +1,5 @@
 import pandas as pd
 import sqlalchemy
-from tkinter import filedialog
 import sys
 
 pd.options.mode.chained_assignment = None
