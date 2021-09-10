@@ -1,8 +1,7 @@
-from subprocess import run, PIPE, Popen
+from subprocess import run, PIPE
 import sys
-from tkinter.constants import FALSE
 from django.db.models.aggregates import Count
-from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
+from django.shortcuts import render,  redirect
 from django.core.files.storage import FileSystemStorage
 from tables.models import *
 from .forms import *
