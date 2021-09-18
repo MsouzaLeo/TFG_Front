@@ -16,25 +16,35 @@
 
 
     <div id="div_table">
-        <table id='table' class="table table-striped ">
-            <tr>
-                <th>Codigo da Unidade</th>
-                <th>Unidade Pericial</th>
-                <th id="edit_col ">Editar</th>
-            </tr>
-            {% for result in data %}
-            <tr>
-                <td>{{ result.cod_unidade_exame }}</td>
-                <td>{{ result.comarca_da_unidade }}</td>
-                <td id="edit_col ">
-                    <a href="{% url 'uniexa-update' result.cod_unidade_exame %} " class="btn edit-link ">
-                        <i class="bi bi-pencil-square "></i>
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
+        <table id='Table' class="table table-striped ">
+            <thead>
+                <tr>
+                    <th>Codigo da Unidade</th>
+                    <th>Unidade Pericial</th>
+                    <th id="edit_col ">Editar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in data %}
+                <tr>
+                    <td>{{ result.cod_unidade_exame }}</td>
+                    <td>{{ result.comarca_da_unidade }}</td>
+                    <td id="edit_col ">
+                        <a href="{% url 'uniexa-update' result.cod_unidade_exame %} " class="btn edit-link ">
+                            <i class="bi bi-pencil-square "></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
     <button class='btn btn-success' id='downloadcsv'>CSV <i class="bi bi-file-earmark-arrow-down-fill"></i></button>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#Table').DataTable();
+    });
+</script>
 {% endblock %}

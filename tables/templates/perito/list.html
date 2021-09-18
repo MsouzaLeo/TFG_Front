@@ -15,25 +15,35 @@
 
 
     <div id="div_table">
-        <table id='table' class="table table-striped ">
-            <tr>
-                <th>MASP</th>
-                <th>Nome do Perito</th>
-                <th id="edit_col ">Editar</th>
-            </tr>
-            {% for result in data %}
-            <tr>
-                <td>{{ result.masp }}</td>
-                <td>{{ result.nome_perito }}</td>
-                <td id="edit_col ">
-                    <a href="{% url 'perito-update' result.masp %} " class="btn edit-link ">
-                        <i class="bi bi-pencil-square "></i>
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
+        <table id="Table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>MASP</th>
+                    <th>Nome do Perito</th>
+                    <th id="edit_col ">Editar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in data %}
+                <tr>
+                    <td>{{ result.masp }}</td>
+                    <td>{{ result.nome_perito }}</td>
+                    <td id="edit_col ">
+                        <a href="{% url 'perito-update' result.masp %} " class="btn edit-link ">
+                            <i class="bi bi-pencil-square "></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
     <button class='btn btn-success' id='downloadcsv'>CSV <i class="bi bi-file-earmark-arrow-down-fill"></i></button>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#Table').DataTable();
+    });
+</script>
 {% endblock %}

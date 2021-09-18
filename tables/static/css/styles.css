@@ -122,10 +122,11 @@ th {
     vertical-align: middle;
 }
 
-#div_table {
+
+/* #div_table {
     overflow: auto;
     height: 460px;
-}
+} */
 
 
 /* CSV Download */
