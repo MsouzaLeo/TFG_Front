@@ -615,24 +615,22 @@ def adhoc(request):
     if not(dataini and datafim):
         if natu or espe or masp or unires or uniex or tpres:
             showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres)
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres)[:3000]
         else:
-            showall = LaudoModel.objects.all()
+            showall = LaudoModel.objects.all()[:3000]
     else:
         if natu or espe or masp or unires or uniex or tpres or (dataini and datafim):
             showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim])
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim])[:3000]
     
     return render(request, 'relatorios/relatorio_adhoc.html', {"data": showall})
-
-
-def dashTeste(request,cod_natureza_exame=0):
-    natureza = NaturezaModel.objects.all().order_by('descricao_natureza')
-    return render(request, 'dashboard/dash copy.html',{"data": natureza})
 
 def dash(request):
     natureza = NaturezaModel.objects.all().order_by('descricao_natureza')
     return render(request, 'dashboard/dash.html',{"data": natureza})
+
+def home(request):
+    return render(request, 'home.html')
 
 def dadosMapa(request):
     natu = request.GET.get('natureza')

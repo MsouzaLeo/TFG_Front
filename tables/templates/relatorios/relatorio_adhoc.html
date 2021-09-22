@@ -133,7 +133,7 @@
 
 
     <div id="div_table" class="table-responsive">
-        <table id='Table' class="table table-striped ">
+        <table id='Table_Data' class="table table-striped ">
             <thead>
                 <tr>
                     <th name="tcol1" id="tcol1">Nº de Requisição</th>
@@ -187,7 +187,12 @@
 
 <script language="javascript">
     $(document).ready(function() {
-        $('#Table').DataTable();
+        $('#Table_Data').DataTable({
+            dom: '<"top row" l>rt<"bottom row"<"col-4" B><"info col-4" i><"col-4" p>><"clear">',
+            buttons: [
+                'copy', 'excel', 'pdf', 'print'
+            ]
+        });
     });
 
     var showMode = 'table-cell';

@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-     path('', views.dash, name='dash'),
+     path('', views.home, name='dash'),
      path('unires/', views.uniresList, name='unires-list'),
      path('uniexa/', views.uniexaList, name='uniexa-list'),
      path('perito/', views.peritoList, name='perito-list'),
@@ -37,6 +37,4 @@ urlpatterns = [
      path('dadosGraf/<int:geocod>/', views.dadosLinha, name='teste'),
 
      path('dash/', views.dash, name='dash'),
-
-     path('dash/<int:cod_natureza_exame>/', views.dashTeste, name='dashTeste'),
 ]

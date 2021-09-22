@@ -1,3 +1,47 @@
+/* DataTable botões */
+
+.dataTables_info {
+    float: left !important;
+    width: 100%;
+}
+
+label {
+    display: inline-flex;
+}
+
+.custom-select {
+    margin: auto 5px;
+}
+
+.info {
+    text-align: center !important;
+}
+
+.dataTables_length {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.dt-buttons {
+    margin-top: 0.5em;
+}
+
+.btn-secondary {
+    background-color: #198754 !important;
+    border-color: #10422a !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background: transparent;
+    border: 0px;
+    padding: 0.25em;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: transparent;
+    border: 0px;
+}
+
 .container-fluid {
     padding: 0px !important;
 }
