@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} Lista de Naturezas {% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %} Home Page {% endblock %} {% block content %}{% load static %}
 <div class="offset-1 col-10 list-div">
     <h1>Bem-vindo à Plataforma Integrada de Laudos Periciais de Minas Gerais</h1>
     <p>Sistemas de Apoio à Decisão (SADs) são sistemas computacionais que auxiliam pessoas a tomarem decisões inteligentes e bem-informadas. No caso da segurança pública os SADs podem subsidiar estratégias de inteligência policial por meio de ferramentas
@@ -9,5 +9,7 @@
     <p>Caso precise rever o vídeo de apresentação do sistema, ele está disponível abaixo.</p>
     <p>Muito Obrigado!</p>
     <p>Equipe UNIFEI</p>
+
+    <img src="{% static 'assets/logo_IMC.png' %}" alt="bldasijdiasjd">
 </div>
 {% endblock %}
