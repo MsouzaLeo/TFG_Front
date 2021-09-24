@@ -1,15 +1,17 @@
 {% extends 'base.html' %} {% block title %} Home Page {% endblock %} {% block content %}{% load static %}
-<div class="offset-1 col-10 list-div">
-    <h1>Bem-vindo à Plataforma Integrada de Laudos Periciais de Minas Gerais</h1>
+<div class="offset-3 col-6 list-div">
+
+    <h1 class="mb-4">Bem-vindo à Plataforma Integrada de Laudos Periciais de Minas Gerais</h1>
     <p>Sistemas de Apoio à Decisão (SADs) são sistemas computacionais que auxiliam pessoas a tomarem decisões inteligentes e bem-informadas. No caso da segurança pública os SADs podem subsidiar estratégias de inteligência policial por meio de ferramentas
         para a análise criminal.</p>
     <p>A plataforma integrada de laudos periciais de Minas Gerais objetiva facilitar a análise dos registros de laudos periciais disponíveis no PCNet por meio da integração e disponibilização de seus dados. É um sistema ainda acadêmico e em teste. O banco
-        de dados possui registros de laudos entre as datas xxx e xxx. Ao todo são xxx registros que foram importados a partir das planilhas mensais em CSV disponibilizadas no PCNet.</p>
+        de dados possui registros de laudos entre as datas Janeiro de 2017 e Agosto de 2021. Ao todo são 1.438.723 registros que foram importados a partir das planilhas mensais em CSV disponibilizadas no PCNet.</p>
     <p>Convidamos você a nos ajudar testá-lo e melhorá-lo.</p>
     <p>Caso precise rever o vídeo de apresentação do sistema, ele está disponível abaixo.</p>
     <p>Muito Obrigado!</p>
     <p>Equipe UNIFEI</p>
-
-    <img src="{% static 'assets/logo_IMC.png' %}" alt="bldasijdiasjd">
+    <iframe width="100%" height="400" src="https://www.youtube.com/embed/iymniXk-C8I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <img src="{% static 'assets/logo_IMC.png' %}" height="200px" alt="" style="margin-top: 25px;">
+    <img src=" {% static 'assets/logo_policia.png' %} " height="200px " alt="" style="float: right; margin-top: 25px; ">
 </div>
 {% endblock %}
