@@ -14,6 +14,10 @@
             <input type="text" id="search" name="sigl" placeholder="Classificação da Espécie" value="{{request.GET.sigl}}">
 
             <i id="search-btn" class="bi bi-search"></i>
+            <a id="search-btn" href="/especie">
+                <i class="bi bi-eraser-fill"></i> Limpar
+            </a>
+
         </form>
     </div>
 
@@ -44,18 +48,15 @@
                 {% endfor %}
             </tbody>
         </table>
-
     </div>
-    <button class='btn btn-success' id='downloadcsv'>CSV <i class="bi bi-file-earmark-arrow-down-fill"></i></button>
-</div>
-<script>
-    $(document).ready(function() {
-        $('#Table_Data').DataTable({
-            dom: '<"top row" l>rt<"bottom row"<"col-4" B><"info col-4" i><"col-4" p>><"clear">',
-            buttons: [
-                'copy', 'excel', 'pdf', 'print'
-            ]
+    <script>
+        $(document).ready(function() {
+            $('#Table_Data').DataTable({
+                dom: '<"top row" l>rt<"bottom row"<"col-4" B><"info col-4" i><"col-4" p>><"clear">',
+                buttons: [
+                    'copy', 'excel', 'pdf', 'print'
+                ]
+            });
         });
-    });
-</script>
-{% endblock %}
+    </script>
+    {% endblock %}

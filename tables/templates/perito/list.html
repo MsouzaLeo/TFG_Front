@@ -10,6 +10,9 @@
         <form method="get" id='search-form'>
             <input type="text" id="search" name="search" placeholder="Nome do Perito" size="80px" value="{{request.GET.search}}">
             <i id="search-btn" class=" bi bi-search "></i>
+            <a id="search-btn" href="/perito">
+                <i class="bi bi-eraser-fill"></i> Limpar
+            </a>
         </form>
     </div>
 
@@ -38,7 +41,6 @@
             </tbody>
         </table>
     </div>
-    <button class='btn btn-success' id='downloadcsv'>CSV <i class="bi bi-file-earmark-arrow-down-fill"></i></button>
 </div>
 
 <script>

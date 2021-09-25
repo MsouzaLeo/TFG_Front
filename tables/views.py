@@ -243,7 +243,7 @@ def run_python_script(request):
 def relatorio_especie(request):
     labels = []
     data = []
-
+    teste = []
     limit = request.GET.get('Qtde')
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
@@ -298,16 +298,19 @@ def relatorio_especie(request):
             data.append(especie.contagem)
 
     else:
+        
         for especie in EspecieModel.objects.raw('''select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem
         from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame
         group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc'''):
             labels.append(especie.cod_especie_exame)
+            teste.append(especie.descricao_especie)
             data.append(especie.contagem)
 
 
     context={
         'labels': json.dumps(labels),
         'data': data,
+        'teste':teste
     }
 
     return render(request, 'relatorios/relatorio_especie.html', context)
