@@ -36,10 +36,6 @@
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-<style>
-
-</style>
-
 <script>
     data = jQuery.parseJSON('{{data|safe}}')
     labels = jQuery.parseJSON('{{labels|safe}}')
@@ -62,7 +58,7 @@
             }
         },
         tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            headerFormat: '<span style="font-size:13px; font-weight: bold;">{point.key}</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                 '<td style="padding:1"><b>{point.y}</b></td></tr>',
             footerFormat: '</table>',
@@ -76,6 +72,7 @@
             }
         },
         series: [{
+            color: '#068d9d',
             name: 'Quantidade de Registros',
             data: data
         }]
