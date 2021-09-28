@@ -608,7 +608,9 @@ def relatorio_unidader(request):
 def adhoc(request):
 
     natu = request.GET.get('natu')
+    codnatu = request.GET.get('codnatu')
     espe = request.GET.get('espe')
+    codespe = request.GET.get('codespe')
     masp = request.GET.get('masp')
     unires = request.GET.get('unires')
     uniex = request.GET.get('uniex')
@@ -616,9 +618,9 @@ def adhoc(request):
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
     if not(dataini and datafim):
-        if natu or espe or masp or unires or uniex or tpres:
+        if natu or codnatu or espe or codespe or masp or unires or uniex or tpres:
             showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres)[:3000]
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres)[:3000]
         else:
             showall = LaudoModel.objects.all()[:3000]
     else:
