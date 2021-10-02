@@ -38,13 +38,22 @@
                 </div>
 
                 <div class="form-group row">
-                    <div class="form-group col-4">
+                    <div class="form-group col-3">
                         <label for="espe">
                         Código da Espécie
                     </label>
                         <input type="text" id="codespe" name="codespe" class="form-control" placeholder="Código da Espécie do exame" value="{{request.GET.codespe}}" />
                     </div>
-                    <div class="form-group col-4">
+                    <div class="form-group col-2">
+                        <label for="classespe">Classificação</label>
+                        <select class="form-control js-example-basic-single" name="classespe" id="natureza">
+                            <option value="">Selecione uma classificação</option>
+                            <option value="DI">DI</option>
+                            <option value="DEU">DEU</option>
+                            <option value="DEA">DEA</option>
+                    </select>
+                    </div>
+                    <div class="form-group col-3">
                         <label for="espe">
                         Espécie de Exame
                     </label>
@@ -83,6 +92,7 @@
                 <button id="search-btn" type="submit" class="btn" style="margin-top: 10px; margin-bottom: 30px;">
                     <i class="bi bi-search "></i>
                 </button>
+
                 <button id="search-btn" href="/ad-hoc" class="btn" style="margin-top: 10px; margin-bottom: 30px;">
                     <i class="bi bi-eraser-fill"></i> Limpar
                 </button>
@@ -215,36 +225,12 @@
     });
 
     var showMode = 'table-cell';
-
-    // However, IE5 at least does not render table cells correctly
-    // using the style 'table-cell', but does when the style 'block'
-    // is used, so handle this
-
     if (document.all) showMode = 'block';
 
-    // This is the function that actually does the manipulation
-
     function toggleVis(btn) {
-
-        // First isolate the checkbox by name using the
-        // name of the form and the name of the checkbox
-
         btn = document.forms['tcol'].elements[btn];
-
-        // Next find all the table cells by using the DOM function
-        // getElementsByName passing in the constructed name of
-        // the cells, derived from the checkbox name
-
         cells = document.getElementsByName('t' + btn.name);
-
-        // Once the cells and checkbox object has been retrieved
-        // the show hide choice is simply whether the checkbox is
-        // checked or clear
-
         mode = btn.checked ? showMode : 'none';
-
-        // Apply the style to the CSS display property for the cells
-
         for (j = 0; j < cells.length; j++) cells[j].style.display = mode;
     }
 </script>

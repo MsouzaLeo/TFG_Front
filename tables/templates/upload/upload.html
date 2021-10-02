@@ -10,6 +10,7 @@
             <input type="file" class="form-control" id="inputGroupFile02" name="document" value="{{ request.GET.inputGroupFile02}}">
 
         </div>
-        <button type="submit" class="btn btn-primary" id='upload-btn'>Upload</button>
-        <p style="padding-top: 10px;">{{data}}</p>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br>{% endblock %}
+        <button type="submit" class="btn btn-secondary" id='upload-btn' disabled>Upload</button>
+        <h5 style="padding-top: 10px; color: red"> Desativado durante período de teste. </h5>
+        <p style="padding-top: 10px; margin-bottom: 350px;">{{data}}</p>
+        {% endblock %}
