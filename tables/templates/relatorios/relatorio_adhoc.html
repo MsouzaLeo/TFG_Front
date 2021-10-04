@@ -89,13 +89,28 @@
                     <input type="text" id="tpres" name="tpres" class="form-control" placeholder="Tipo de Requisição" value="{{request.GET.tpres}}">
                 </div>
 
-                <button id="search-btn" type="submit" class="btn" style="margin-top: 10px; margin-bottom: 30px;">
-                    <i class="bi bi-search "></i>
-                </button>
+                <div class="form-group row">
+                    <div class="form-group col-2">
+                        <label for="page">Página</label>
+                        <select class="form-control js-example-basic-single" style='font-weight:bold;' name="page">
+                            <option style='font-weight:bold;' value="{{data.number}}">Atual: {{data.number}} </option>
+                            {% for page in data.paginator.page_range %}
+                                <option value="{{page}}">{{page}} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-2">
+                        <button id="search-btn" type="submit" class="btn" style="margin-top: 25px; margin-bottom: 30px;">
+                            <i class="bi bi-search "></i>
+                        </button>
+                    </div>
+                    <div class="form-group col-2">
+                        <button id="search-btn" href="/ad-hoc" class="btn" style="margin-top: 25px; margin-bottom: 30px;">
+                            <i class="bi bi-eraser-fill"></i> Limpar
+                        </button>
+                    </div>
 
-                <button id="search-btn" href="/ad-hoc" class="btn" style="margin-top: 10px; margin-bottom: 30px;">
-                    <i class="bi bi-eraser-fill"></i> Limpar
-                </button>
+                </div>
             </form>
         </div>
 
@@ -161,7 +176,7 @@
 
 
 
-
+    <h5 style="text-align:center"> Total de Registros da consulta: {{data.paginator.count}}</h5>
     <div id="div_table" class="table-responsive">
         <table id='Table_Data' class="table table-striped ">
             <thead>
@@ -213,11 +228,11 @@
         </table>
     </div>
 </div>
-
 <script language="javascript">
     $(document).ready(function() {
         $('#Table_Data').DataTable({
-            dom: '<"top row" l>rt<"bottom row"<"col-4" B><"info col-4" i><"col-4" p>><"clear">',
+            "pageLength": 100,
+            dom: 'rt<"bottom row"<"col-4" B>><"clear">',
             buttons: [
                 'copy', 'excel', 'pdf', 'print'
             ]
