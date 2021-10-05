@@ -5,7 +5,7 @@
     <form method="POST" autocomplete="off">
         {% csrf_token %}
         <div class="col-md-5">
-            {{form.comarca_da_unidade|as_crispy_field}}
+            {{form.cod_unidade_exame|as_crispy_field}} {{form.comarca_da_unidade|as_crispy_field}}
         </div>
         <button type="submit" class="btn btn-success"><i class="bi bi-upload"></i> Enviar </button>
     </form>

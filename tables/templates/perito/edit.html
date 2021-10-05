@@ -5,7 +5,7 @@
     <form method="POST" autocomplete="off">
         {% csrf_token %}
         <div class="col-md-5">
-            {{form.nome_perito|as_crispy_field}}
+            {{form.masp|as_crispy_field}} {{form.nome_perito|as_crispy_field}}
         </div>
         <button type="submit" class="btn btn-success"><i class="bi bi-upload"></i> Enviar </button>
     </form>

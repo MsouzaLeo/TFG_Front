@@ -11,6 +11,7 @@ class EspecieForm(forms.ModelForm):
         labels = {
             'cod_especie_exame': 'Código da Especie',
             'descricao_especie': 'Descrição da Especie',
+            'sigla':'Classificação',
             'cod_natureza_exame': 'Natureza de Exame da Especie'
         }
 

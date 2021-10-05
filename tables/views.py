@@ -92,11 +92,15 @@ def naturezaEdit(request, cod_natureza_exame=0):
         else:
             natureza = NaturezaModel.objects.get(pk=cod_natureza_exame)
             form = NaturezaForm(instance=natureza)
+            form.fields['cod_natureza_exame'].widget.attrs['readonly'] = True
         return render(request, 'natureza/edit.html', {'form': form})
     else:
-        form = NaturezaForm(request.POST)
+        natureza = NaturezaModel.objects.get(pk=cod_natureza_exame)
+        form = NaturezaForm(request.POST, instance=natureza)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
+        else:
+            print(request.POST)
         return redirect('/natureza')
 
 
@@ -131,11 +135,15 @@ def peritoEdit(request, masp=-1):
         else:
             perito = PeritoModel.objects.get(pk=masp)
             form = PeritoForm(instance=perito)
+            form.fields['masp'].widget.attrs['readonly'] = True
         return render(request, 'perito/edit.html', {'form': form})
     else:
-        form = PeritoForm(request.POST)
+        perito = PeritoModel.objects.get(pk=masp)
+        form = PeritoForm(request.POST, instance=masp)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
+        else:
+            print(request.POST)
         return redirect('/perito')
 
 
@@ -171,11 +179,15 @@ def uniexaEdit(request, cod_unidade_exame=''):
         else:
             uniexa = UniexaModel.objects.get(pk=cod_unidade_exame)
             form = UniexaForm(instance=uniexa)
+            form.fields['cod_unidade_exame'].widget.attrs['readonly'] = True
         return render(request, 'uniexa/edit.html', {'form': form})
     else:
-        form = UniexaForm(request.POST)
+        uniexa = UniexaModel.objects.get(pk=cod_unidade_exame)
+        form = UniexaForm(request.POST,instance=cod_unidade_exame)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
+        else:
+            print(request.POST)
         return redirect('/uniexa')
 
 
@@ -211,11 +223,15 @@ def uniresEdit(request, cod_unidade_requisitante=''):
         else:
             unires = UniresModel.objects.get(pk=cod_unidade_requisitante)
             form = UniresForm(instance=unires)
+            form.fields['cod_unidade_requisitante'].widget.attrs['readonly'] = True
         return render(request, 'unires/edit.html', {'form': form})
     else:
-        form = UniresForm(request.POST)
+        unires = UniresModel.objects.get(pk=cod_unidade_requisitante)
+        form = UniresForm(request.POST,instance=cod_unidade_requisitante)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
+        else:
+            print(request.POST)
         return redirect('/unires')
 
 
@@ -629,7 +645,7 @@ def adhoc(request):
             showall = LaudoModel.objects.filter(
                 cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim]).order_by('nmr_requisicao')
     
-    p = Paginator(showall,100)
+    p = Paginator(showall,3000)
     page = request.GET.get('page', 1)
 
     try:
