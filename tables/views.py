@@ -645,7 +645,7 @@ def adhoc(request):
             showall = LaudoModel.objects.filter(
                 cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim]).order_by('nmr_requisicao')
     
-    p = Paginator(showall,3000)
+    p = Paginator(showall,2000)
     page = request.GET.get('page', 1)
 
     try:
