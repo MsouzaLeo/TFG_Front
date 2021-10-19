@@ -86,7 +86,14 @@
                     <label for="tpres">
                         Tipo de Requisição
                     </label>
-                    <input type="text" id="tpres" name="tpres" class="form-control" placeholder="Tipo de Requisição" value="{{request.GET.tpres}}">
+                    <select class="form-control js-example-basic-single" name="tpres" id="tpres">
+                        <option value="">Selecione um Tipo de Requisição</option>
+                        <option value="FAEP">FAEP</option>
+                        <option value="EXPEDIENTE">EXPEDIENTE</option>
+                        <option value="COMPLEMENTAR">COMPLEMENTAR</option>
+                        <option value="ESCLARECIMENTO">ESCLARECIMENTO</option>
+                        <option value="ESCLARECIMENTO_CDL">ESCLARECIMENTO_CDL</option>
+                </select>
                 </div>
 
                 <div class="form-group row">
