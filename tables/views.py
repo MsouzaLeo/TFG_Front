@@ -632,8 +632,16 @@ def adhoc(request):
     unires = request.GET.get('unires')
     uniex = request.GET.get('uniex')
     tpres = request.GET.get('tpres')
-    dataini = request.GET.get('dataini')
-    datafim = request.GET.get('datafim')
+    tipodata = request.GET.get('tipodata')
+    dataini = ''
+    datafim = ''
+    if tipodata == "requisicao":
+        dataini = request.GET.get('datainireq')
+        datafim = request.GET.get('datafimreq')
+    elif tipodata == "expedicao":
+        dataini = request.GET.get('datainiexp')
+        datafim = request.GET.get('datafimexp')
+
     if not(dataini and datafim):
         if natu or codnatu or espe or codespe or classespe or masp or unires or uniex or tpres:
             showall = LaudoModel.objects.filter(
@@ -641,9 +649,14 @@ def adhoc(request):
         else:
             showall = LaudoModel.objects.all().order_by('nmr_requisicao')[:500]
     else:
-        if natu or codnatu or espe or codespe or classespe or masp or unires or uniex or tpres or (dataini and datafim):
-            showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim]).order_by('nmr_requisicao')
+        if tipodata == "requisicao":
+            if natu or codnatu or espe or codespe or classespe or masp or unires or uniex or tpres or (dataini and datafim):
+                showall = LaudoModel.objects.filter(
+                    cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim]).order_by('nmr_requisicao')
+        elif tipodata == "expedicao":
+            if natu or codnatu or espe or codespe or classespe or masp or unires or uniex or tpres or (dataini and datafim):
+                showall = LaudoModel.objects.filter(
+                    cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_expedicao_laudo__range=[dataini, datafim]).order_by('nmr_requisicao')
     
     p = Paginator(showall,2000)
     page = request.GET.get('page', 1)

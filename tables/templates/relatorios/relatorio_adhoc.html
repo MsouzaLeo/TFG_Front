@@ -5,29 +5,63 @@
         <div class="col-8">
             <form method="get" id='search-form'>
 
-                <h5>Filtros</h5>
+                <h4>Filtros</h4>
 
-                <div class="form-group row ">
+                <div class="form-group row " style="margin-top: 20px;">
+                    <div class="form-group row">
+                        <div class="form-group col-3">
+                            <h5>Data de Requisição</h5>
+                        </div>
+                        <div class="form-group col-4">
+                            <input class="form-check-input" type="radio" value='requisicao' id="req" checked="true" name='tipodata' onclick="Checkradiobutton()">
+                        </div>
+                    </div>
+
                     <div class="form-group col-4">
                         <label for="dataini">
                             Data de Início
                         </label>
-                        <input type="date" id="dataini" name="dataini" class="form-control" placeholder="Data de início" value="{{request.GET.dataini}}">
+                        <input type="date" id="datainireq" name="datainireq" class="form-control" placeholder="Data de início" value="{{request.GET.datainireq}}">
                     </div>
                     <div class="form-group col-4">
                         <label for="datafim">
                             Data de Fim
                         </label>
-                        <input type="date" id="datafim" name="datafim" class="form-control" placeholder="Data de fim" value="{{request.GET.datafim}}">
+                        <input type="date" id="datafimreq" name="datafimreq" class="form-control" placeholder="Data de fim" value="{{request.GET.datafimreq}}">
                     </div>
                 </div>
 
-                <div class="form-group row">
+                <div class="form-group row " style="margin-top: 10px;">
+
+                    <div class="form-group row">
+                        <div class="form-group col-3">
+                            <h5>Data de Expedição</h5>
+                        </div>
+                        <div class="form-group col-4">
+                            <input class="form-check-input" type="radio" value='expedicao' id="exp" name='tipodata' onclick="Checkradiobutton()">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-4">
+                        <label for="dataini">
+                            Data de Início
+                        </label>
+                        <input type="date" id="datainiexp" name="datainiexp" class="form-control" placeholder="Data de início" disabled='true' value="{{request.GET.datainiexp}}">
+                    </div>
+                    <div class="form-group col-4">
+                        <label for="datafim">
+                            Data de Fim
+                        </label>
+                        <input type="date" id="datafimexp" name="datafimexp" class="form-control" placeholder="Data de fim" disabled='true' value="{{request.GET.datafimexp}}">
+                    </div>
+                </div>
+
+                <div class="form-group row" style="margin-top: 20px;">
                     <div class="form-group col-4">
                         <label for="natu">
                             Código da Natureza
                         </label>
-                        <input type="text" id="codnatu" name="codnatu" class="form-control" placeholder="Código da Natureza do exame" value="{{request.GET.codnatu}}" />
+                        <input type="text" id="codnatu" name="codnatu" class="form-control" placeholder="Código da Natureza do exame" value="{{request.GET.codnatu}}">
                     </div>
                     <div class="form-group col-4">
                         <label for="natu">
@@ -126,7 +160,7 @@
 
         <div class="col-4">
             <form name="tcol" onsubmit="return false">
-                <h5>Campos </h5>
+                <h4>Campos </h4>
                 <p>Seleciones os Campos desejados no relatório:</p>
                 <div>
                     <input class="form-check-input" type=checkbox name="col1" onclick="toggleVis(this.name)" checked> Nº de Requisição
@@ -256,6 +290,20 @@
         cells = document.getElementsByName('t' + btn.name);
         mode = btn.checked ? showMode : 'none';
         for (j = 0; j < cells.length; j++) cells[j].style.display = mode;
+    }
+
+    function Checkradiobutton() {
+        if (document.getElementById('req').checked) {
+            document.getElementById('datainireq').disabled = false;
+            document.getElementById('datafimreq').disabled = false;
+            document.getElementById('datainiexp').disabled = true;
+            document.getElementById('datafimexp').disabled = true;
+        } else {
+            document.getElementById('datainireq').disabled = true;
+            document.getElementById('datafimreq').disabled = true;
+            document.getElementById('datainiexp').disabled = false;
+            document.getElementById('datafimexp').disabled = false;
+        }
     }
 </script>
 {% endblock %}
