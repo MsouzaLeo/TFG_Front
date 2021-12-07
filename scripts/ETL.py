@@ -13,7 +13,8 @@ IC_mes = pd.read_csv(sys.argv[1], sep=';', encoding='cp1252')
 
 
 # Separando os dados dos Laudos para o Banco de Dados
-df = IC_mes[['Número da Requisição', 'Código da natureza do exame', 'Código da espécie do exame', 'Código da unidade requisitante',
+df = IC_mes[['Número da Requisição', 'Código da natureza do exame', 
+             'Código da espécie do exame', 'Código da unidade requisitante',
              'Código da unidade do exame', 'MASP/matrícula do perito responsável',
              'Tipo da Requisição', 'Número do Procedimento', 'Código modelo laudo',
              'Data da requisição de perícia', 'Data de distribuição da requisição',
@@ -50,7 +51,7 @@ df['data_expedicao_laudo'] = pd.to_datetime(
 # Adicionando o atributo calculado "tempo_confeccao_laudo" ao DataFrame
 df['tempo_confeccao_laudo'] = df['data_expedicao_laudo'] - \
     df['data_distribuicao_requisicao']
-# Pegando Apenas a parte inteira de dias do tempo de confeccao
+# Resgatando Apenas a parte inteira de dias do tempo de confeccao
 df['tempo_confeccao_laudo'] = df['tempo_confeccao_laudo'].dt.days
 # tratando os valores nulos caso alguma das variaveis usadas no calculo estivesse vazia
 df['tempo_confeccao_laudo'].fillna('-1', inplace=True)
@@ -76,7 +77,7 @@ df['cod_modelo_laudo'] = df['cod_modelo_laudo'].astype('int64')
 
 
 # Criando a conexao ao Banco
-engine = sqlalchemy.create_engine('postgres://jkoaredsblhwpx:cf1a7b1d0c07942bfa33687f24e448943418f6f690b173073039ab01e820c67d@ec2-34-202-115-62.compute-1.amazonaws.com:5432/d85rh56eu5lt5h')
+engine = sqlalchemy.create_engine('postgres://bmdcbgkzopupmj:b4eb31216e0db3b0da2dadc2a4bd63b799a1433025b47437081f8987498f53aa@ec2-34-195-69-118.compute-1.amazonaws.com:5432/d525k6utv3jbsb')
 conexao = engine.connect()
 
 
