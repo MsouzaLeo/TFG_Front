@@ -4,68 +4,93 @@
     <br>
     <form method="get" id='search-form'>
         <div class="row offset-1">
-            <div class="col-2">
-                <label for="dataini">Data de início </label>
-                <input type="date" class="form-control" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
+            <div class="col" style="vertical-align: middle; border-radius: 15px; border: solid rgb(184, 184, 184) 1px;">
+                <div class="row" style="vertical-align: middle; margin-top: 15px;">
+                    <div class="col-6" style="vertical-align: middle;">
+                        <label for="dataini">Data de início </label>
+                        <input type="date" class="form-control" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
+                    </div>
+                    <div class="col-6" style="vertical-align: middle;">
+                        <label for="datafim">Data de fim </label>
+                        <input type="date" class="form-control" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
+                    </div>
+                </div>
             </div>
-            <div class="col-2">
-                <label for="datafim">Data de fim </label>
-                <input type="date" class="form-control" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
-            </div>
-            <div class="col-8" style="margin-top: 25px;">
-                <label class="form-check-label" for="all">Todos </label>
-                <input type="radio" class="form-check-input" value='All' id="all" checked="checked" name='Qtde' onclick="Checkradiobutton()">
-                <label class="form-check-label" for="ten" style="margin-left: 25px;">Top 10 </label>
-                <input type="radio" class="form-check-input" value='Ten' id="ten" name='Qtde' onclick="Checkradiobutton()">
-                <label class="form-check-label" for="other" style="margin-left: 25px;">Uma Espécie </label>
-                <input type="radio" class="form-check-input" name="Qtde" id="other" value="Other" onclick="Checkradiobutton()" />
-                <input type="text" id="uma" placeholder="Código da Espécie" name="uma" disabled='true' style="margin-left: 15px;" />
-                <i id="search-btn" class="bi bi-search " style="margin-left: 25px;"></i>
+
+            <div class="col"></div>
+            <div class="col" style="vertical-align: middle; border-radius: 15px; border: solid rgb(184, 184, 184) 1px;">
+                <div class="col" style="margin-top: 25px;">
+                    <label class="form-check-label" for="all">Todos </label>
+                    <input type="radio" class="form-check-input" value='All' id="all" checked="checked" name='Qtde' onclick="Checkradiobutton()">
+                    <label class="form-check-label" for="ten" style="margin-left: 25px;">Top 10 </label>
+                    <input type="radio" class="form-check-input" value='Ten' id="ten" name='Qtde' onclick="Checkradiobutton()">
+                    <label class="form-check-label" for="other" style="margin-left: 25px;">Uma Espécie </label>
+                    <input type="radio" class="form-check-input" name="Qtde" id="other" value="Other" onclick="Checkradiobutton()" />
+                    <input type="text" id="uma" placeholder="Código da Espécie" name="uma" disabled='true' style="margin-top: 15px; margin-bottom: 15px;" />
+                    <i id="search-btn" class="bi bi-search " style="margin-left: 25px;"></i>
+                    <a id="search-btn" href="/relatorio-especie" style="margin-left: 15px;">
+                        <i class="bi bi-eraser-fill"></i> Limpar
+                    </a>
+                </div>
             </div>
         </div>
     </form>
     <br>
     <div id="container" style="width: 100%;">
-        <canvas id="especie-chart"></canvas>
-        <button class="btn btn-primary" id="btn-download"> Download</button>
+        <div id="coluna"></div>
     </div>
+
 </div>
 
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
 <script>
-    labels = jQuery.parseJSON('{{labels|safe}}')
-    console.log(labels)
     data = jQuery.parseJSON('{{data|safe}}')
-    var ctx = document.getElementById("especie-chart");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Qtde de Registros',
-                backgroundColor: '#3d3b8e',
-                data: data
-            }]
+    labels = jQuery.parseJSON('{{labels|safe}}')
+    Highcharts.chart('coluna', {
+        chart: {
+            type: 'bar'
         },
-        options: {
-            responsive: true,
-            legend: {
-                position: 'top',
-            },
+        title: {
+            text: ' '
+        },
+
+        xAxis: {
+            categories: labels,
+            crosshair: true,
             title: {
-                display: true,
-                text: 'Gráfico de Unidade de Exame'
-            },
-            interaction: {
-                intersect: false,
-                mode: 'index',
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: (ctx) => 'Tooltip position mode: ' + ctx.chart.options.plugins.tooltip.position,
-                }
+                text: 'código das espécies'
             }
-        }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Qtde de Laudos'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:13px; font-weight: bold;">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:1"><b>{point.y}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.1,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            showInLegend: false,
+            color: '#068d9d',
+            name: 'Quantidade de Laudos',
+            data: data
+        }]
     });
 
     function Checkradiobutton() {

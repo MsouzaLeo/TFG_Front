@@ -1,3 +1,55 @@
+/* DataTable botões */
+
+.dataTables_info {
+    float: left !important;
+    width: 100%;
+}
+
+label {
+    display: inline-flex;
+}
+
+.custom-select {
+    margin: auto 5px;
+}
+
+.info {
+    text-align: center !important;
+}
+
+.dataTables_length {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.dt-buttons {
+    margin-top: 0.5em;
+}
+
+.btn-secondary {
+    background-color: #198754 !important;
+    border-color: #10422a !important;
+}
+
+.btn-allert {
+    background: rgb(100, 100, 100);
+    color: #FFF;
+    padding: 4px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background: transparent;
+    border: 0px;
+    padding: 0.25em;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: transparent;
+    border: 0px;
+}
+
 .container-fluid {
     padding: 0px !important;
 }
@@ -48,10 +100,12 @@
 
 .bi.bi-linkedin:hover {
     color: #0e76a8 !important;
+    transition: color 1s ease-out;
 }
 
 .bi.bi-github:hover {
     color: rgb(0, 0, 0) !important;
+    transition: color 1s ease-out;
 }
 
 
@@ -88,6 +142,7 @@
     color: #FFF;
     padding: 4px 10px;
     border-radius: 8px;
+    text-decoration: none;
 }
 
 #search-btn:hover {
@@ -122,14 +177,59 @@ th {
     vertical-align: middle;
 }
 
-#div_table {
-    overflow: auto;
-    height: 460px;
-}
-
 
 /* CSV Download */
 
 #downloadcsv {
     margin-top: 15px;
+}
+
+
+/* gráficos de columas */
+
+.highcharts-figure,
+.highcharts-data-table table {
+    min-width: 310px;
+    max-width: 800px;
+    margin: 1em auto;
+}
+
+#coluna {
+    height: 750px;
+}
+
+.highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #EBEBEB;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.highcharts-data-table th {
+    font-weight: 600;
+    padding: 0.5em;
+}
+
+.highcharts-data-table td,
+.highcharts-data-table th,
+.highcharts-data-table caption {
+    padding: 0.5em;
+}
+
+.highcharts-data-table thead tr,
+.highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
 }

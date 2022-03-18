@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block title %} Lista de Naturezas {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
-    <h1 id='name'>Naturezas de Exame</h1>
+    <h1 id='name' style="text-align:center">Naturezas de Exame</h1>
     <a id="add-link" href="novaNatureza/">
         <div class="col-2 add-div">
             <i class="bi bi-plus-square"></i> Nova Natureza
@@ -11,32 +11,50 @@
             <input type="text" id="desc" name="desc" placeholder="Descrição da Natureza" size="60px" value="{{request.GET.desc}}">
             <input type="text" id="cien" name="cien" placeholder="Ciência da Natureza" size="40px" value="{{request.GET.cien}}">
             <i id="search-btn" class="bi bi-search "></i>
+            <a id="search-btn" href="/natureza">
+                <i class="bi bi-eraser-fill"></i> Limpar
+            </a>
         </form>
     </div>
 
 
     <div id="div_table">
-        <table id='table' class="table table-striped ">
-            <tr>
-                <th>Código</th>
-                <th>Descrição</th>
-                <th>Ciência</th>
-                <th id="edit_col ">Editar</th>
-            </tr>
-            {% for result in data %}
-            <tr>
-                <td>{{ result.cod_natureza_exame }}</td>
-                <td>{{ result.descricao_natureza }}</td>
-                <td>{{ result.ciencia}}</td>
-                <td id="edit_col ">
-                    <a href="{% url 'natureza-update' result.cod_natureza_exame %} " class="btn edit-link ">
-                        <i class="bi bi-pencil-square "></i>
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
+        <table id="Table_Data" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th>Ciência</th>
+                    <th id="edit_col ">Editar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in data %}
+                <tr>
+                    <td>{{ result.cod_natureza_exame }}</td>
+                    <td>{{ result.descricao_natureza }}</td>
+                    <td>{{ result.ciencia}}</td>
+                    <td id="edit_col ">
+                        <a href="{% url 'natureza-update' result.cod_natureza_exame %} " class="btn edit-link ">
+                            <i class="bi bi-pencil-square "></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
-    <button class='btn btn-success' id='downloadcsv'>CSV <i class="bi bi-file-earmark-arrow-down-fill"></i></button>
 </div>
+<script>
+    $(document).ready(function() {
+        $('#Table_Data').DataTable({
+            dom: '<"top row" l>rt<"bottom row"<"col-4" B><"info col-4" i><"col-4" p>><"clear">',
+            buttons: [
+                'copy', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>
+
+
 {% endblock %}

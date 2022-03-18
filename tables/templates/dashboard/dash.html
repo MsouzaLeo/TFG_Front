@@ -1,181 +1,343 @@
-{% extends 'base.html' %} {% block title %} Laudos {% endblock %} {% block content %}
-<script src="https://code.highcharts.com/maps/highmaps.js"></script>
-<script src="https://code.highcharts.com/maps/modules/data.js"></script>
-<script src="https://code.highcharts.com/maps/modules/data.js"></script>
-<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+{% extends 'base.html' %} {% block title %} Dashboard {% endblock %} {% block content %}
 
 <div class="offset-1 col-10 list-div">
-    <h1 id='name'>Dashboard</h1>
-    <input type="text" id="desc" name="desc" placeholder="Descrição da Natureza" size="60px">
-    <button type="submit" class="btn btn-secondary" style="margin-top: 10px; margin-bottom: 30px;" onclick="toggleVis(this.name)"><i
-        class="bi bi-search "></i></button>
+    <h1 id='name' style="text-align:center">Dashboard</h1>
+    <form method="GET" action='/dadosMapa/' id='search-form' style="margin-top: 15px;">
+        <div class="row offset-1">
+            <div class="col-2">
+                <label for="dataini">Data de início </label>
+                <input type="date" class="form-control" id="inicio" name="dataini">
+            </div>
+            <div class="col-2">
+                <label for="datafim">Data de fim </label>
+                <input type="date" class="form-control" id="fim" name="datafim">
+            </div>
+            <div class="col-4">
+                <label for="natureza" style="margin-bottom: 5px;">Selecione Uma Natureza</label>
+                <select class="form-control js-example-basic-single" name="natureza" id="natureza">
+                    <option value="">Selecione uma Natureza</option>
+                    {% for result in data %}
+                        <option value={{result.cod_natureza_exame}}>{{result.descricao_natureza}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-4">
+                <button type="button" id="btn1" class="btn btn-allert shadow-none" style="margin-top: 20px;">
+                    <i class="bi bi-search "></i>
+                </button>
+                <button id="search-btn" class="btn" style="margin-top: 20px; margin-left: 15px;">
+                    <a id="search-btn" href="/dash">
+                        <i class="bi bi-eraser-fill"></i> Limpar
+                    </a>
+                </button>
+            </div>
+        </div>
+    </form>
     <div class="col-10">
         <div id="wrapper">
-            <div id="mapa" style="height:800px"></div>
+            <div id="mapa" style="height:800px; margin-top: 50px;"></div>
             <div id="info">
                 <span class="f32"><span id="flag"></span></span>
-                <div id="grafico_linha">
+                <div id="grafico_linha" style="margin-top: 50px;">
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <script>
-    $.getJSON('/dadosMapa/' + '?desc=' + document.getElementById('desc').value, function(teste) {
-        data = teste
-            //console.log(data)
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2();
 
-        Highcharts.getJSON('https://raw.githubusercontent.com/tbrugz/geodata-br/master/geojson/geojs-31-mun.json', function(geojson) {
 
-            // Initiate the chart
-            Highcharts.mapChart('mapa', {
-                chart: {
-                    map: geojson
-                },
 
-                credits: {
-                    enabled: false,
-                },
+        $.getJSON('/dadosMapa/', function(teste) {
+            data = teste
+                //console.log(data)
 
-                title: {
-                    text: 'Unidades Requisitante MG'
-                },
+            Highcharts.getJSON('https://raw.githubusercontent.com/tbrugz/geodata-br/master/geojson/geojs-31-mun.json', function(geojson) {
 
-                mapNavigation: {
-                    enabled: true,
-                    buttonOptions: {
-                        verticalAlign: 'bottom'
-                    }
-                },
-
-                colorAxis: {
-                    tickPixelInterval: 100
-                },
-
-                series: [{
-                    animation: {
-                        duration: 100
+                // Initiate the chart
+                Highcharts.mapChart('mapa', {
+                    chart: {
+                        map: geojson
                     },
-                    data: data,
-                    keys: ['cod_unidade_requisitante__geocodigo', 'value'],
-                    joinBy: ['id', 'cod_unidade_requisitante__geocodigo'],
-                    name: 'Qtd. de Laudos',
-                    states: {
-                        hover: {
-                            color: '#3d3b8e'
+
+                    credits: {
+                        enabled: false,
+                    },
+
+                    title: {
+                        text: 'Unidades Requisitante MG'
+                    },
+
+                    mapNavigation: {
+                        enabled: true,
+                        buttonOptions: {
+                            verticalAlign: 'bottom'
                         }
                     },
-                    dataLabels: {
-                        enabled: false,
-                        color: 'white',
-                        format: '{point.name}'
-                    }
-                }],
-                plotOptions: {
-                    series: {
-                        cursor: 'pointer',
-                        point: {
-                            events: {
-                                click: function() {
-                                    x = this.cod_unidade_requisitante__geocodigo
-                                    console.log('camada 1:', x)
-                                    var name = this.properties.name;
-                                    $.getJSON('/dadosGraf/' + x + '/?desc=' + document.getElementById('desc').value, function(teste2) {
-                                        data2 = teste2
-                                        console.log('camada 2:', data2)
-                                        data = [];
-                                        value = [];
 
-                                        function formatDate(date) {
-                                            var d = new Date(date),
-                                                month = '' + (d.getMonth() + 1),
-                                                day = '' + d.getDate(),
-                                                year = d.getFullYear();
+                    colorAxis: {
+                        tickPixelInterval: 100
+                    },
 
-                                            if (month.length < 2)
-                                                month = '0' + month;
-                                            if (day.length < 2)
-                                                day = '0' + day;
+                    series: [{
+                        animation: {
+                            duration: 100
+                        },
+                        data: data,
+                        keys: ['cod_unidade_requisitante__geocodigo', 'value'],
+                        joinBy: ['id', 'cod_unidade_requisitante__geocodigo'],
+                        name: 'Qtd. de Laudos',
+                        states: {
+                            hover: {
+                                color: '#3d3b8e'
+                            }
+                        },
+                        dataLabels: {
+                            enabled: false,
+                            color: 'white',
+                            format: '{point.name}'
+                        }
+                    }],
+                    plotOptions: {
+                        series: {
+                            cursor: 'pointer',
+                            point: {
+                                events: {
+                                    click: function() {
+                                        x = this.cod_unidade_requisitante__geocodigo
+                                        console.log('camada 1:', x)
+                                        var name = this.properties.name;
+                                        $.getJSON('/dadosGraf/' + x, function(teste2) {
+                                            data2 = teste2
+                                            console.log('camada 2:', data2)
+                                            data = [];
+                                            value = [];
 
-                                            return [month, year].join('/');
-                                        }
-                                        for (i = 0; i < data2.length; i++) {
-                                            // var d = new Date(data2[i].mes_registro);
-                                            // data += toDate('mm/yyyyy') + ',';
-                                            data[i] = formatDate(data2[i].mes_registro);
-                                            value[i] = data2[i].laudo_nmr;
-                                        }
-                                        // var data_final = '[' + data.substring(0, data.length - 2) + ']';
-                                        // var value_final = '[' + value.substring(0, value.length - 2) + ']';
-                                        // console.log(data_final)
-                                        // console.log(value_final)
-                                        // console.log(this)
-                                        console.log(data, value)
+                                            function formatDate(date) {
+                                                var d = new Date(date),
+                                                    month = '' + (d.getMonth() + 1),
+                                                    day = '' + d.getDate(),
+                                                    year = d.getFullYear();
 
-                                        Highcharts.chart('grafico_linha', {
+                                                if (month.length < 2)
+                                                    month = '0' + month;
+                                                if (day.length < 2)
+                                                    day = '0' + day;
 
-                                            title: {
-                                                text: name
-                                            },
-
-                                            yAxis: {
-                                                title: {
-                                                    text: 'Número de laudos'
-                                                }
-                                            },
-
-                                            xAxis: {
-                                                // type: "category",
-                                                categories: data
-                                            },
-
-                                            legend: {
-                                                layout: 'vertical',
-                                                align: 'right',
-                                                verticalAlign: 'middle'
-                                            },
-
-                                            // plotOptions: {
-                                            //     line: {
-                                            //         dataLabels: {
-                                            //             enabled: true
-                                            //         },
-                                            //     }
-                                            // },
-
-                                            series: [{
-                                                name: 'Número de Laudos',
-                                                data: value
-                                            }],
-
-                                            responsive: {
-                                                rules: [{
-                                                    condition: {
-                                                        maxWidth: 500
-                                                    },
-                                                    chartOptions: {
-                                                        legend: {
-                                                            layout: 'horizontal',
-                                                            align: 'center',
-                                                            verticalAlign: 'bottom'
-                                                        }
-                                                    }
-                                                }]
+                                                return [month, year].join('/');
                                             }
+                                            for (i = 0; i < data2.length; i++) {
+                                                // var d = new Date(data2[i].mes_registro);
+                                                // data += toDate('mm/yyyyy') + ',';
+                                                data[i] = formatDate(data2[i].mes_registro);
+                                                value[i] = data2[i].laudo_nmr;
+                                            }
+                                            console.log(data, value)
 
-                                        });
-                                        // chart.addSeries({
-                                        //     data: value_final,
-                                        // })
-                                    })
+                                            var linechart = Highcharts.chart('grafico_linha', {
+
+                                                title: {
+                                                    text: name
+                                                },
+
+                                                yAxis: {
+                                                    title: {
+                                                        text: 'Número de laudos'
+                                                    }
+                                                },
+
+                                                xAxis: {
+                                                    categories: data
+                                                },
+
+                                                legend: {
+                                                    layout: 'vertical',
+                                                    align: 'right',
+                                                    verticalAlign: 'middle'
+                                                },
+
+                                                series: [{
+                                                    name: 'Número de Laudos',
+                                                    data: value
+                                                }],
+
+                                                responsive: {
+                                                    rules: [{
+                                                        condition: {
+                                                            maxWidth: 500
+                                                        },
+                                                        chartOptions: {
+                                                            legend: {
+                                                                layout: 'horizontal',
+                                                                align: 'center',
+                                                                verticalAlign: 'bottom'
+                                                            }
+                                                        }
+                                                    }]
+                                                }
+
+                                            });
+                                        })
+                                    }
                                 }
                             }
                         }
-                    }
-                },
+                    },
+                });
+            });
+        });
+
+        // caso faça o filtro, carrega td dnv mas funciona
+        $('#btn1').on('click', function() {
+            document.getElementById('grafico_linha').style.visibility = 'hidden';
+
+            var natureza = document.getElementById("natureza").value
+
+            inicio = document.getElementById("inicio").value
+            console.log(inicio)
+
+            fim = document.getElementById("fim").value
+            console.log(fim)
+
+            $.getJSON('/dadosMapa/?natureza=' + natureza + '&inicio=' + inicio + '&fim=' + fim, function(teste) {
+                data = teste
+                    //console.log(data)
+
+                Highcharts.getJSON('https://raw.githubusercontent.com/tbrugz/geodata-br/master/geojson/geojs-31-mun.json', function(geojson) {
+
+                    // Initiate the chart
+                    Highcharts.mapChart('mapa', {
+                        chart: {
+                            map: geojson
+                        },
+
+                        credits: {
+                            enabled: false,
+                        },
+
+                        title: {
+                            text: 'Unidades Requisitante MG'
+                        },
+
+                        mapNavigation: {
+                            enabled: true,
+                            buttonOptions: {
+                                verticalAlign: 'bottom'
+                            }
+                        },
+
+                        colorAxis: {
+                            tickPixelInterval: 100
+                        },
+
+                        series: [{
+                            animation: {
+                                duration: 100
+                            },
+                            data: data,
+                            keys: ['cod_unidade_requisitante__geocodigo', 'value'],
+                            joinBy: ['id', 'cod_unidade_requisitante__geocodigo'],
+                            name: 'Qtd. de Laudos',
+                            states: {
+                                hover: {
+                                    color: '#3d3b8e'
+                                }
+                            },
+                            dataLabels: {
+                                enabled: false,
+                                color: 'white',
+                                format: '{point.name}'
+                            }
+                        }],
+                        plotOptions: {
+                            series: {
+                                cursor: 'pointer',
+                                point: {
+                                    events: {
+                                        click: function() {
+                                            document.getElementById('grafico_linha').style.visibility = 'visible';
+                                            x = this.cod_unidade_requisitante__geocodigo
+                                            console.log('camada 1:', x)
+                                            var name = this.properties.name;
+                                            $.getJSON('/dadosGraf/' + x + '/?natureza=' + natureza + '&inicio=' + inicio + '&fim=' + fim, function(data2) {
+                                                console.log('camada 2:', data2)
+                                                data = [];
+                                                value = [];
+
+                                                function formatDate(date) {
+                                                    var d = new Date(date),
+                                                        month = '' + (d.getMonth() + 1),
+                                                        day = '' + d.getDate(),
+                                                        year = d.getFullYear();
+
+                                                    if (month.length < 2)
+                                                        month = '0' + month;
+                                                    if (day.length < 2)
+                                                        day = '0' + day;
+
+                                                    return [month, year].join('/');
+                                                }
+                                                for (i = 0; i < data2.length; i++) {
+                                                    data[i] = formatDate(data2[i].mes_registro);
+                                                    value[i] = data2[i].laudo_nmr;
+                                                }
+                                                console.log(data, value)
+
+                                                var linechart = Highcharts.chart('grafico_linha', {
+
+                                                    title: {
+                                                        text: name
+                                                    },
+
+                                                    yAxis: {
+                                                        title: {
+                                                            text: 'Número de laudos'
+                                                        }
+                                                    },
+
+                                                    xAxis: {
+                                                        // type: "category",
+                                                        categories: data
+                                                    },
+
+                                                    legend: {
+                                                        layout: 'vertical',
+                                                        align: 'right',
+                                                        verticalAlign: 'middle'
+                                                    },
+
+                                                    series: [{
+                                                        name: 'Número de Laudos',
+                                                        data: value
+                                                    }],
+
+                                                    responsive: {
+                                                        rules: [{
+                                                            condition: {
+                                                                maxWidth: 500
+                                                            },
+                                                            chartOptions: {
+                                                                legend: {
+                                                                    layout: 'horizontal',
+                                                                    align: 'center',
+                                                                    verticalAlign: 'bottom'
+                                                                }
+                                                            }
+                                                        }]
+                                                    }
+
+                                                });
+                                            })
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    });
+                });
             });
         });
     });

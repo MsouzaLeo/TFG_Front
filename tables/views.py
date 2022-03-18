@@ -1,8 +1,8 @@
-from subprocess import run, PIPE, Popen
+from subprocess import run, PIPE
 import sys
-from tkinter.constants import FALSE
+from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.db.models.aggregates import Count
-from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
+from django.shortcuts import render,  redirect
 from django.core.files.storage import FileSystemStorage
 from tables.models import *
 from .forms import *
@@ -92,11 +92,15 @@ def naturezaEdit(request, cod_natureza_exame=0):
         else:
             natureza = NaturezaModel.objects.get(pk=cod_natureza_exame)
             form = NaturezaForm(instance=natureza)
+            form.fields['cod_natureza_exame'].widget.attrs['readonly'] = True
         return render(request, 'natureza/edit.html', {'form': form})
     else:
-        form = NaturezaForm(request.POST)
+        natureza = NaturezaModel.objects.get(pk=cod_natureza_exame)
+        form = NaturezaForm(request.POST, instance=natureza)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
+        else:
+            print(request.POST)
         return redirect('/natureza')
 
 
@@ -131,11 +135,15 @@ def peritoEdit(request, masp=-1):
         else:
             perito = PeritoModel.objects.get(pk=masp)
             form = PeritoForm(instance=perito)
+            form.fields['masp'].widget.attrs['readonly'] = True
         return render(request, 'perito/edit.html', {'form': form})
     else:
-        form = PeritoForm(request.POST)
+        perito = PeritoModel.objects.get(pk=masp)
+        form = PeritoForm(request.POST, instance=masp)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
+        else:
+            print(request.POST)
         return redirect('/perito')
 
 
@@ -171,11 +179,15 @@ def uniexaEdit(request, cod_unidade_exame=''):
         else:
             uniexa = UniexaModel.objects.get(pk=cod_unidade_exame)
             form = UniexaForm(instance=uniexa)
+            form.fields['cod_unidade_exame'].widget.attrs['readonly'] = True
         return render(request, 'uniexa/edit.html', {'form': form})
     else:
-        form = UniexaForm(request.POST)
+        uniexa = UniexaModel.objects.get(pk=cod_unidade_exame)
+        form = UniexaForm(request.POST,instance=cod_unidade_exame)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
+        else:
+            print(request.POST)
         return redirect('/uniexa')
 
 
@@ -211,11 +223,15 @@ def uniresEdit(request, cod_unidade_requisitante=''):
         else:
             unires = UniresModel.objects.get(pk=cod_unidade_requisitante)
             form = UniresForm(instance=unires)
+            form.fields['cod_unidade_requisitante'].widget.attrs['readonly'] = True
         return render(request, 'unires/edit.html', {'form': form})
     else:
-        form = UniresForm(request.POST)
+        unires = UniresModel.objects.get(pk=cod_unidade_requisitante)
+        form = UniresForm(request.POST,instance=cod_unidade_requisitante)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
+        else:
+            print(request.POST)
         return redirect('/unires')
 
 
@@ -244,7 +260,7 @@ def run_python_script(request):
 def relatorio_especie(request):
     labels = []
     data = []
-
+    teste = []
     limit = request.GET.get('Qtde')
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
@@ -299,16 +315,19 @@ def relatorio_especie(request):
             data.append(especie.contagem)
 
     else:
+        
         for especie in EspecieModel.objects.raw('''select l.cod_especie_exame ,n.descricao_especie, count(l.nmr_requisicao) as contagem
         from laudo l inner join especie_exame n on l.cod_especie_exame = n.cod_especie_exame
         group by n.cod_especie_exame, l.cod_especie_exame order by contagem desc'''):
             labels.append(especie.cod_especie_exame)
+            teste.append(especie.descricao_especie)
             data.append(especie.contagem)
 
 
     context={
         'labels': json.dumps(labels),
         'data': data,
+        'teste':teste
     }
 
     return render(request, 'relatorios/relatorio_especie.html', context)
@@ -604,41 +623,83 @@ def relatorio_unidader(request):
 
 
 def adhoc(request):
-
     natu = request.GET.get('natu')
+    codnatu = request.GET.get('codnatu')
     espe = request.GET.get('espe')
+    codespe = request.GET.get('codespe')
+    classespe = request.GET.get('classespe')
     masp = request.GET.get('masp')
     unires = request.GET.get('unires')
     uniex = request.GET.get('uniex')
     tpres = request.GET.get('tpres')
-    dataini = request.GET.get('dataini')
-    datafim = request.GET.get('datafim')
+    tipodata = request.GET.get('tipodata')
+    dataini = ''
+    datafim = ''
+    if tipodata == "requisicao":
+        dataini = request.GET.get('datainireq')
+        datafim = request.GET.get('datafimreq')
+    elif tipodata == "expedicao":
+        dataini = request.GET.get('datainiexp')
+        datafim = request.GET.get('datafimexp')
+
     if not(dataini and datafim):
-        if natu or espe or masp or unires or uniex or tpres:
+        if natu or codnatu or espe or codespe or classespe or masp or unires or uniex or tpres:
             showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres)[:1000]
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres).order_by('nmr_requisicao')
         else:
-            showall = LaudoModel.objects.all()[:1000]
+            showall = LaudoModel.objects.all().order_by('nmr_requisicao')[:500]
     else:
-        if natu or espe or masp or unires or uniex or tpres or (dataini and datafim):
-            showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_especie_exame__descricao_especie__icontains=espe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim])[:1000]
+        if tipodata == "requisicao":
+            if natu or codnatu or espe or codespe or classespe or masp or unires or uniex or tpres or (dataini and datafim):
+                showall = LaudoModel.objects.filter(
+                    cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim]).order_by('nmr_requisicao')
+        elif tipodata == "expedicao":
+            if natu or codnatu or espe or codespe or classespe or masp or unires or uniex or tpres or (dataini and datafim):
+                showall = LaudoModel.objects.filter(
+                    cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_expedicao_laudo__range=[dataini, datafim]).order_by('nmr_requisicao')
     
-    return render(request, 'relatorios/relatorio_adhoc.html', {"data": showall})
+    p = Paginator(showall,2000)
+    page = request.GET.get('page', 1)
 
-
+    try:
+        data = p.get_page(page)
+        print(data.paginator.num_pages)
+        print(data.number)
+    except (EmptyPage, InvalidPage):
+        data = p.page(p.num_pages)
+    return render(request, 'relatorios/relatorio_adhoc.html', {'data':data})
 
 def dash(request):
-    return render(request, 'dashboard/dash.html')
+    natureza = NaturezaModel.objects.all().order_by('descricao_natureza')
+    return render(request, 'dashboard/dash.html',{"data": natureza})
 
+def home(request):
+    return render(request, 'home.html')
 
 def dadosMapa(request):
-    natu = request.GET.get('desc')
-    data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(cod_natureza_exame__descricao_natureza__icontains=natu)
-    #data = list(teste.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-laudo_nmr'))
+    natu = request.GET.get('natureza')
+    inicio = request.GET.get('inicio')
+    fim = request.GET.get('fim')
+    if not natu and not inicio:
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value')
+    elif natu and not(inicio and fim):
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(cod_natureza_exame=natu)
+    elif not natu and (inicio and fim):
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(data_requisicao_pericia__range=[inicio, fim])
+    elif natu and (inicio and fim):
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(cod_natureza_exame=natu, data_requisicao_pericia__range=[inicio, fim])
     return JsonResponse(list(data),safe=False)
 
 def dadosLinha(request,geocod):
-    natu = request.GET.get('desc')
-    teste = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(cod_natureza_exame__descricao_natureza__icontains=natu)
-    return JsonResponse(list(teste),safe=False)
+    natu = request.GET.get('natureza')
+    inicio = request.GET.get('inicio')
+    fim = request.GET.get('fim')
+    if not natu and not inicio:
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod)
+    elif natu and not(inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(cod_natureza_exame=natu)
+    elif not natu and (inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(data_requisicao_pericia__range=[inicio, fim])
+    elif natu and (inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(data_requisicao_pericia__range=[inicio, fim], cod_natureza_exame=natu)
+    return JsonResponse(list(data),safe=False)

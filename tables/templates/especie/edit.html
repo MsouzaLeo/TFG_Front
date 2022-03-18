@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block title %} Edit de Especies {% endblock %} {% load crispy_forms_tags %} {% block content %}
 
 <div class="offset-1 col-10">
-    <h1>Editar a Especie:</h1>
+    <h1>Editar a Espécie:</h1>
     <form method="POST" autocomplete="off">
         {% csrf_token %}
         <div class="col-md-5">
@@ -10,9 +10,4 @@
         <button type="submit" class="btn btn-success"><i class="bi bi-upload"></i> Enviar </button>
     </form>
 </div>
-<style>
-    #id_cod_especie_exame {
-        disabled='true';
-    }
-</style>
 {% endblock %}
