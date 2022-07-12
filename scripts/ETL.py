@@ -77,7 +77,7 @@ df['cod_modelo_laudo'] = df['cod_modelo_laudo'].astype('int64')
 
 
 # Criando a conexao ao Banco
-engine = sqlalchemy.create_engine('postgres://bmdcbgkzopupmj:b4eb31216e0db3b0da2dadc2a4bd63b799a1433025b47437081f8987498f53aa@ec2-34-195-69-118.compute-1.amazonaws.com:5432/d525k6utv3jbsb')
+engine = sqlalchemy.create_engine('postgresql://postgres:0812@localhost:5432/TFG')
 conexao = engine.connect()
 
 
