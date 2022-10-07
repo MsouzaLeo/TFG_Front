@@ -1,21 +1,30 @@
 {% extends 'base.html' %} {% block title %} Lista de Unidades Requisitantes {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1 id='name' style="text-align:center">Lista de Unidades Requisitantes</h1>
-
-    <a id="add-link" href="novaUnires/">
-        <div class="col-3 add-div">
-            <i class="bi bi-plus-square"></i> Nova Unidade Requisitante
+    <form method="get" id='search-form'>
+        <div class="row">
+            <div class="col-4">
+                <a href="novaUnires/" class="btn btn-primary">
+                    <i class="bi bi-plus-square"></i> Nova Unidade Requisitante
+                </a>
+            </div>
+            <div class="col-8">
+                <input type="text" id="search" name="search" placeholder="Município" value="{{request.GET.search}}" style="width: 100%;">
+            </div>
         </div>
-    </a>
-    <div class="col-8 search-div">
-        <form method="get" id='search-form'>
-            <input type="text" id="search" name="search" placeholder="Município" size="80px" value="{{request.GET.search}}">
-            <i id="search-btn" class=" bi bi-search "></i>
-            <a id="search-btn" href="/unires">
-                <i class="bi bi-eraser-fill"></i> Limpar
-            </a>
-        </form>
-    </div>
+        <div class="row">            
+            <div class="col-6">
+                <a href="/unires" class="btn btn-danger mt-3">
+                    <i class="bi bi-eraser-fill"></i> Limpar
+                </a>
+            </div>
+            <div class="col-6">
+                <button class="btn shadow-none float-end btn-success mt-3">
+                    <i class="bi bi-search"></i> Pesquisar
+                </button>
+            </div>
+        </div>
+    </form>
 
     <div id="div_table">
         <table id='Table_Data' class="table table-striped ">
@@ -37,8 +46,8 @@
                     <td>{{ result.unidade }}</td>
                     <td>{{ result.tipo_unidade }}</td>
                     <td>{{ result.subordinacao }}</td>
-                    <td>{{ result.municipio }}</td>
-                    <td>{{ result.geocodigo }}</td>
+                    <td>{{ result.geocodigo.municipio }}</td>
+                    <td>{{ result.geocodigo.geocodigo }}</td>
                     <td id="edit_col ">
                         <a href="{% url 'unires-update' result.cod_unidade_requisitante %} " class="btn edit-link ">
                             <i class="bi bi-pencil-square "></i>

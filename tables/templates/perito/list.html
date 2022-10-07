@@ -1,20 +1,31 @@
 {% extends 'base.html' %} {% block title %} Lista de Peritos {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1 id='name' style="text-align:center">Lista de Peritos</h1>
-    <a id="add-link" href="novoPerito/">
-        <div class="col-2 add-div">
-            <i class="bi bi-plus-square"></i> Novo Perito
+    <form method="get" id='search-form'>
+        <div class="row">
+            <div class="col-2">
+                <a href="novoPerito/" class="btn btn-primary">
+                    <i class="bi bi-plus-square"></i> Novo Perito
+                </a>
+            </div>
+            <div class="col-10">
+                <input type="text" name="search" placeholder="Nome do Perito" value="{{request.GET.search}}"
+                style="width: 100%;">
+            </div>
         </div>
-    </a>
-    <div class="col-9 search-div">
-        <form method="get" id='search-form'>
-            <input type="text" id="search" name="search" placeholder="Nome do Perito" size="80px" value="{{request.GET.search}}">
-            <i id="search-btn" class=" bi bi-search "></i>
-            <a id="search-btn" href="/perito">
-                <i class="bi bi-eraser-fill"></i> Limpar
-            </a>
-        </form>
-    </div>
+        <div class="row">            
+            <div class="col-6">
+                <a href="/perito" class="btn btn-danger mt-3">
+                    <i class="bi bi-eraser-fill"></i> Limpar
+                </a>
+            </div>
+            <div class="col-6">
+                <button class="btn shadow-none float-end btn-success mt-3">
+                    <i class="bi bi-search"></i> Pesquisar
+                </button>
+            </div>
+        </div>
+    </form>
 
 
     <div id="div_table">

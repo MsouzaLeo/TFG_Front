@@ -1,3 +1,4 @@
+from pyexpat import model
 from django.db import models
 
 
@@ -60,7 +61,8 @@ class UniresModel(models.Model):
     tipo_unidade = models.CharField(max_length=50)
     subordinacao = models.CharField(max_length=100)
     municipio = models.CharField(max_length=80)
-    geocodigo = models.IntegerField()
+    geocodigo = models.ForeignKey(
+        'MunicipioModel', on_delete=models.DO_NOTHING, db_column='geocodigo')
 
     def __str__(self):
         return self.municipio
@@ -93,3 +95,41 @@ class LaudoModel(models.Model):
 
     class Meta:
         db_table = 'laudo'
+
+
+class MunicipioModel(models.Model):
+    geocodigo = models.IntegerField(primary_key=True)
+    municipio = models.CharField(max_length=80)
+    cod_regional = models.ForeignKey(
+        'RegionalModel', on_delete=models.DO_NOTHING, db_column='cod_regional')
+
+    def __str__(self):
+        return self.municipio
+
+    class Meta:
+        db_table = 'municipio'
+
+
+class RegionalModel(models.Model):
+    cod_regional = models.IntegerField(primary_key=True)
+    regional = models.CharField(max_length=80)
+    cod_departamento = models.ForeignKey(
+        'DepartamentoModel', on_delete=models.DO_NOTHING, db_column='cod_departamento')
+
+    def __str__(self):
+        return self.regional
+
+    class Meta:
+        db_table = 'regional'
+
+
+class DepartamentoModel(models.Model):
+    cod_departamento = models.IntegerField(primary_key=True)
+    departamento = models.CharField(max_length=80)
+
+    def __str__(self):
+        return self.departamento
+
+    class Meta:
+        db_table = 'departamento'
+

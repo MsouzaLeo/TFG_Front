@@ -4,33 +4,41 @@
     <br>
     <form method="get" id='search-form'>
         <div class="row offset-1">
-            <div class="col" style="vertical-align: middle; border-radius: 15px; border: solid rgb(184, 184, 184) 1px;">
-                <div class="row" style="vertical-align: middle; margin-top: 15px;">
-                    <div class="col-6" style="vertical-align: middle;">
+            <div class="col-5 p-4" style="border-radius: 15px; border: solid rgb(184, 184, 184) 1px;">
+                <div class="row">
+                    <div class="col-6">
                         <label for="dataini">Data de início </label>
                         <input type="date" class="form-control" id="dataini" name="dataini" placeholder="Data de início" value="{{request.GET.dataini}}">
                     </div>
-                    <div class="col-6" style="vertical-align: middle;">
+                    <div class="col-6">
                         <label for="datafim">Data de fim </label>
                         <input type="date" class="form-control" id="datafim" name="datafim" placeholder="Data de fim" value="{{request.GET.datafim}}">
                     </div>
                 </div>
             </div>
-
-            <div class="col"></div>
-            <div class="col" style="vertical-align: middle; border-radius: 15px; border: solid rgb(184, 184, 184) 1px;">
-                <div class="col" style="margin-top: 25px;">
-                    <label class="form-check-label" for="all">Todos </label>
-                    <input type="radio" class="form-check-input" value='All' id="all" checked="checked" name='Qtde' onclick="Checkradiobutton()">
-                    <label class="form-check-label" for="ten" style="margin-left: 25px;">Top 10 </label>
-                    <input type="radio" class="form-check-input" value='Ten' id="ten" name='Qtde' onclick="Checkradiobutton()">
-                    <label class="form-check-label" for="other" style="margin-left: 25px;">Uma Espécie </label>
-                    <input type="radio" class="form-check-input" name="Qtde" id="other" value="Other" onclick="Checkradiobutton()" />
-                    <input type="text" id="uma" placeholder="Código da Espécie" name="uma" disabled='true' style="margin-top: 15px; margin-bottom: 15px;" />
-                    <i id="search-btn" class="bi bi-search " style="margin-left: 25px;"></i>
-                    <a id="search-btn" href="/relatorio-especie" style="margin-left: 15px;">
-                        <i class="bi bi-eraser-fill"></i> Limpar
-                    </a>
+            <div class="col-5 offset-2 p-4" style="border-radius: 15px; border: solid rgb(184, 184, 184) 1px;">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-check-label" for="all">Todos </label>
+                        <input type="radio" class="form-check-input" value='All' id="all" checked="checked" name='Qtde' onclick="Checkradiobutton()">
+                        <label class="form-check-label" for="ten" style="margin-left: 25px;">Top 10 </label>
+                        <input type="radio" class="form-check-input" value='Ten' id="ten" name='Qtde' onclick="Checkradiobutton()">
+                        <label class="form-check-label" for="other" style="margin-left: 25px;">Uma Espécie </label>
+                        <input type="radio" class="form-check-input" name="Qtde" id="other" value="Other" onclick="Checkradiobutton()" />
+                        <input type="text" id="uma" placeholder="Código da Espécie" name="uma" disabled='true' style="margin-top: 15px; margin-bottom: 15px;" />
+                    </div>
+                </div>
+                <div class="row">            
+                    <div class="col-6">
+                        <a href="/relatorio-especie" class="btn btn-danger mt-3">
+                            <i class="bi bi-eraser-fill"></i> Limpar
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn shadow-none float-end btn-success mt-3">
+                            <i class="bi bi-search"></i> Pesquisar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

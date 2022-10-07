@@ -21,16 +21,26 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-4">
-                <button type="button" id="btn1" class="btn btn-allert shadow-none" style="margin-top: 20px;">
-                    <i class="bi bi-search "></i>
-                </button>
-                <button id="search-btn" class="btn" style="margin-top: 20px; margin-left: 15px;">
-                    <a id="search-btn" href="/dash">
-                        <i class="bi bi-eraser-fill"></i> Limpar
-                    </a>
-                </button>
+            <div class="col-2">
+                <label for="agrupamento" style="margin-bottom: 5px;">Agrupar por</label>
+                <select class="form-control js-example-basic-single" name="agrupamento" id="agrupamento">
+                    <option value="1">Município</option>
+                    <option value="2">Regional</option>
+                    <option value="3">Departamento</option>                  
+                </select>
             </div>
+        </div>
+        <div class="row offset-1">
+            <div class="col-5">
+                <a href="/dash" class="btn btn-danger" style="margin-top: 20px;">
+                    <i class="bi bi-eraser-fill"></i> Limpar
+                </a>
+            </div>  
+            <div class="col-5">
+                <button type="button" id="btn1" class="btn shadow-none float-end btn-success" style="margin-top: 20px;">
+                    <i class="bi bi-search"></i> Pesquisar
+                </button>
+            </div>                  
         </div>
     </form>
     <div class="col-10">
@@ -195,6 +205,7 @@
             document.getElementById('grafico_linha').style.visibility = 'hidden';
 
             var natureza = document.getElementById("natureza").value
+            var agrupamento = document.getElementById("agrupamento").value
 
             inicio = document.getElementById("inicio").value
             console.log(inicio)
@@ -204,139 +215,427 @@
 
             $.getJSON('/dadosMapa/?natureza=' + natureza + '&inicio=' + inicio + '&fim=' + fim, function(teste) {
                 data = teste
-                    //console.log(data)
 
+                var conteudo_series = [], nova_serie = false, municipios = [], total_regional = 0, total_departamento = 0;
+
+                
                 Highcharts.getJSON('https://raw.githubusercontent.com/tbrugz/geodata-br/master/geojson/geojs-31-mun.json', function(geojson) {
 
-                    // Initiate the chart
-                    Highcharts.mapChart('mapa', {
-                        chart: {
-                            map: geojson
-                        },
+                    if(agrupamento == 2){
+                        teste.map((item, i)=>{
+                            municipios.push({
+                                cod_unidade_requisitante__geocodigo: item.cod_unidade_requisitante__geocodigo, 
+                                value: item.value,
+                                regional: item.cod_unidade_requisitante__geocodigo__cod_regional,
+                                nome_regional: item.cod_unidade_requisitante__geocodigo__cod_regional__regional
+                            });
 
-                        credits: {
-                            enabled: false,
-                        },
+                            total_regional += Number(item.value);
 
-                        title: {
-                            text: 'Unidades Requisitante MG'
-                        },
+                            if(i+1 == teste.length) nova_serie = true;
+                            else if(item.cod_unidade_requisitante__geocodigo__cod_regional__regional != teste[i+1].cod_unidade_requisitante__geocodigo__cod_regional__regional) nova_serie = true;
+                            else nova_serie = false;
 
-                        mapNavigation: {
-                            enabled: true,
-                            buttonOptions: {
-                                verticalAlign: 'bottom'
+                            if(nova_serie){
+                                conteudo_series.push({
+                                    name: item.cod_unidade_requisitante__geocodigo__cod_regional__regional + ' - Total de Laudos: '+total_regional,
+                                    value: total_regional,
+                                    data: municipios
+                                });
+
+                                total_regional = 0;
+                                municipios = [];
                             }
-                        },
+                        });
 
-                        colorAxis: {
-                            tickPixelInterval: 100
-                        },
 
-                        series: [{
-                            animation: {
-                                duration: 100
+
+                        // Initiate the chart
+                        Highcharts.mapChart('mapa', {
+                            chart: {
+                                map: geojson
                             },
-                            data: data,
-                            keys: ['cod_unidade_requisitante__geocodigo', 'value'],
-                            joinBy: ['id', 'cod_unidade_requisitante__geocodigo'],
-                            name: 'Qtd. de Laudos',
-                            states: {
-                                hover: {
-                                    color: '#3d3b8e'
-                                }
+
+                            title: {
+                                text: 'Unidades Requisitante MG'
                             },
-                            dataLabels: {
-                                enabled: false,
-                                color: 'white',
-                                format: '{point.name}'
-                            }
-                        }],
-                        plotOptions: {
-                            series: {
-                                cursor: 'pointer',
-                                point: {
-                                    events: {
-                                        click: function() {
-                                            document.getElementById('grafico_linha').style.visibility = 'visible';
-                                            x = this.cod_unidade_requisitante__geocodigo
-                                            console.log('camada 1:', x)
-                                            var name = this.properties.name;
-                                            $.getJSON('/dadosGraf/' + x + '/?natureza=' + natureza + '&inicio=' + inicio + '&fim=' + fim, function(data2) {
-                                                console.log('camada 2:', data2)
-                                                data = [];
-                                                value = [];
 
-                                                function formatDate(date) {
-                                                    var d = new Date(date),
-                                                        month = '' + (d.getMonth() + 1),
-                                                        day = '' + d.getDate(),
-                                                        year = d.getFullYear();
+                            plotOptions: {
+                                map: {
+                                    allAreas: false,
+                                    joinBy: ['id', 'cod_unidade_requisitante__geocodigo']
+                                },
+                                dataLabels: {
+                                    enabled: true,
+                                    color: '#FFFFFF',
+                                    style: {
+                                        fontWeight: 'bold'
+                                    }
+                                },
+                                tooltip: {
+                                    headerFormat: '',
+                                    //modificado para mostrar o nome da regional: nome da cidade
+                                    pointFormat: '<b>{series.name} - {series.value} laudos</b>: {point.name}'
+                                },
+                                series: {
+                                    cursor: 'pointer',
+                                    point: {
+                                        events: {
+                                            click: function() {
+                                                document.getElementById('grafico_linha').style.visibility = 'visible';
+                                                x = this.regional;
+                                                var name = this.nome_regional;
+                                                $.getJSON('/dadosGrafRegional/' + x, function(teste2) {
+                                                    data2 = teste2;
 
-                                                    if (month.length < 2)
-                                                        month = '0' + month;
-                                                    if (day.length < 2)
-                                                        day = '0' + day;
+                                                    console.log(teste2)
+                                                    data = [];
+                                                    value = [];
 
-                                                    return [month, year].join('/');
-                                                }
-                                                for (i = 0; i < data2.length; i++) {
-                                                    data[i] = formatDate(data2[i].mes_registro);
-                                                    value[i] = data2[i].laudo_nmr;
-                                                }
-                                                console.log(data, value)
+                                                    function formatDate(date) {
+                                                        var d = new Date(date),
+                                                            month = '' + (d.getMonth() + 1),
+                                                            day = '' + d.getDate(),
+                                                            year = d.getFullYear();
 
-                                                var linechart = Highcharts.chart('grafico_linha', {
+                                                        if (month.length < 2)
+                                                            month = '0' + month;
+                                                        if (day.length < 2)
+                                                            day = '0' + day;
 
-                                                    title: {
-                                                        text: name
-                                                    },
-
-                                                    yAxis: {
-                                                        title: {
-                                                            text: 'Número de laudos'
-                                                        }
-                                                    },
-
-                                                    xAxis: {
-                                                        // type: "category",
-                                                        categories: data
-                                                    },
-
-                                                    legend: {
-                                                        layout: 'vertical',
-                                                        align: 'right',
-                                                        verticalAlign: 'middle'
-                                                    },
-
-                                                    series: [{
-                                                        name: 'Número de Laudos',
-                                                        data: value
-                                                    }],
-
-                                                    responsive: {
-                                                        rules: [{
-                                                            condition: {
-                                                                maxWidth: 500
-                                                            },
-                                                            chartOptions: {
-                                                                legend: {
-                                                                    layout: 'horizontal',
-                                                                    align: 'center',
-                                                                    verticalAlign: 'bottom'
-                                                                }
-                                                            }
-                                                        }]
+                                                        return [month, year].join('/');
+                                                    }
+                                                    for (i = 0; i < data2.length; i++) {
+                                                        data[i] = formatDate(data2[i].mes_registro);
+                                                        value[i] = data2[i].laudo_nmr;
                                                     }
 
-                                                });
-                                            })
+                                                    var linechart = Highcharts.chart('grafico_linha', {
+
+                                                        title: {
+                                                            text: name
+                                                        },
+
+                                                        yAxis: {
+                                                            title: {
+                                                                text: 'Número de laudos'
+                                                            }
+                                                        },
+
+                                                        xAxis: {
+                                                            categories: data
+                                                        },
+
+                                                        legend: {
+                                                            layout: 'vertical',
+                                                            align: 'right',
+                                                            verticalAlign: 'middle'
+                                                        },
+
+                                                        series: [{
+                                                            name: 'Número de Laudos',
+                                                            data: value
+                                                        }],
+
+                                                        responsive: {
+                                                            rules: [{
+                                                                condition: {
+                                                                    maxWidth: 500
+                                                                },
+                                                                chartOptions: {
+                                                                    legend: {
+                                                                        layout: 'horizontal',
+                                                                        align: 'center',
+                                                                        verticalAlign: 'bottom'
+                                                                    }
+                                                                }
+                                                            }]
+                                                        }
+
+                                                    });
+                                                })
+                                            }
+                                        }
+                                    }
+                                }                
+                            },
+
+                            series: conteudo_series
+                        });
+                
+                    }
+                    else if(agrupamento == 3){
+                        teste.map((item, i)=>{
+                            municipios.push({
+                                cod_unidade_requisitante__geocodigo: item.cod_unidade_requisitante__geocodigo, 
+                                value: item.value,
+                                departamento: item.cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento,
+                                nome_departamento: item.cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento
+                            });
+
+                            total_departamento += Number(item.value);
+
+                            if(i+1 == teste.length) nova_serie = true;
+                            else if(item.cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento != teste[i+1].cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento) nova_serie = true;
+                            else nova_serie = false;
+
+                            if(nova_serie){
+                                conteudo_series.push({
+                                    name: item.cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento + ' - Total de Laudos: '+ total_departamento,
+                                    value: total_departamento,
+                                    data: municipios
+                                });
+
+                                total_departamento = 0;
+                                municipios = [];
+                            }
+                        });
+
+
+
+                        // Initiate the chart
+                        Highcharts.mapChart('mapa', {
+                            chart: {
+                                map: geojson
+                            },
+
+                            title: {
+                                text: 'Unidades Requisitante MG'
+                            },
+
+                            plotOptions: {
+                                map: {
+                                    allAreas: false,
+                                    joinBy: ['id', 'cod_unidade_requisitante__geocodigo']
+                                },
+                                dataLabels: {
+                                    enabled: true,
+                                    color: '#FFFFFF',
+                                    style: {
+                                        fontWeight: 'bold'
+                                    }
+                                },
+                                tooltip: {
+                                    headerFormat: '',
+                                    //modificado para mostrar o nome da regional: nome da cidade
+                                    pointFormat: '<b>{series.name} - {series.value} laudos</b>: {point.name}'
+                                },
+                                series: {
+                                    cursor: 'pointer',
+                                    point: {
+                                        events: {
+                                            click: function() {
+                                                document.getElementById('grafico_linha').style.visibility = 'visible';
+                                                console.log(this);
+                                                x = this.departamento
+                                                var name = this.nome_departamento;
+                                                $.getJSON('/dadosGrafDepartamento/' + x, function(teste2) {
+                                                    data2 = teste2
+                                                    data = [];
+                                                    value = [];
+
+                                                    function formatDate(date) {
+                                                        var d = new Date(date),
+                                                            month = '' + (d.getMonth() + 1),
+                                                            day = '' + d.getDate(),
+                                                            year = d.getFullYear();
+
+                                                        if (month.length < 2)
+                                                            month = '0' + month;
+                                                        if (day.length < 2)
+                                                            day = '0' + day;
+
+                                                        return [month, year].join('/');
+                                                    }
+                                                    for (i = 0; i < data2.length; i++) {
+                                                        data[i] = formatDate(data2[i].mes_registro);
+                                                        value[i] = data2[i].laudo_nmr;
+                                                    }
+
+                                                    var linechart = Highcharts.chart('grafico_linha', {
+
+                                                        title: {
+                                                            text: name
+                                                        },
+
+                                                        yAxis: {
+                                                            title: {
+                                                                text: 'Número de laudos'
+                                                            }
+                                                        },
+
+                                                        xAxis: {
+                                                            categories: data
+                                                        },
+
+                                                        legend: {
+                                                            layout: 'vertical',
+                                                            align: 'right',
+                                                            verticalAlign: 'middle'
+                                                        },
+
+                                                        series: [{
+                                                            name: 'Número de Laudos',
+                                                            data: value
+                                                        }],
+
+                                                        responsive: {
+                                                            rules: [{
+                                                                condition: {
+                                                                    maxWidth: 500
+                                                                },
+                                                                chartOptions: {
+                                                                    legend: {
+                                                                        layout: 'horizontal',
+                                                                        align: 'center',
+                                                                        verticalAlign: 'bottom'
+                                                                    }
+                                                                }
+                                                            }]
+                                                        }
+
+                                                    });
+                                                })
+                                            }
+                                        }
+                                    }
+                                }                               
+                            },
+
+                            series: conteudo_series
+                        });
+                
+                    }else{
+                        // Initiate the chart
+                        Highcharts.mapChart('mapa', {
+                            chart: {
+                                map: geojson
+                            },
+
+                            credits: {
+                                enabled: false,
+                            },
+
+                            title: {
+                                text: 'Unidades Requisitante MG'
+                            },
+
+                            mapNavigation: {
+                                enabled: true,
+                                buttonOptions: {
+                                    verticalAlign: 'bottom'
+                                }
+                            },
+
+                            colorAxis: {
+                                tickPixelInterval: 100
+                            },
+
+                            series: [{
+                                animation: {
+                                    duration: 100
+                                },
+                                data: data,
+                                keys: ['cod_unidade_requisitante__geocodigo', 'value'],
+                                joinBy: ['id', 'cod_unidade_requisitante__geocodigo'],
+                                name: 'Qtd. de Laudos',
+                                states: {
+                                    hover: {
+                                        color: '#3d3b8e'
+                                    }
+                                },
+                                dataLabels: {
+                                    enabled: false,
+                                    color: 'white',
+                                    format: '{point.name}'
+                                }
+                            }],
+                            plotOptions: {
+                                series: {
+                                    cursor: 'pointer',
+                                    point: {
+                                        events: {
+                                            click: function() {
+                                                document.getElementById('grafico_linha').style.visibility = 'visible';
+                                                x = this.cod_unidade_requisitante__geocodigo
+                                                console.log('camada 1:', x)
+                                                var name = this.properties.name;
+                                                $.getJSON('/dadosGraf/' + x + '/?natureza=' + natureza + '&inicio=' + inicio + '&fim=' + fim, function(data2) {
+                                                    console.log('camada 2:', data2)
+                                                    data = [];
+                                                    value = [];
+
+                                                    function formatDate(date) {
+                                                        var d = new Date(date),
+                                                            month = '' + (d.getMonth() + 1),
+                                                            day = '' + d.getDate(),
+                                                            year = d.getFullYear();
+
+                                                        if (month.length < 2)
+                                                            month = '0' + month;
+                                                        if (day.length < 2)
+                                                            day = '0' + day;
+
+                                                        return [month, year].join('/');
+                                                    }
+                                                    for (i = 0; i < data2.length; i++) {
+                                                        data[i] = formatDate(data2[i].mes_registro);
+                                                        value[i] = data2[i].laudo_nmr;
+                                                    }
+                                                    console.log(data, value)
+
+                                                    var linechart = Highcharts.chart('grafico_linha', {
+
+                                                        title: {
+                                                            text: name
+                                                        },
+
+                                                        yAxis: {
+                                                            title: {
+                                                                text: 'Número de laudos'
+                                                            }
+                                                        },
+
+                                                        xAxis: {
+                                                            // type: "category",
+                                                            categories: data
+                                                        },
+
+                                                        legend: {
+                                                            layout: 'vertical',
+                                                            align: 'right',
+                                                            verticalAlign: 'middle'
+                                                        },
+
+                                                        series: [{
+                                                            name: 'Número de Laudos',
+                                                            data: value
+                                                        }],
+
+                                                        responsive: {
+                                                            rules: [{
+                                                                condition: {
+                                                                    maxWidth: 500
+                                                                },
+                                                                chartOptions: {
+                                                                    legend: {
+                                                                        layout: 'horizontal',
+                                                                        align: 'center',
+                                                                        verticalAlign: 'bottom'
+                                                                    }
+                                                                }
+                                                            }]
+                                                        }
+
+                                                    });
+                                                })
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        },
-                    });
+                            },
+                        });
+                    }
                 });
             });
         });

@@ -1,20 +1,20 @@
-{% extends 'base.html' %} {% block title %} Lista de Unidades de Exame {% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %} Lista de Regional {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
-    <h1 id='name' style="text-align:center">Lista de Unidades de Exame</h1>
+    <h1 id='name' style="text-align:center">Lista de Regional</h1>
     <form method="get" id='search-form'>
         <div class="row">
-            <div class="col-4">
-                <a href="novaUniexa/" class="btn btn-primary">
-                    <i class="bi bi-plus-square"></i> Nova Unidade de Exame
+            <div class="col-3">
+                <a href="novaRegional/" class="btn btn-primary">
+                    <i class="bi bi-plus-square"></i> Nova Regional
                 </a>
             </div>
-            <div class="col-8">
-                <input type="text" id="search" name="search" placeholder="Comarca" value="{{request.GET.search}}" style="width: 100%;">
+            <div class="col-sm-9">
+                <input type="text" id="search" name="search" placeholder="Regional" value="{{request.GET.search}}" style="width: 100%;">
             </div>
         </div>
         <div class="row">            
             <div class="col-6">
-                <a href="/uniexa" class="btn btn-danger mt-3">
+                <a href="/regional" class="btn btn-danger mt-3">
                     <i class="bi bi-eraser-fill"></i> Limpar
                 </a>
             </div>
@@ -26,23 +26,24 @@
         </div>
     </form>
 
-
     <div id="div_table">
         <table id='Table_Data' class="table table-striped ">
             <thead>
                 <tr>
-                    <th>Codigo da Unidade</th>
-                    <th>Unidade Pericial</th>
+                    <th>Codigo da Regional</th>
+                    <th>Regional</th>
+                    <th>Departamento</th>
                     <th id="edit_col ">Editar</th>
                 </tr>
             </thead>
             <tbody>
                 {% for result in data %}
                 <tr>
-                    <td>{{ result.cod_unidade_exame }}</td>
-                    <td>{{ result.comarca_da_unidade }}</td>
+                    <td>{{ result.cod_regional }}</td>
+                    <td>{{ result.regional }}</td>
+                    <td>{{ result.cod_departamento }}</td>
                     <td id="edit_col ">
-                        <a href="{% url 'uniexa-update' result.cod_unidade_exame %} " class="btn edit-link ">
+                        <a href="{% url 'regional-update' result.cod_regional %} " class="btn edit-link ">
                             <i class="bi bi-pencil-square "></i>
                         </a>
                     </td>
@@ -52,7 +53,6 @@
         </table>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
         $('#Table_Data').DataTable({

@@ -139,7 +139,7 @@ def peritoEdit(request, masp=-1):
         return render(request, 'perito/edit.html', {'form': form})
     else:
         perito = PeritoModel.objects.get(pk=masp)
-        form = PeritoForm(request.POST, instance=masp)
+        form = PeritoForm(request.POST, instance=perito)
         if form.is_valid():
             form.save(commit=True)
         else:
@@ -183,7 +183,7 @@ def uniexaEdit(request, cod_unidade_exame=''):
         return render(request, 'uniexa/edit.html', {'form': form})
     else:
         uniexa = UniexaModel.objects.get(pk=cod_unidade_exame)
-        form = UniexaForm(request.POST,instance=cod_unidade_exame)
+        form = UniexaForm(request.POST,instance=uniexa)
         if form.is_valid():
             form.save(commit=True)
         else:
@@ -227,13 +227,144 @@ def uniresEdit(request, cod_unidade_requisitante=''):
         return render(request, 'unires/edit.html', {'form': form})
     else:
         unires = UniresModel.objects.get(pk=cod_unidade_requisitante)
-        form = UniresForm(request.POST,instance=cod_unidade_requisitante)
+        form = UniresForm(request.POST,instance=unires)
         if form.is_valid():
             form.save(commit=True)
         else:
             print(request.POST)
         return redirect('/unires')
 
+
+def departamentoList(request):
+    search = request.GET.get('search')
+    if search:
+        showall = DepartamentoModel.objects.filter(
+            departamento__icontains=search.upper())
+    else:
+        showall = DepartamentoModel.objects.all()
+    return render(request, 'departamento/list.html', {"data": showall})
+
+
+def departamentoCreate(request, cod_departamento=''):
+    if request.method == 'GET':
+        if cod_departamento == '':
+            form = DepartamentoForm()
+        else:
+            departamento = DepartamentoModel.objects.get(pk=cod_departamento)
+            form = DepartamentoForm(instance=departamento)
+        return render(request, 'departamento/create.html', {'form': form})
+    else:
+        form = DepartamentoForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('/departamento')
+
+
+def departamentoEdit(request, cod_departamento=''):
+    if request.method == 'GET':
+        if cod_departamento == '':
+            form = DepartamentoForm()
+        else:
+            departamento = DepartamentoModel.objects.get(pk=cod_departamento)
+            form = DepartamentoForm(instance=departamento)
+            form.fields['cod_departamento'].widget.attrs['readonly'] = True
+        return render(request, 'departamento/edit.html', {'form': form})
+    else:
+        departamento = DepartamentoModel.objects.get(pk=cod_departamento)
+        form = DepartamentoForm(request.POST,instance=departamento)
+        if form.is_valid():
+            form.save(commit=True)
+        else:
+            print(request.POST)
+        return redirect('/departamento')
+
+
+def regionalList(request):
+    search = request.GET.get('search')
+    if search:
+        showall = RegionalModel.objects.filter(
+            regional__icontains=search.upper())
+    else:
+        showall = RegionalModel.objects.all()
+    return render(request, 'regional/list.html', {"data": showall})
+
+
+def regionalCreate(request, cod_regional=''):
+    if request.method == 'GET':
+        if cod_regional == '':
+            form = RegionalForm()
+        else:
+            regional = RegionalModel.objects.get(pk=cod_regional)
+            form = RegionalForm(instance=regional)
+        return render(request, 'regional/create.html', {'form': form})
+    else:
+        form = RegionalForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('/regional')
+
+
+def regionalEdit(request, cod_regional=''):
+    if request.method == 'GET':
+        if cod_regional == '':
+            form = RegionalForm()
+        else:
+            regional = RegionalModel.objects.get(pk=cod_regional)
+            form = RegionalForm(instance=regional)
+            form.fields['cod_regional'].widget.attrs['readonly'] = True
+        return render(request, 'regional/edit.html', {'form': form})
+    else:
+        regional = RegionalModel.objects.get(pk=cod_regional)
+        form = RegionalForm(request.POST,instance=regional)
+        if form.is_valid():
+            form.save(commit=True)
+        else:
+            print(request.POST)
+        return redirect('/regional')
+
+
+def municipioList(request):
+    search = request.GET.get('search')
+    if search:
+        showall = MunicipioModel.objects.filter(
+            municipio__icontains=search.upper())
+    else:
+        showall = MunicipioModel.objects.all()
+    return render(request, 'municipio/list.html', {"data": showall})
+
+
+def municipioCreate(request, geocodigo=''):
+    if request.method == 'GET':
+        if geocodigo == '':
+            form = MunicipioForm()
+        else:
+            municipio = MunicipioModel.objects.get(pk=geocodigo)
+            form = MunicipioForm(instance=municipio)
+        return render(request, 'municipio/create.html', {'form': form})
+    else:
+        form = MunicipioForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('/municipio')
+
+
+def municipioEdit(request, geocodigo=''):
+    if request.method == 'GET':
+        if geocodigo == '':
+            form = MunicipioForm()
+        else:
+            municipio = MunicipioModel.objects.get(pk=geocodigo)
+            form = MunicipioForm(instance=municipio)
+            form.fields['geocodigo'].widget.attrs['readonly'] = True
+        return render(request, 'municipio/edit.html', {'form': form})
+    else:
+        municipio = MunicipioModel.objects.get(pk=geocodigo)
+        form = MunicipioForm(request.POST,instance=municipio)
+        if form.is_valid():
+            form.save(commit=True)
+        else:
+            print(request.POST)
+        return redirect('/municipio')
 
 def upload(request):
 
@@ -553,65 +684,59 @@ def relatorio_unidader(request):
     limit = request.GET.get('Qtde')
     dataini = request.GET.get('dataini')
     datafim = request.GET.get('datafim')
+    depunires = request.GET.get('depunires')
+    regunires = request.GET.get('regunires')
+    mununires = request.GET.get('mununires')
 
-    if limit == "Other":
-        unid = str(request.GET.get('uma'))
-        unid = '%' + unid + '%'
+    if depunires: depunires = '%' + depunires + '%'
+    else: depunires = '%'
+
+    if regunires: regunires = '%' + regunires + '%'
+    else: regunires = '%'
+
+    if mununires: mununires = '%' + mununires + '%'
+    else: mununires = '%'
+
+    if limit == 'Ten': limit = ' LIMIT 10'
+    else: limit = ''
+
+    select_from = '''
+        select l.cod_unidade_requisitante, d.departamento, r.regional, m.municipio, count(l.nmr_requisicao) as contagem 
+        from    laudo l 
+                inner join unidade_requisitante u 
+                    on l.cod_unidade_requisitante = u.cod_unidade_requisitante
+                inner join municipio m
+                    on u.geocodigo = m.geocodigo
+                inner join regional r
+                    on m.cod_regional = r.cod_regional
+                inner join departamento d
+                    on r.cod_departamento = d.cod_departamento
+    '''
+    group_by = 'group by l.cod_unidade_requisitante, d.departamento, r.regional, m.municipio order by contagem desc'
 
     if (dataini and datafim):
         dataini = dataini + 'T00:00'
         datafim = datafim + 'T23:59'
 
-    if (dataini and datafim) and limit == 'Ten':
-        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
-        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
-        where l.data_requisicao_pericia BETWEEN %s AND %s
-        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc LIMIT 10''',[dataini, datafim]):
-            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
-            labels.append(cod_nome)
+        for unidade in UniresModel.objects.raw(
+            select_from + 
+            ''' where   l.data_requisicao_pericia BETWEEN %s AND %s
+                        AND d.departamento ILIKE %s
+                        AND r.regional ILIKE %s
+                        AND m.municipio ILIKE %s''' 
+            + group_by + limit,[dataini, datafim, depunires, regunires, mununires]
+        ):
+            labels.append(str(unidade.cod_unidade_requisitante + ' - ' + unidade.departamento + ' - ' + unidade.regional + ' - ' + unidade.municipio))
             data.append(unidade.contagem)
-    
-    elif (dataini and datafim) and limit == 'Other':
-        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
-        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
-        where l.data_requisicao_pericia BETWEEN %s AND %s AND u.municipio ILIKE %s
-        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc''',[dataini, datafim, unid]):
-            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
-            labels.append(cod_nome)
-            data.append(unidade.contagem)
-
-    elif not(dataini and datafim) and limit == 'Other':
-        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
-        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
-        where u.municipio ILIKE %s
-        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc''',[unid]):
-            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
-            labels.append(cod_nome)
-            data.append(unidade.contagem)
-
-    elif not(dataini and datafim) and limit == 'Ten':
-        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
-        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
-        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc LIMIT 10'''):
-            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
-            labels.append(cod_nome)
-            data.append(unidade.contagem)
-
-    elif (dataini and datafim) and limit == 'All':
-        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
-        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
-        where l.data_requisicao_pericia BETWEEN %s AND %s
-        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc''',[dataini, datafim]):
-            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
-            labels.append(cod_nome)
-            data.append(unidade.contagem)
-
+        
     else:
-        for unidade in UniresModel.objects.raw('''select l.cod_unidade_requisitante ,u.municipio as nome, count(l.nmr_requisicao) as contagem 
-        from laudo l inner join unidade_requisitante u on l.cod_unidade_requisitante = u.cod_unidade_requisitante
-        group by u.cod_unidade_requisitante, l.cod_unidade_requisitante order by contagem desc'''):
-            cod_nome = str(unidade.cod_unidade_requisitante +' - '+ unidade.nome)
-            labels.append(cod_nome)
+        for unidade in UniresModel.objects.raw(select_from + 
+            ''' where   d.departamento ILIKE %s
+                        AND r.regional ILIKE %s
+                        AND m.municipio ILIKE %s'''
+            + group_by + limit,[depunires, regunires, mununires]
+        ):
+            labels.append(str(unidade.cod_unidade_requisitante + ' - ' + unidade.departamento + ' - ' + unidade.regional + ' - ' + unidade.municipio))
             data.append(unidade.contagem)
 
     context={
@@ -629,7 +754,9 @@ def adhoc(request):
     codespe = request.GET.get('codespe')
     classespe = request.GET.get('classespe')
     masp = request.GET.get('masp')
-    unires = request.GET.get('unires')
+    depunires = request.GET.get('depunires')
+    regunires = request.GET.get('regunires')
+    mununires = request.GET.get('mununires')
     uniex = request.GET.get('uniex')
     tpres = request.GET.get('tpres')
     tipodata = request.GET.get('tipodata')
@@ -643,20 +770,23 @@ def adhoc(request):
         datafim = request.GET.get('datafimexp')
 
     if not(dataini and datafim):
-        if natu or codnatu or espe or codespe or classespe or masp or unires or uniex or tpres:
+        if natu or codnatu or espe or codespe or classespe or masp or depunires or regunires or mununires or uniex or tpres:
             showall = LaudoModel.objects.filter(
-                cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres).order_by('nmr_requisicao')
+                cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento__icontains=depunires, cod_unidade_requisitante__geocodigo__cod_regional__regional__icontains=regunires, cod_unidade_requisitante__geocodigo__municipio__icontains=mununires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres
+            ).order_by('nmr_requisicao')
         else:
             showall = LaudoModel.objects.all().order_by('nmr_requisicao')[:500]
     else:
         if tipodata == "requisicao":
-            if natu or codnatu or espe or codespe or classespe or masp or unires or uniex or tpres or (dataini and datafim):
+            if natu or codnatu or espe or codespe or classespe or masp or depunires or regunires or mununires or uniex or tpres or (dataini and datafim):
                 showall = LaudoModel.objects.filter(
-                    cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim]).order_by('nmr_requisicao')
+                    cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento__icontains=depunires, cod_unidade_requisitante__geocodigo__cod_regional__regional__icontains=regunires, cod_unidade_requisitante__geocodigo__municipio__icontains=mununires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_requisicao_pericia__range=[dataini, datafim]
+                ).order_by('nmr_requisicao')
         elif tipodata == "expedicao":
-            if natu or codnatu or espe or codespe or classespe or masp or unires or uniex or tpres or (dataini and datafim):
+            if natu or codnatu or espe or codespe or classespe or masp or depunires or regunires or mununires or uniex or tpres or (dataini and datafim):
                 showall = LaudoModel.objects.filter(
-                    cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__municipio__icontains=unires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_expedicao_laudo__range=[dataini, datafim]).order_by('nmr_requisicao')
+                    cod_natureza_exame__descricao_natureza__icontains=natu, cod_natureza_exame__cod_natureza_exame__icontains=codnatu, cod_especie_exame__descricao_especie__icontains=espe, cod_especie_exame__sigla__icontains=classespe, cod_especie_exame__cod_especie_exame__icontains=codespe, masp_perito__icontains=masp, cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento__icontains=depunires, cod_unidade_requisitante__geocodigo__cod_regional__regional__icontains=regunires, cod_unidade_requisitante__geocodigo__municipio__icontains=mununires, cod_unidade_exame__comarca_da_unidade__icontains=uniex, tipo_requisicao__icontains=tpres, data_expedicao_laudo__range=[dataini, datafim]
+                ).order_by('nmr_requisicao')
     
     p = Paginator(showall,2000)
     page = request.GET.get('page', 1)
@@ -669,37 +799,76 @@ def adhoc(request):
         data = p.page(p.num_pages)
     return render(request, 'relatorios/relatorio_adhoc.html', {'data':data})
 
+
 def dash(request):
     natureza = NaturezaModel.objects.all().order_by('descricao_natureza')
     return render(request, 'dashboard/dash.html',{"data": natureza})
 
+
 def home(request):
     return render(request, 'home.html')
+
 
 def dadosMapa(request):
     natu = request.GET.get('natureza')
     inicio = request.GET.get('inicio')
     fim = request.GET.get('fim')
+
     if not natu and not inicio:
-        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value')
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo', 'cod_unidade_requisitante__geocodigo__cod_regional__regional', 'cod_unidade_requisitante__geocodigo__cod_regional', 'cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento', 'cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento').annotate(value=Count('nmr_requisicao')).order_by('cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento', 'cod_unidade_requisitante__geocodigo__cod_regional__regional')
     elif natu and not(inicio and fim):
-        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(cod_natureza_exame=natu)
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo', 'cod_unidade_requisitante__geocodigo__cod_regional__regional', 'cod_unidade_requisitante__geocodigo__cod_regional', 'cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento', 'cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento').annotate(value=Count('nmr_requisicao')).order_by('cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento', 'cod_unidade_requisitante__geocodigo__cod_regional__regional').filter(cod_natureza_exame=natu)
     elif not natu and (inicio and fim):
-        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(data_requisicao_pericia__range=[inicio, fim])
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo', 'cod_unidade_requisitante__geocodigo__cod_regional__regional', 'cod_unidade_requisitante__geocodigo__cod_regional', 'cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento', 'cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento').annotate(value=Count('nmr_requisicao')).order_by('cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento', 'cod_unidade_requisitante__geocodigo__cod_regional__regional').filter(data_requisicao_pericia__range=[inicio, fim])
     elif natu and (inicio and fim):
-        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo').annotate(value=Count('nmr_requisicao')).order_by('-value').filter(cod_natureza_exame=natu, data_requisicao_pericia__range=[inicio, fim])
+        data = LaudoModel.objects.values('cod_unidade_requisitante__geocodigo', 'cod_unidade_requisitante__geocodigo__cod_regional__regional', 'cod_unidade_requisitante__geocodigo__cod_regional', 'cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento', 'cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento').annotate(value=Count('nmr_requisicao')).order_by('cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__departamento', 'cod_unidade_requisitante__geocodigo__cod_regional__regional').filter(cod_natureza_exame=natu, data_requisicao_pericia__range=[inicio, fim])
+
     return JsonResponse(list(data),safe=False)
+
 
 def dadosLinha(request,geocod):
     natu = request.GET.get('natureza')
     inicio = request.GET.get('inicio')
     fim = request.GET.get('fim')
+    
     if not natu and not inicio:
-        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod)
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__geocodigo__icontains=geocod)
     elif natu and not(inicio and fim):
-        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(cod_natureza_exame=natu)
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__geocodigo__icontains=geocod).filter(cod_natureza_exame=natu)
     elif not natu and (inicio and fim):
-        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(data_requisicao_pericia__range=[inicio, fim])
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__geocodigo__icontains=geocod).filter(data_requisicao_pericia__range=[inicio, fim])
     elif natu and (inicio and fim):
-        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__icontains=geocod).filter(data_requisicao_pericia__range=[inicio, fim], cod_natureza_exame=natu)
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__geocodigo__icontains=geocod).filter(data_requisicao_pericia__range=[inicio, fim], cod_natureza_exame=natu)
+    return JsonResponse(list(data),safe=False)
+
+
+def dadosLinhaRegional(request,regional):
+    natu = request.GET.get('natureza')
+    inicio = request.GET.get('inicio')
+    fim = request.GET.get('fim')
+    
+    if not natu and not inicio:
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo__cod_regional','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__cod_regional__cod_regional__icontains=regional)
+    elif natu and not(inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo__cod_regional','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__cod_regional__cod_regional__icontains=regional).filter(cod_natureza_exame=natu)
+    elif not natu and (inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo__cod_regional','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__cod_regional__cod_regional__icontains=regional).filter(data_requisicao_pericia__range=[inicio, fim])
+    elif natu and (inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo__cod_regional','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__cod_regional__cod_regional__icontains=regional).filter(data_requisicao_pericia__range=[inicio, fim], cod_natureza_exame=natu)
+    return JsonResponse(list(data),safe=False)
+
+
+def dadosLinhaDepartamento(request,departamento):
+    natu = request.GET.get('natureza')
+    inicio = request.GET.get('inicio')
+    fim = request.GET.get('fim')
+    
+    if not natu and not inicio:
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__cod_departamento__icontains=departamento)
+    elif natu and not(inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__cod_departamento__icontains=departamento).filter(cod_natureza_exame=natu)
+    elif not natu and (inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__cod_departamento__icontains=departamento).filter(data_requisicao_pericia__range=[inicio, fim])
+    elif natu and (inicio and fim):
+        data = LaudoModel.objects.annotate(mes_registro=TruncMonth('data_requisicao_pericia')).values('cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento','mes_registro').annotate(laudo_nmr=Count('nmr_requisicao')).order_by('mes_registro').filter(cod_unidade_requisitante__geocodigo__cod_regional__cod_departamento__cod_departamento__icontains=departamento).filter(data_requisicao_pericia__range=[inicio, fim], cod_natureza_exame=natu)
     return JsonResponse(list(data),safe=False)

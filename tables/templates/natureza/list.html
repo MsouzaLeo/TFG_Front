@@ -1,21 +1,33 @@
 {% extends 'base.html' %} {% block title %} Lista de Naturezas {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1 id='name' style="text-align:center">Naturezas de Exame</h1>
-    <a id="add-link" href="novaNatureza/">
-        <div class="col-2 add-div">
-            <i class="bi bi-plus-square"></i> Nova Natureza
+    <form method="get" id='search-form'>
+        <div class="row">
+            <div class="col-3">
+                <a href="novaNatureza/" class="btn btn-primary">
+                    <i class="bi bi-plus-square"></i> Nova Natureza
+                </a>
+            </div>
+            <div class="col-5">
+                <input type="text" id="desc" name="desc" placeholder="Descrição da Natureza" value="{{request.GET.desc}}" style="width: 100%;">
+            </div>
+            <div class="col-4">
+                <input type="text" id="cien" name="cien" placeholder="Ciência da Natureza" value="{{request.GET.cien}}"style="width: 100%;">
+            </div>
         </div>
-    </a>
-    <div class="col-9 search-div form">
-        <form method="get" id='search-form'>
-            <input type="text" id="desc" name="desc" placeholder="Descrição da Natureza" size="60px" value="{{request.GET.desc}}">
-            <input type="text" id="cien" name="cien" placeholder="Ciência da Natureza" size="40px" value="{{request.GET.cien}}">
-            <i id="search-btn" class="bi bi-search "></i>
-            <a id="search-btn" href="/natureza">
-                <i class="bi bi-eraser-fill"></i> Limpar
-            </a>
-        </form>
-    </div>
+        <div class="row">            
+            <div class="col-6">
+                <a href="/natureza" class="btn btn-danger mt-3">
+                    <i class="bi bi-eraser-fill"></i> Limpar
+                </a>
+            </div>
+            <div class="col-6">
+                <button class="btn shadow-none float-end btn-success mt-3">
+                    <i class="bi bi-search"></i> Pesquisar
+                </button>
+            </div>
+        </div>
+    </form>
 
 
     <div id="div_table">

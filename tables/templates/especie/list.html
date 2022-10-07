@@ -1,25 +1,36 @@
 {% extends 'base.html' %} {% block title %} Lista de Especies {% endblock %} {% block content %}
 <div class="offset-1 col-10 list-div">
     <h1 id='name' style="text-align:center">Espécies de Exame</h1>
-
-    <a id="add-link" href="novaEspecie/">
-        <div class="col-2 add-div">
-            <i class="bi bi-plus-square"></i>Nova Espécie
+    <form method="get" id='search-form'>
+        <div class="row">
+            <div class="col-2">
+                <a href="novaEspecie/" class="btn btn-primary">       
+                    <i class="bi bi-plus-square"></i> Nova Espécie
+                </a>
+            </div>
+            <div class="col-4">
+                <input type="text" name="desc" placeholder="Descrição da Espécie" value="{{request.GET.desc}}" style="width: 100%;">
+            </div>
+            <div class="col-3">
+                <input type="text" name="natu" placeholder="Natureza da Espécie" value="{{request.GET.natu}}" style="width: 100%;">
+            </div>
+            <div class="col-3">
+                <input type="text" name="sigl" placeholder="Classificação da Espécie" value="{{request.GET.sigl}}" style="width: 100%;">
+            </div>          
         </div>
-    </a>
-    <div class="col-9 search-div form">
-        <form method="get" id='search-form'>
-            <input type="text" id="search" name="desc" placeholder="Descrição da Espécie" size='50px' value="{{request.GET.desc}}">
-            <input type="text" id="search" name="natu" placeholder="Natureza da Espécie" value="{{request.GET.natu}}">
-            <input type="text" id="search" name="sigl" placeholder="Classificação da Espécie" value="{{request.GET.sigl}}">
-
-            <i id="search-btn" class="bi bi-search"></i>
-            <a id="search-btn" href="/especie">
-                <i class="bi bi-eraser-fill"></i> Limpar
-            </a>
-
-        </form>
-    </div>
+        <div class="row">            
+            <div class="col-6">
+                <a href="/especie" class="btn btn-danger mt-3">
+                    <i class="bi bi-eraser-fill"></i> Limpar
+                </a>
+            </div>
+            <div class="col-6">
+                <button class="btn shadow-none float-end btn-success mt-3">
+                    <i class="bi bi-search"></i> Pesquisar
+                </button>
+            </div>
+        </div>
+    </form>
 
     <div id="div_table">
         <table id="Table_Data" class="table table-striped">

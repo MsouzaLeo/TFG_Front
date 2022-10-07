@@ -73,9 +73,7 @@
 
                 <div class="form-group row">
                     <div class="form-group col-3">
-                        <label for="espe">
-                        Código da Espécie
-                    </label>
+                        <label for="espe">Código da Espécie</label>
                         <input type="text" id="codespe" name="codespe" class="form-control" placeholder="Código da Espécie do exame" value="{{request.GET.codespe}}" />
                     </div>
                     <div class="form-group col-2">
@@ -85,41 +83,41 @@
                             <option value="DI">DI</option>
                             <option value="DEU">DEU</option>
                             <option value="DEA">DEA</option>
-                    </select>
+                        </select>
                     </div>
                     <div class="form-group col-3">
-                        <label for="espe">
-                        Espécie de Exame
-                    </label>
+                        <label for="espe">Espécie de Exame</label>
                         <input type="text" id="espe" name="espe" class="form-control" placeholder="Descrição da Espécie do exame" value="{{request.GET.espe}}" />
                     </div>
                 </div>
 
                 <div class="form-group col-8">
-                    <label for="masp">
-                        MASP do perito
-                    </label>
+                    <label for="masp">MASP do perito</label>
                     <input type="text" id="masp" name="masp" class="form-control" placeholder="MASP do Perito" value="{{request.GET.masp}}">
                 </div>
 
                 <div class="form-group col-8">
-                    <label for="unires">
-                        Unidade Requisitante
-                    </label>
-                    <input type="text" id="unires" name="unires" class="form-control" placeholder="Unidade Requisitante" value="{{request.GET.unires}}">
+                    <label for="depunires">Departamento da Unidade Requisitante</label>
+                    <input type="text" id="depunires" name="depunires" class="form-control" placeholder="Departamento da Unidade Requisitante" value="{{request.GET.depunires}}">
                 </div>
 
                 <div class="form-group col-8">
-                    <label for="uniex">
-                        Unidade de Exame
-                    </label>
+                    <label for="regunires">Regional da Unidade Requisitante</label>
+                    <input type="text" id="regunires" name="regunires" class="form-control" placeholder="Regional da Unidade Requisitante" value="{{request.GET.regunires}}">
+                </div>
+
+                <div class="form-group col-8">
+                    <label for="mununires">Município da Unidade Requisitante</label>
+                    <input type="text" id="mununires" name="mununires" class="form-control" placeholder="Unidade Requisitante" value="{{request.GET.mununires}}">
+                </div>
+
+                <div class="form-group col-8">
+                    <label for="uniex">Unidade de Exame</label>
                     <input type="text" id="uniex" name="uniex" class="form-control" placeholder="Unidade de Exame" value="{{request.GET.uniex}}">
                 </div>
 
                 <div class="form-group col-8">
-                    <label for="tpres">
-                        Tipo da Requisição
-                    </label>
+                    <label for="tpres">Tipo da Requisição</label>
                     <select class="form-control js-example-basic-single" name="tpres" id="tpres">
                         <option value="">Selecione um Tipo de Requisição</option>
                         <option value="FAEP">FAEP</option>
@@ -127,7 +125,7 @@
                         <option value="COMPLEMENTAR">COMPLEMENTAR</option>
                         <option value="ESCLARECIMENTO">ESCLARECIMENTO</option>
                         <option value="ESCLARECIMENTO_CDL">ESCLARECIMENTO_CDL</option>
-                </select>
+                    </select>
                 </div>
 
                 <div class="form-group row">
@@ -140,19 +138,16 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group col-2">
-                        <button id="search-btn" type="submit" class="btn" style="margin-top: 25px; margin-bottom: 30px;">
-                            <i class="bi bi-search "></i>
+                    <div class="col-3">
+                        <button class="btn shadow-none btn-success mt-4">
+                            <i class="bi bi-search"></i> Pesquisar
                         </button>
                     </div>
-                    <div class="form-group col-2">
-                        <button id="search-btn" href="/ad-hoc" class="btn" style="margin-top: 25px; margin-bottom: 30px;">
-                            <a id="search-btn" href="/ad-hoc">
-                                <i class="bi bi-eraser-fill"></i> Limpar
-                            </a>
-                        </button>
+                    <div class="col-3">
+                        <a href="/ad-hoc" class="btn float-end btn-danger mt-4">
+                            <i class="bi bi-eraser-fill"></i> Limpar
+                        </a>
                     </div>
-
                 </div>
             </form>
         </div>
@@ -175,7 +170,13 @@
                     <input class="form-check-input" type=checkbox name="col4" onclick="toggleVis(this.name)" checked> Espécie
                 </div>
                 <div>
-                    <input class="form-check-input" type=checkbox name="col5" onclick="toggleVis(this.name)" checked> Unidade Requisitante
+                    <input class="form-check-input" type=checkbox name="col18" onclick="toggleVis(this.name)" checked> Departamento da Unidade Requisitante
+                </div>
+                <div>
+                    <input class="form-check-input" type=checkbox name="col19" onclick="toggleVis(this.name)" checked> Regional da Unidade Requisitante
+                </div>
+                <div>
+                    <input class="form-check-input" type=checkbox name="col5" onclick="toggleVis(this.name)" checked> Município da Unidade Requisitante
                 </div>
                 <div>
                     <input class="form-check-input" type=checkbox name="col6" onclick="toggleVis(this.name)" checked> Unidade de Exame
@@ -229,7 +230,9 @@
                     <th name="tcol3" id="tcol3">Ciência da Natureza</th>
                     <th name="tcol4" id="tcol4">Espécie</th>
                     <th name="tcol4" id="tcol4">Classificação da Espécie</th>
-                    <th name="tcol5" id="tcol5">Unidade Requisitante</th>
+                    <th name="tcol18" id="tcol18">Departamento da Unidade Requisitante</th>
+                    <th name="tcol19" id="tcol19">Regional da Unidade Requisitante</th>
+                    <th name="tcol5" id="tcol5">Município da Unidade Requisitante</th>
                     <th name="tcol6" id="tcol6">Unidade de Exame</th>
                     <th name="tcol7" id="tcol7">MASP</th>
                     <th name="tcol8" id="tcol8">Tipo da Requisição</th>
@@ -252,7 +255,9 @@
                     <td name="tcol3" id="tcol3">{{ result.cod_natureza_exame.ciencia}}</td>
                     <td name="tcol4" id="tcol4">{{ result.cod_especie_exame}}</td>
                     <td name="tcol4" id="tcol4" style="text-align:center">{{ result.cod_especie_exame.sigla}}</td>
-                    <td name="tcol5" id="tcol5">{{ result.cod_unidade_requisitante}}</td>
+                    <td name="tcol5" id="tcol5">{{ result.cod_unidade_requisitante.geocodigo.cod_regional.cod_departamento.departamento}}</td>
+                    <td name="tcol5" id="tcol5">{{ result.cod_unidade_requisitante.geocodigo.cod_regional.regional}}</td>
+                    <td name="tcol5" id="tcol5">{{ result.cod_unidade_requisitante.geocodigo.municipio}}</td>
                     <td name="tcol6" id="tcol6">{{ result.cod_unidade_exame}}</td>
                     <td name="tcol7" id="tcol7">{{ result.masp_perito}}</td>
                     <td name="tcol8" id="tcol8">{{ result.tipo_requisicao}}</td>
